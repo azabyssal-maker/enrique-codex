@@ -54,7 +54,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 /* Power Level Selector */
 .power-section{padding:12px 16px;border-bottom:1px solid var(--border)}
 .power-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.power-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.power-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .power-card{padding:8px 6px;border:1.5px solid var(--border);border-radius:var(--radius-xs);cursor:pointer;text-align:center;transition:all .2s;background:var(--card)}
 .power-card:hover{border-color:var(--primary)}
 .power-card.active{border-color:var(--primary);background:var(--primary-light)}
@@ -97,7 +97,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 .model-sel:focus{border-color:var(--primary)}
 .token-badge{font-size:11px;color:var(--muted);background:var(--bg2);padding:4px 10px;border-radius:var(--radius-xs);border:1px solid var(--border);display:flex;align-items:center;gap:4px}
 .power-badge{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase}
-.power-badge.high{background:#fef2f2;color:var(--red)}
+.power-badge.high{background:#fef2f2;color:var(--red)}.power-badge.maximum{background:#fef2f2;color:var(--red)}
 .power-badge.medium{background:#fffbeb;color:var(--orange)}
 .power-badge.low{background:#f0fdf4;color:var(--green)}
 .right-btns{display:flex;align-items:center;gap:6px}
@@ -266,7 +266,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
   .tab{padding:9px 12px;font-size:12px}
   .input-area{padding:8px 12px 14px}
   .main-head .left{gap:4px}
-  .power-grid{grid-template-columns:1fr 1fr 1fr}
+  .power-grid{grid-template-columns:repeat(5,1fr)}
 }
 @media(max-width:480px){
   .msg .content{max-width:90%}
@@ -290,22 +290,34 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
     <div class="power-section">
       <div class="power-label">⚡ Execution Power</div>
       <div class="power-grid">
+        <div class="power-card" data-level="minimum" onclick="setPower('minimum')">
+          <div class="p-icon">⚪</div>
+          <div class="p-name">Min</div>
+          <div class="p-tokens">~200</div>
+        </div>
         <div class="power-card" data-level="low" onclick="setPower('low')">
           <div class="p-icon">🟢</div>
           <div class="p-name">Low</div>
-          <div class="p-tokens">~500 tokens</div>
+          <div class="p-tokens">~500</div>
         </div>
         <div class="power-card active" data-level="medium" onclick="setPower('medium')">
           <div class="p-icon">🟡</div>
-          <div class="p-name">Medium</div>
-          <div class="p-tokens">~1500 tokens</div>
+          <div class="p-name">Med</div>
+          <div class="p-tokens">~1500</div>
         </div>
         <div class="power-card" data-level="high" onclick="setPower('high')">
-          <div class="p-icon">🔴</div>
+          <div class="p-icon">🟠</div>
           <div class="p-name">High</div>
-          <div class="p-tokens">~4000 tokens</div>
+          <div class="p-tokens">~3000</div>
+        </div>
+        <div class="power-card" data-level="max" onclick="setPower('max')">
+          <div class="p-icon">🔴</div>
+          <div class="p-name">Max</div>
+          <div class="p-tokens">~4000</div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
 
     <!-- Device Control -->
@@ -365,6 +377,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
       <div class="tab" onclick="go('plugins')">🧩 Plugins</div>
       <div class="tab" onclick="go('brain')">🧠 Brain</div>
       <div class="tab" onclick="go('history')">📋 History</div>
+      <div class="tab" onclick="go('browser')">🌐 Browser</div>
     </div>
 
     <div class="panels">
@@ -483,6 +496,27 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
           <div class="empty-state"><div class="empty-icon">📋</div><h3>No History</h3><p>Start chatting to see history</p></div>
         </div>
       </div>
+      <!-- Browser -->
+      <div class="pnl" id="pnl-browser">
+        <div style="display:flex;flex-direction:column;height:100%">
+          <div style="display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;align-items:center">
+            <button onclick="browserBack()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--card);color:var(--text);font-size:14px;cursor:pointer">◀</button>
+            <button onclick="browserForward()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--card);color:var(--text);font-size:14px;cursor:pointer">▶</button>
+            <button onclick="browserRefresh()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--card);color:var(--text);font-size:14px;cursor:pointer">🔄</button>
+            <input type="text" id="browserUrl" placeholder="Enter URL (e.g. https://tiktok.com)" style="flex:1;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--text);font-size:13px;outline:none" onkeydown="if(event.key==='Enter')browserGo()">
+            <button onclick="browserGo()" style="padding:8px 14px;border:none;border-radius:var(--radius-xs);background:var(--primary);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Go</button>
+          </div>
+          <div style="display:flex;gap:4px;padding:6px 16px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;flex-wrap:wrap">
+            <button onclick="browserLoad('https://tiktok.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">📱 TikTok</button>
+            <button onclick="browserLoad('https://youtube.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">🎬 YouTube</button>
+            <button onclick="browserLoad('https://instagram.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">📷 Instagram</button>
+            <button onclick="browserLoad('https://twitter.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">🐦 Twitter</button>
+            <button onclick="browserLoad('https://reddit.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">🔴 Reddit</button>
+            <button onclick="browserLoad('https://github.com')" style="padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:11px;cursor:pointer">💻 GitHub</button>
+          </div>
+          <iframe id="browserFrame" src="about:blank" style="flex:1;border:none;width:100%;background:#fff"></iframe>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -493,9 +527,11 @@ var API_KEY='c2stb3ItdjEtMjljNzdlZTBjMTFlZDU5ZTExNDZiM2E2NTRlYWYyNjZhYjZlNGM5Nzd
 var MODEL='openai/gpt-3.5-turbo';
 var POWER_LEVEL='medium';
 var POWER_CONFIG={
+  minimum:{max_tokens:200,label:'MINIMUM',badge:'low'},
   low:{max_tokens:500,label:'LOW',badge:'low'},
   medium:{max_tokens:1500,label:'MEDIUM',badge:'medium'},
-  high:{max_tokens:4000,label:'HIGH',badge:'high'}
+  high:{max_tokens:3000,label:'HIGH',badge:'high'},
+  max:{max_tokens:4000,label:'MAXIMUM',badge:'high'}
 };
 var chatData=JSON.parse(localStorage.getItem('ec_chat')||'[]');
 var totalTokens=parseInt(localStorage.getItem('ec_tokens')||'0');
@@ -542,7 +578,7 @@ function setPower(level){
   var badge=document.getElementById('powerBadge');
   var cfg=POWER_CONFIG[level];
   badge.textContent=cfg.label;
-  badge.className='power-badge '+cfg.badge;
+  badge.className='power-badge '+(level==='max'?'maximum':level==='high'?'high':level==='medium'?'medium':'low');
   toast('Power: '+cfg.label+' (~'+cfg.max_tokens+' tokens)','info');
 }
 
@@ -554,7 +590,7 @@ function go(id){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
   document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('active')});
   var tabs=document.querySelectorAll('.tab');
-  var map={chat:0,code:1,preview:2,search:3,plugins:4,brain:5,history:6};
+  var map={chat:0,code:1,preview:2,search:3,plugins:4,brain:5,history:6,browser:7};
   if(map[id]!==undefined)tabs[map[id]].classList.add('active');
   document.getElementById('pnl-'+id).classList.add('active');
 }
@@ -845,6 +881,23 @@ function exitApp(){
   document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:var(--bg,#fff)"><div style="text-align:center"><div style="font-size:48px;margin-bottom:16px">👋</div><h2 style="margin-bottom:8px">Session Ended</h2><p style="color:#6b7280;margin-bottom:20px">All data saved locally. Refresh to start again.</p><button onclick="location.reload()" style="padding:10px 24px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer">Start New Session</button></div></div>';
 }
 
+
+/* Browser */
+function browserGo(){
+  var url=document.getElementById('browserUrl').value.trim();
+  if(!url)return;
+  if(!url.startsWith('http'))url='https://'+url;
+  document.getElementById('browserFrame').src=url;
+  document.getElementById('browserUrl').value=url;
+}
+function browserLoad(url){
+  document.getElementById('browserFrame').src=url;
+  document.getElementById('browserUrl').value=url;
+  go('browser');
+}
+function browserBack(){try{document.getElementById('browserFrame').contentWindow.history.back()}catch(e){}}
+function browserForward(){try{document.getElementById('browserFrame').contentWindow.history.forward()}catch(e){}}
+function browserRefresh(){try{document.getElementById('browserFrame').contentWindow.location.reload()}catch(e){}}
 function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function toast(msg,type){
   var t=document.createElement('div');t.className='toast '+(type||'');
