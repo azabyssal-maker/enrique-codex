@@ -291,6 +291,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
   .device-grid{grid-template-columns:1fr 1fr 1fr}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 </head>
 <body>
 <div class="app">
@@ -452,7 +453,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
       <div class="pnl" id="pnl-code">
         <div class="editor-wrap">
           <div class="editor-toolbar">
-            <select id="codeLang"><option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JavaScript</option><option value="python">Python</option></select>
+            <select id="codeLang"><option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JavaScript</option><option value="python">Python (Pyodide)</option></select>
             <button class="run-btn" onclick="runCode()">▶ Run</button>
             <button onclick="copyCode()">📋 Copy</button>
             <button onclick="clearEditor()">🗑️ Clear</button>
@@ -463,7 +464,18 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
       </div>
 
       <!-- Preview -->
-      <div class="pnl" id="pnl-preview"><iframe class="preview-frame" id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe></div>
+      <div class="pnl" id="pnl-preview">
+        <div style="display:flex;flex-direction:column;height:100%">
+          <div style="display:flex;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;align-items:center">
+            <span style="font-size:13px;font-weight:600;color:var(--muted)">Output:</span>
+            <span id="execStatus" style="font-size:11px;padding:3px 8px;border-radius:4px;background:var(--card2);color:var(--muted)">Ready</span>
+            <span id="execLang" style="font-size:11px;padding:3px 8px;border-radius:4px;background:var(--primary-light);color:var(--primary);font-weight:600"></span>
+            <div style="flex:1"></div>
+            <button onclick="clearOutput()" style="padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--card);color:var(--muted);font-size:11px;cursor:pointer">Clear</button>
+          </div>
+          <div id="execOutput" style="flex:1;overflow:auto;padding:16px;background:#0d1117;color:#e6edf3;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-all"></div>
+        </div>
+      </div>
 
       <!-- Browser -->
       <div class="pnl" id="pnl-browser">
@@ -758,13 +770,14 @@ async function send(){
       var wrap=document.createElement('div');wrap.className='code-block-wrap';
       pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
       var btns=document.createElement('div');btns.className='code-btns';
-      btns.innerHTML='<button onclick="copyCodeBlock(this)">📋 Copy</button><button onclick="runCodeBlock(this)">▶ Run</button><button onclick="openInBrowser(this)">🌐 Open in Browser</button>';
+      btns.innerHTML='<button onclick="copyCodeBlock(this)">📋 Copy</button><button onclick="runCodeBlock(this)">▶ Execute</button><button onclick="openInBrowser(this)">🌐 Open in Browser</button>';
       wrap.appendChild(btns);
     });
     chatData.push({role:'ai',content:reply,time:Date.now()});
     saveData();
     updateTokens((msg?msg.length:0)+reply.length);
     parseActions(reply);
+    autoExecFromReply(reply);
   }catch(e){
     aiDiv.querySelector('.bubble').innerHTML='<div style="color:var(--red)">⚠️ Error: '+esc(e.message)+'</div>';
     chatData.push({role:'ai',content:'Error: '+e.message,time:Date.now()});
@@ -803,7 +816,7 @@ function renderMessages(){
 }
 
 /* Code */
-function runCode(){var c=document.getElementById('codeEditor').value;if(!c)return;go('preview');var f=document.getElementById('previewFrame');var d=f.contentDocument||f.contentWindow.document;d.open();d.write(c);d.close()}
+function runCode(){var c=document.getElementById('codeEditor').value;if(!c)return;var lang=document.getElementById('codeLang').value;smartExecute(c,lang)}
 function copyCode(){navigator.clipboard.writeText(document.getElementById('codeEditor').value);toast('Code copied!','success')}
 function clearEditor(){document.getElementById('codeEditor').value=''}
 async function aiWriteCode(){
@@ -830,11 +843,7 @@ function copyCodeBlock(btn){
   btn.textContent='✓ Copied';btn.classList.add('copied');
   setTimeout(function(){btn.textContent='📋 Copy';btn.classList.remove('copied')},2000);
 }
-function runCodeBlock(btn){
-  var code=btn.closest('.code-block-wrap').querySelector('code').textContent;
-  document.getElementById('codeEditor').value=code;
-  go('code');
-}
+function runCodeBlock(btn){execCodeBlock(btn)}
 function openInBrowser(btn){
   var code=btn.closest('.code-block-wrap').querySelector('code').textContent;
   go('browser');
@@ -971,6 +980,156 @@ function exitApp(){
   document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3"><div style="text-align:center"><div style="font-size:56px;margin-bottom:20px">👋</div><h2 style="margin-bottom:10px;font-size:28px">Session Ended</h2><p style="color:#7d8590;margin-bottom:24px;font-size:15px">All data saved locally. Refresh to continue.</p><button onclick="location.reload()" style="padding:12px 28px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Start New Session</button></div></div>';
 }
 
+
+
+/* ===== CODE EXECUTION ENGINE ===== */
+var pyodide=null;
+async function loadPyodide_(){
+  if(pyodide)return pyodide;
+  updateExecStatus('Loading Python...','#d29922');
+  try{
+    pyodide=await loadPyodide();
+    updateExecStatus('Python ready','#10b981');
+    return pyodide;
+  }catch(e){
+    updateExecStatus('Python load error','#f85149');
+    return null;
+  }
+}
+function updateExecStatus(text,color){
+  var el=document.getElementById('execStatus');
+  if(el){el.textContent=text;el.style.color=color;el.style.background=color+'22'}
+}
+function updateExecLang(lang){
+  var el=document.getElementById('execLang');
+  if(el){el.textContent=lang;el.style.display=lang?'inline':'none'}
+}
+function appendOutput(text,type){
+  var el=document.getElementById('execOutput');
+  if(!el)return;
+  var span=document.createElement('span');
+  if(type==='error')span.style.color='#f85149';
+  else if(type==='info')span.style.color='#58a6ff';
+  else if(type==='success')span.style.color='#10b981';
+  else if(type==='warn')span.style.color='#d29922';
+  span.textContent=text+'\n';
+  el.appendChild(span);
+  el.scrollTop=el.scrollHeight;
+}
+function clearOutput(){
+  var el=document.getElementById('execOutput');
+  if(el)el.innerHTML='<span style="color:#7d8590">Ready. Run code to see output here.</span>';
+}
+function clearOutputIfEmpty(){
+  var el=document.getElementById('execOutput');
+  if(el&&el.textContent.trim()==='Ready. Run code to see output here.')el.innerHTML='';
+}
+
+/* Execute JavaScript */
+function execJS(code){
+  clearOutputIfEmpty();
+  updateExecStatus('Running JS...','#d29922');
+  updateExecLang('JavaScript');
+  go('preview');
+  try{
+    var logs=[];
+    var fakeConsole={log:function(){var args=Array.from(arguments).map(function(a){return typeof a==='object'?JSON.stringify(a,null,2):String(a)}).join(' ');appendOutput(args);logs.push(args)},
+      error:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'error')},
+      warn:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'warn')},
+      info:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'info')},
+      clear:function(){clearOutput()}
+    };
+    var f=document.getElementById('previewFrame');
+    var d=f.contentDocument||f.contentWindow.document;
+    d.open();
+    d.write('<html><head><style>body{font-family:monospace;padding:16px;background:#0d1117;color:#e6edf3;font-size:14px}pre{white-space:pre-wrap}</style></head><body><pre id=\"out\"></pre><script>var _out=document.getElementById(\"out\");function print(){var a=Array.from(arguments).join(\" \");_out.textContent+=a+\"\\n\"}<\/script></body></html>');
+    d.close();
+    var iframeWin=f.contentWindow;
+    iframeWin.console=fakeConsole;
+    iframeWin.print=function(){var a=Array.from(arguments).join(' ');d.getElementById('out').textContent+=a+'\n';};
+    var result=new Function('console','return (async function(){'+code+'})()')(fakeConsole);
+    if(result&&typeof result.then==='function'){
+      result.then(function(r){
+        if(r!==undefined)fakeConsole.log('=> '+String(r));
+        updateExecStatus('Done ✓','#10b981');
+      }).catch(function(e){fakeConsole.error('Error: '+e.message);updateExecStatus('Error','#f85149')});
+    }else{
+      if(result!==undefined)fakeConsole.log('=> '+String(result));
+      updateExecStatus('Done ✓','#10b981');
+    }
+  }catch(e){
+    appendOutput('Error: '+e.message,'error');
+    updateExecStatus('Error','#f85149');
+  }
+}
+
+/* Execute HTML */
+function execHTML(code){
+  clearOutputIfEmpty();
+  updateExecStatus('Running HTML...','#d29922');
+  updateExecLang('HTML');
+  go('preview');
+  var f=document.getElementById('previewFrame');
+  var d=f.contentDocument||f.contentWindow.document;
+  d.open();d.write(code);d.close();
+  updateExecStatus('Rendered ✓','#10b981');
+}
+
+/* Execute Python via Pyodide */
+async function execPython(code){
+  clearOutputIfEmpty();
+  updateExecStatus('Loading Python...','#d29922');
+  updateExecLang('Python');
+  go('preview');
+  var py=await loadPyodide_();
+  if(!py){appendOutput('Failed to load Python runtime','error');return}
+  updateExecStatus('Running Python...','#d29922');
+  try{
+    py.runPython('import sys\nimport io\nsys.stdout = io.StringIO()');
+    var output=py.runPython(code);
+    var captured=py.runPython('sys.stdout.getvalue()');
+    if(captured)appendOutput(captured.trim());
+    if(output!==undefined&&output!==''&&String(output).trim()!=='None')appendOutput('=> '+String(output).trim(),'info');
+    updateExecStatus('Done ✓','#10b981');
+  }catch(e){
+    var errMsg=e.message||String(e);
+    appendOutput('Python Error: '+errMsg,'error');
+    updateExecStatus('Error','#f85149');
+  }
+}
+
+/* Smart execute - detect language and run */
+function smartExecute(code,lang){
+  lang=(lang||'').toLowerCase();
+  if(lang==='python'||lang==='py')execPython(code);
+  else if(lang==='html'||lang==='htm'||code.trim().startsWith('<!DOCTYPE')||code.trim().startsWith('<html'))execHTML(code);
+  else if(lang==='javascript'||lang==='js'||lang==='')execJS(code);
+  else execJS(code);
+}
+
+/* Execute code blocks from AI responses - AUTO RUN */
+function execCodeBlock(btn){
+  var wrap=btn.closest('.code-block-wrap');
+  var code=wrap.querySelector('code').textContent;
+  var langMatch=wrap.querySelector('code').className.match(/language-(\w+)/);
+  var lang=langMatch?langMatch[1]:'javascript';
+  smartExecute(code,lang);
+  toast('▶ Executing '+lang+'...','info');
+}
+
+/* Execute all code blocks in the last AI message */
+function autoExecFromReply(reply){
+  var codeBlocks=reply.match(/```(\w+)?\n([\s\S]*?)```/g);
+  if(!codeBlocks||!codeBlocks.length)return;
+  var lastBlock=codeBlocks[codeBlocks.length-1];
+  var match=lastBlock.match(/```(\w+)?\n([\s\S]*?)```/);
+  if(!match)return;
+  var lang=match[1]||'javascript';
+  var code=match[2].trim();
+  if(code.length>10&&code.length<5000){
+    setTimeout(function(){smartExecute(code,lang)},500);
+  }
+}
 
 /* Action Parser - executes device commands from AI responses */
 function parseActions(reply){
