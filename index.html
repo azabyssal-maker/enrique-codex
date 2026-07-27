@@ -152,6 +152,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     <div class="nav-t" onclick="go('editor')">📝 Code</div>
     <div class="nav-t" onclick="go('preview')">👁️ View</div>
     <div class="nav-t" onclick="go('search')">🔍 Search</div>
+    <div class="nav-t" onclick="go('plugins')">🧩 Plugins</div>
     <div class="nav-t" onclick="go('brain')">🧠 Brain</div>
     <div class="nav-t" onclick="go('history')">📁 History</div>
   </div>
@@ -210,6 +211,31 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
         </div>
       </div>
     </div>
+    <!-- PLUGINS -->
+    <div class="pnl" id="p-plugins">
+      <div class="brain-wrap">
+        <div class="brain-header">
+          <div class="brain-icon" style="background:linear-gradient(135deg,var(--green),#10b981)">🧩</div>
+          <h2>Plugins</h2>
+          <p>Extend ENRIQUE CODEX with tools</p>
+        </div>
+        <div id="pluginList">
+          <div class="perm-card" onclick="togglePlugin('image')"><div class="icon">🎨</div><div class="info"><h4>Image Generator</h4><p>Create images with AI</p></div><div class="status" id="pl-image">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('voice')"><div class="icon">🗣️</div><div class="info"><h4>Voice Input</h4><p>Speak instead of type</p></div><div class="status" id="pl-voice">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('translator')"><div class="icon">🌍</div><div class="info"><h4>Translator</h4><p>Translate any language</p></div><div class="status" id="pl-translator">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('weather')"><div class="icon">🌤️</div><div class="info"><h4>Weather</h4><p>Check weather anywhere</p></div><div class="status" id="pl-weather">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('calculator')"><div class="icon">🧮</div><div class="info"><h4>Calculator</h4><p>Math and calculations</p></div><div class="status" id="pl-calculator">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('timer')"><div class="icon">⏱️</div><div class="info"><h4>Timer & Alarm</h4><p>Set timers and alarms</p></div><div class="status" id="pl-timer">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('notes')"><div class="icon">📝</div><div class="info"><h4>Notes</h4><p>Save quick notes</p></div><div class="status" id="pl-notes">OFF</div></div>
+          <div class="perm-card" onclick="togglePlugin('qrcode')"><div class="icon">📱</div><div class="info"><h4>QR Code</h4><p>Generate QR codes</p></div><div class="status" id="pl-qrcode">OFF</div></div>
+        </div>
+        <div class="status-box">
+          <h4>📦 Installed: <span id="pluginCount">0</span></h4>
+          <div id="installedPlugins" style="margin-top:8px;font-size:11px;color:var(--muted)">No plugins installed</div>
+        </div>
+      </div>
+    </div>
+
     <!-- BRAIN -->
     <div class="pnl" id="p-brain">
       <div class="brain-wrap">
@@ -261,7 +287,7 @@ try{chatData=JSON.parse(localStorage.getItem('ecx_data')||'[]')}catch(e){}
 
 function go(t){
   var tabs=document.querySelectorAll('.nav-t');
-  var panels=['chat','editor','preview','search','brain','history'];
+  var panels=['chat','editor','preview','search','plugins','brain','history'];
   tabs.forEach(function(el,i){el.classList.toggle('active',panels[i]===t)});
   document.querySelectorAll('.pnl').forEach(function(el,i){el.classList.toggle('active',panels[i]===t)});
 }
@@ -467,6 +493,110 @@ function getDeviceInfo(){
   document.getElementById('st-screen').textContent=screen.width+'x'+screen.height;
 }
 
+// PLUGINS
+var installedPlugins={};
+try{installedPlugins=JSON.parse(localStorage.getItem('ecx_plugins')||'{}')}catch(e){}
+
+function togglePlugin(id){
+  if(installedPlugins[id]){
+    delete installedPlugins[id];
+    var el=document.getElementById('pl-'+id);if(el){el.textContent='OFF';el.classList.remove('on')}
+  }else{
+    installedPlugins[id]=true;
+    var el=document.getElementById('pl-'+id);if(el){el.textContent='ON';el.classList.add('on')}
+  }
+  localStorage.setItem('ecx_plugins',JSON.stringify(installedPlugins));
+  updatePluginCount();
+}
+
+function updatePluginCount(){
+  var count=Object.keys(installedPlugins).length;
+  document.getElementById('pluginCount').textContent=count;
+  var el=document.getElementById('installedPlugins');
+  if(!count){el.innerHTML='No plugins installed';return}
+  var names=[];
+  if(installedPlugins.image)names.push('🎨 Image');
+  if(installedPlugins.voice)names.push('🗣️ Voice');
+  if(installedPlugins.translator)names.push('🌍 Translator');
+  if(installedPlugins.weather)names.push('🌤️ Weather');
+  if(installedPlugins.calculator)names.push('🧮 Calculator');
+  if(installedPlugins.timer)names.push('⏱️ Timer');
+  if(installedPlugins.notes)names.push('📝 Notes');
+  if(installedPlugins.qrcode)names.push('📱 QR');
+  el.innerHTML=names.join(' · ');
+}
+
+function usePlugin(plugin,args){
+  if(plugin==='weather'){
+    return '🌤️ Weather plugin: Checking weather for '+args+'... (Feature coming soon!)';
+  }else if(plugin==='calculator'){
+    try{var result=eval(args);return '🧮 Result: '+result}catch(e){return '🧮 Math error: '+e.message}
+  }else if(plugin==='timer'){
+    var sec=parseInt(args);if(isNaN(sec))return '⏱️ Please specify seconds: "timer 60"';
+    setTimeout(function(){navigator.vibrate([300,100,300]);if(installedPlugins.notifications||Notification.permission==='granted')new Notification('⏱️ Timer Done!',{body:args+' seconds have passed'})},sec*1000);
+    return '⏱️ Timer set for '+sec+' seconds!';
+  }else if(plugin==='notes'){
+    var notes=localStorage.getItem('ecx_notes')||'';
+    localStorage.setItem('ecx_notes',notes+'\n'+args);
+    return '📝 Note saved: '+args;
+  }else if(plugin==='translator'){
+    return '🌍 Translator: Translating "'+args+'"... (Ask AI: "Translate '+args+' to English")';
+  }else if(plugin==='image'){
+    return '🎨 Image Generator: Generating "'+args+'"... (Feature coming soon!)';
+  }else if(plugin==='qrcode'){
+    return '📱 QR Code: Generating QR for "'+args+'"... (Feature coming soon!)';
+  }
+  return null;
+}
+
+// Check plugins in send
+var origSend=send;
+send=async function(){
+  var input=document.getElementById('chatIn');
+  var msg=input.value.trim();
+  if(!msg)return;
+  // Check if any plugin can handle this
+  if(installedPlugins.calculator&&(msg.match(/^[\d\s\+\-\*\/\(\)\.]+$/))){
+    var result=usePlugin('calculator',msg);
+    addMsg('user',msg);addMsg('ai',result);
+    chatData.push({role:'user',content:msg},{role:'ai',content:result});saveData();
+    input.value='';input.style.height='auto';
+    return;
+  }
+  if(installedPlugins.timer&&msg.toLowerCase().match(/timer (\d+)/)){
+    var sec=msg.match(/timer (\d+)/)[1];
+    var result=usePlugin('timer',sec);
+    addMsg('user',msg);addMsg('ai',result);
+    chatData.push({role:'user',content:msg},{role:'ai',content:result});saveData();
+    input.value='';input.style.height='auto';
+    return;
+  }
+  if(installedPlugins.notes&&msg.toLowerCase().match(/^note:|^save:|^remember:/)){
+    var note=msg.replace(/^(note:|save:|remember:)\s*/i,'');
+    var result=usePlugin('notes',note);
+    addMsg('user',msg);addMsg('ai',result);
+    chatData.push({role:'user',content:msg},{role:'ai',content:result});saveData();
+    input.value='';input.style.height='auto';
+    return;
+  }
+  if(installedPlugins.weather&&msg.toLowerCase().match(/weather|temperature/)){
+    var city=msg.replace(/what.*weather.*in\s*/i,'').replace(/weather\s*/i,'').trim()||'your location';
+    var result=usePlugin('weather',city);
+    addMsg('user',msg);addMsg('ai',result);
+    chatData.push({role:'user',content:msg},{role:'ai',content:result});saveData();
+    input.value='';input.style.height='auto';
+    return;
+  }
+  // Otherwise use original send
+  origSend();
+}
+
+// Restore plugin states
+Object.keys(installedPlugins).forEach(function(id){
+  var el=document.getElementById('pl-'+id);
+  if(el){el.textContent='ON';el.classList.add('on')}
+});
+updatePluginCount();
 renderHist();getDeviceInfo();
 </script>
 </body>
