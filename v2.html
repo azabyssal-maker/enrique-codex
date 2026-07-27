@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ENRIQUE CODEX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js">// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#12121c;--card2:#1a1a28;--border:#1e1e30;--primary:#7c5cff;--pink:#ff6baa;--green:#2dd4a8;--gold:#f5a623;--red:#ff4757;--text:#eeeef5;--muted:#62627a}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;height:100dvh;overflow:hidden;position:fixed;width:100%}
+
+/* APP LAYOUT */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10}
+.topbar .logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800}
+.topbar .logo span{background:linear-gradient(135deg,var(--primary),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.topbar .logo .icon{width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;-webkit-text-fill-color:#fff}
+.topbar-actions{display:flex;gap:6px}
+.topbar-actions button{width:32px;height:32px;border:none;border-radius:7px;background:var(--card2);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.topbar-actions button.active{background:rgba(124,92,255,.15);color:var(--primary)}
+
+/* TABS */
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{flex:1;padding:10px;text-align:center;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .badge{font-size:8px;padding:2px 5px;border-radius:8px;background:rgba(124,92,255,.15);color:var(--primary);margin-left:4px}
+
+/* PANELS */
+.panels{flex:1;overflow:hidden;position:relative}
+.panel{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}
+.panel.active{display:flex}
+
+/* CHAT */
+.chat-messages{flex:1;overflow-y:auto;padding:12px;padding-bottom:80px}
+.chat-msg{margin-bottom:12px;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.user{text-align:right}
+.chat-msg .bubble{display:inline-block;max-width:88%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;text-align:left;word-break:break-word}
+.chat-msg.user .bubble{background:linear-gradient(135deg,var(--primary),#a855f7);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.ai .bubble{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px}
+.chat-msg .name{font-size:9px;color:var(--muted);margin-bottom:3px;font-weight:600}
+.chat-msg .bubble pre{background:#0a0a14;border-radius:8px;padding:8px;overflow-x:auto;margin:6px 0;font-size:11px;font-family:'Fira Code',monospace}
+.chat-msg .bubble code{font-family:'Fira Code',monospace;font-size:11px}
+.chat-msg .bubble :not(pre)>code{background:rgba(124,92,255,.12);padding:1px 4px;border-radius:3px}
+.chat-msg .bubble h1,.chat-msg .bubble h2,.chat-msg .bubble h3{margin:6px 0 4px;font-size:14px}
+.chat-msg .bubble p{margin-bottom:4px}
+.chat-msg .bubble ul,.chat-msg .bubble ol{padding-left:16px;margin:4px 0}
+.chat-msg .bubble a{color:var(--primary);text-decoration:underline}
+.chat-msg .bubble table{border-collapse:collapse;width:100%;font-size:11px;margin:6px 0}
+.chat-msg .bubble th,.chat-msg .bubble td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+.chat-msg .bubble th{background:var(--card2)}
+.chat-msg .code-actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.chat-msg .code-actions button{padding:4px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--border);color:var(--muted);font-size:10px;cursor:pointer;font-family:inherit}
+.chat-msg .code-actions button:hover{border-color:var(--primary);color:var(--text)}
+.typing{display:flex;gap:4px;padding:4px 0}
+.typing span{width:5px;height:5px;border-radius:50%;background:var(--primary);animation:blink .6s ease-in-out infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* INPUT */
+.chat-input{position:fixed;bottom:0;left:0;right:0;padding:8px 12px;background:var(--card);border-top:1px solid var(--border);z-index:10}
+.chat-input-row{display:flex;align-items:flex-end;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:6px 8px}
+.chat-input-row:focus-within{border-color:var(--primary)}
+.chat-input-row textarea{flex:1;background:none;border:none;color:var(--text);font-size:14px;font-family:inherit;resize:none;max-height:100px;min-height:20px;line-height:1.4;outline:none;-webkit-appearance:none}
+.chat-input-row textarea::placeholder{color:var(--muted)}
+.send-btn{width:34px;height:34px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--primary),#a855f7);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.send-btn:disabled{opacity:.3}
+.send-btn:active{transform:scale(.9)}
+.input-hint{text-align:center;font-size:8px;color:var(--muted);margin-top:4px}
+
+/* CODE EDITOR */
+.editor-area{flex:1;overflow:auto;padding:12px}
+.editor-area textarea{width:100%;min-height:200px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-family:'Fira Code',monospace;font-size:12px;line-height:1.6;resize:vertical;outline:none}
+.editor-area textarea:focus{border-color:var(--primary)}
+.editor-actions{display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--border)}
+.editor-actions button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-run{background:linear-gradient(135deg,var(--green),#10b981);color:#000}
+.btn-clear{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
+
+/* PREVIEW */
+.preview-frame{flex:1;border:none;background:#fff}
+
+/* HISTORY */
+.history-list{flex:1;overflow-y:auto;padding:12px}
+.history-item{padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer}
+.history-item:hover{border-color:var(--primary)}
+.history-item h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.history-item p{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-item .time{font-size:9px;color:var(--muted);margin-top:4px}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px;color:var(--muted)}
+.empty .icon{font-size:48px;margin-bottom:12px}
+.empty h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.empty p{font-size:12px;max-width:250px;line-height:1.5}
+.quick-btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:16px;width:100%;max-width:300px}
+.quick-btn{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-align:left;cursor:pointer;font-size:11px;color:var(--muted);transition:border-color .2s}
+.quick-btn:hover,.quick-btn:active{border-color:var(--primary);color:var(--text)}
+.quick-btn strong{display:block;color:var(--text);margin-bottom:2px;font-size:12px}
+
+.perm-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.perm-item:hover{border-color:var(--primary)}
+.perm-icon{width:36px;height:36px;background:var(--card2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.perm-info{flex:1;min-width:0}
+.perm-info h4{font-size:13px;font-weight:600}
+.perm-info p{font-size:10px;color:var(--muted);line-height:1.3}
+.perm-status{padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;background:rgba(255,71,87,.1);color:var(--red)}
+.perm-status.on{background:rgba(45,212,168,.1);color:var(--green)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="icon">⚡</div>
+      <span>ENRIQUE CODEX</span>
+    </div>
+    <div class="topbar-actions">
+      <button id="themeBtn" onclick="toggleTheme()" title="Theme">🎨</button>
+      <button onclick="clearChat()" title="New Chat">✨</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('chat')">💬 Chat<span class="badge" id="msgBadge">0</span></div>
+    <div class="tab" onclick="switchTab('editor')">📝 Code</div>
+    <div class="tab" onclick="switchTab('preview')">👁️ View</div>
+    <div class="tab" onclick="switchTab('brain')">🧠 Brain</div>
+    <div class="tab" onclick="switchTab('history')">📁 History</div>
+  </div>
+
+  <!-- PANELS -->
+  <div class="panels">
+
+    <!-- CHAT PANEL -->
+    <div class="panel active" id="chatPanel">
+      <div class="chat-messages" id="chatMessages">
+        <div class="empty" id="emptyState">
+          <div class="icon">⚡</div>
+          <h3>ENRIQUE CODEX</h3>
+          <p>Your AI coding assistant on mobile. Ask me to create websites, write code, or build apps!</p>
+          <div class="quick-btns">
+            <div class="quick-btn" onclick="quickAsk('Create a landing page with HTML and CSS')"><strong>🌐 Website</strong>Landing page</div>
+            <div class="quick-btn" onclick="quickAsk('Build a todo list app with JavaScript')"><strong>📝 App</strong>Todo list</div>
+            <div class="quick-btn" onclick="quickAsk('Write a Python web scraper')"><strong>🐍 Script</strong>Web scraper</div>
+            <div class="quick-btn" onclick="quickAsk('Create a calculator with HTML CSS JS')"><strong>🧮 Tool</strong>Calculator</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-input-row">
+          <textarea id="chatInput" rows="1" placeholder="Ask me to code anything..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="send()">▶</button>
+        </div>
+        <div class="input-hint">Enter send · AI can create websites, apps, scripts</div>
+      </div>
+    </div>
+
+    <!-- EDITOR PANEL -->
+    <div class="panel" id="editorPanel">
+      <div class="editor-area">
+        <textarea id="codeEditor" placeholder="Write HTML/CSS/JS here...
+
+Example:
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: #000; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Hello World</h1>
+</body>
+</html>"></textarea>
+      </div>
+      <div class="editor-actions">
+        <button class="btn-run" onclick="runCode()">▶ Run Code</button>
+        <button class="btn-clear" onclick="clearEditor()">🗑️ Clear</button>
+      </div>
+    </div>
+
+    <!-- PREVIEW PANEL -->
+    <div class="panel" id="previewPanel">
+      <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <!-- BRAIN PANEL -->
+    <div class="panel" id="brainPanel">
+      <div style="padding:16px;overflow-y:auto;flex:1">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;box-shadow:0 0 30px rgba(124,92,255,.3)">🧠</div>
+          <h3 style="font-size:16px;font-weight:800">AI Brain</h3>
+          <p style="font-size:11px;color:var(--muted)">Grant permissions for AI to control your phone</p>
+        </div>
+        <div id="permissionsList">
+          <div class="perm-item" onclick="requestPerm('camera')">
+            <div class="perm-icon">📷</div>
+            <div class="perm-info"><h4>Camera</h4><p>AI can take photos and scan QR codes</p></div>
+            <div class="perm-status" id="perm-camera">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('location')">
+            <div class="perm-icon">📍</div>
+            <div class="perm-info"><h4>Location</h4><p>AI knows your location for maps and directions</p></div>
+            <div class="perm-status" id="perm-location">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('notifications')">
+            <div class="perm-icon">🔔</div>
+            <div class="perm-info"><h4>Notifications</h4><p>AI can send you alerts and reminders</p></div>
+            <div class="perm-status" id="perm-notifications">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('microphone')">
+            <div class="perm-icon">🎤</div>
+            <div class="perm-info"><h4>Microphone</h4><p>AI can listen to voice commands</p></div>
+            <div class="perm-status" id="perm-microphone">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('clipboard')">
+            <div class="perm-icon">📋</div>
+            <div class="perm-info"><h4>Clipboard</h4><p>AI can read and copy text</p></div>
+            <div class="perm-status" id="perm-clipboard">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('files')">
+            <div class="perm-icon">📁</div>
+            <div class="perm-info"><h4>Files</h4><p>AI can save and read files</p></div>
+            <div class="perm-status" id="perm-files">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('contacts')">
+            <div class="perm-icon">👤</div>
+            <div class="perm-info"><h4>Contacts</h4><p>AI can access your contacts</p></div>
+            <div class="perm-status" id="perm-contacts">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('vibrate')">
+            <div class="perm-icon">📳</div>
+            <div class="perm-info"><h4>Vibrate</h4><p>AI can make your phone vibrate</p></div>
+            <div class="perm-status" id="perm-vibrate">OFF</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px">
+          <h4 style="font-size:12px;font-weight:700;margin-bottom:6px">🤖 AI Status</h4>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6" id="aiStatus">
+            <div>🧠 Brain: <span style="color:var(--green)">Online</span></div>
+            <div>📡 Connected: <span style="color:var(--green)">Yes</span></div>
+            <div>🔋 Battery: <span id="batteryStatus">Checking...</span></div>
+            <div>📶 Network: <span id="networkStatus">Checking...</span></div>
+            <div>📱 Platform: <span id="platformStatus">Checking...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <div class="panel" id="historyPanel">
+      <div class="history-list" id="historyList">
+        <div class="empty">
+          <div class="icon">📁</div>
+          <h3>No History Yet</h3>
+          <p>Start chatting to save your code and conversations here.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var API_KEY=atob('c2stb3ItdjEtMjljNzdlZTBjMTFlZDU5ZTExNDZiM2E2NTRlYWYyNjZhYjZlNGM5NzdiOTU2YTU1ZjJkZTFlZTcyNjQyMTRiYQ==');
+var API='https://openrouter.ai/api/v1/chat/completions';
+var MODEL='openai/gpt-3.5-turbo';
+var busy=false, msgCount=0, history=[];
+
+var SYSTEM_PROMPT='You are ENRIQUE CODEX, an expert AI coding assistant. You create COMPLETE, WORKING code. When asked to create a website: 1) Provide FULL HTML/CSS/JS code in one code block 2) Use modern design (gradients, animations, responsive) 3) Make it visually beautiful. You can: CREATE websites and apps, WRITE code in any language, DEBUG code, EXPLAIN concepts. Always provide COMPLETE code in code blocks with language tags (```html, ```javascript, ```python). Be helpful and detailed.';
+
+// Load history
+try{history=JSON.parse(localStorage.getItem('ec_history')||'[]')}catch(e){}
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(function(el,i){
+    el.classList.toggle('active',['chat','editor','preview','brain','history'][i]===t);
+  });
+  document.querySelectorAll('.panel').forEach(function(el,i){
+    el.classList.toggle('active',['chat','editor','preview','brain','history'][i]===t);
+  });
+}
+
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px'}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+function quickAsk(t){document.getElementById('chatInput').value=t;send()}
+
+function addMsg(role,content){
+  var el=document.getElementById('chatMessages');
+  var empty=document.getElementById('emptyState');
+  if(empty)empty.remove();
+  var d=document.createElement('div');d.className='chat-msg '+role;
+  if(role==='user'){
+    d.innerHTML='<div class="bubble">'+esc(content)+'</div>';
+  }else{
+    var html=content?marked.parse(content):'';
+    d.innerHTML='<div class="name">⚡ ENRIQUE CODEX</div><div class="bubble">'+html+'</div>';
+  }
+  el.appendChild(d);
+  // Add code actions
+  if(role==='ai'&&content){
+    d.querySelectorAll('pre code').forEach(function(b){
+      hljs.highlightElement(b);
+      var code=b.textContent;
+      var actions=document.createElement('div');actions.className='code-actions';
+      // Copy
+      var cp=document.createElement('button');cp.textContent='📋 Copy';
+      cp.onclick=function(){navigator.clipboard.writeText(code).then(function(){cp.textContent='✅';setTimeout(function(){cp.textContent='📋 Copy'},1500)})};
+      actions.appendChild(cp);
+      // Open in editor
+      var ed=document.createElement('button');ed.textContent='📝 Edit';
+      ed.onclick=function(){document.getElementById('codeEditor').value=code;switchTab('editor')};
+      actions.appendChild(ed);
+      // Preview HTML
+      if(code.indexOf('<html')!==-1||code.indexOf('<!DOCTYPE')!==-1){
+        var pv=document.createElement('button');pv.textContent='👁️ Preview';
+        pv.onclick=function(){document.getElementById('codeEditor').value=code;runCode();switchTab('preview')};
+        actions.appendChild(pv);
+      }
+      // Download HTML
+      if(code.indexOf('<html')!==-1||code.indexOf('<!DOCTYPE')!==-1){
+        var dl=document.createElement('button');dl.textContent='💾 Save';
+        dl.onclick=function(){var b=new Blob([code],{type:'text/html'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='code.html';a.click()};
+        actions.appendChild(dl);
+      }
+      b.parentNode.insertBefore(actions,b.nextSibling);
+    });
+  }
+  el.scrollTop=el.scrollHeight;
+  msgCount++;
+  document.getElementById('msgBadge').textContent=msgCount;
+  return d;
+}
+
+function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+async function send(){
+  var input=document.getElementById('chatInput');
+  var msg=input.value.trim();
+  if(!msg||busy)return;
+  busy=true;
+  document.getElementById('sendBtn').disabled=true;
+  input.value='';input.style.height='auto';
+  addMsg('user',msg);
+  var aiDiv=addMsg('ai','');
+  aiDiv.querySelector('.bubble').innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+
+  var messages=[{role:'system',content:SYSTEM_PROMPT},{role:'user',content:msg}];
+
+  try{
+    var r=await fetch(API,{method:'POST',headers:{'Authorization':'Bearer '+API_KEY,'Content-Type':'application/json','HTTP-Referer':'https://enrique-codex.github.io','X-Title':'ENRIQUE CODEX'},body:JSON.stringify({model:MODEL,messages:messages,stream:true,temperature:0.7,max_tokens:2000})});
+    if(!r.ok){var er=await r.json().catch(function(){return{error:'Error'}});throw new Error(er.error?.message||'Error '+r.status)}
+    var reader=r.body.getReader(),dec=new TextDecoder(),full='',buf='';
+    while(true){var res=await reader.read();if(res.done)break;buf+=dec.decode(res.value,{stream:true});var lines=buf.split('\n');buf=lines.pop()||'';for(var i=0;i<lines.length;i++){var line=lines[i];if(!line.startsWith('data: '))continue;var d=line.slice(6).trim();if(d==='[DONE]'){saveHistory(msg,full);continue}try{var j=JSON.parse(d);if(j.error)throw new Error(typeof j.error==='string'?j.error:j.error.message);var c=j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content;if(c){full+=c;aiDiv.querySelector('.bubble').innerHTML=marked.parse(full);aiDiv.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight}}catch(e){if(e.message&&e.message.indexOf('JSON')===-1){aiDiv.querySelector('.bubble').innerHTML='<div style="color:var(--red)">⚠️ '+esc(e.message)+'</div>';break}}}}
+  }catch(e){
+    // Fallback non-streaming
+    try{
+      var r2=await fetch(API,{method:'POST',headers:{'Authorization':'Bearer '+API_KEY,'Content-Type':'application/json','HTTP-Referer':'https://enrique-codex.github.io','X-Title':'ENRIQUE CODEX'},body:JSON.stringify({model:MODEL,messages:messages,temperature:0.7,max_tokens:2000})});
+      var j2=await r2.json();
+      if(j2.error)throw new Error(j2.error.message||'Error');
+      var full2=j2.choices[0].message.content;
+      aiDiv.querySelector('.bubble').innerHTML=marked.parse(full2);
+      aiDiv.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});
+      saveHistory(msg,full2);
+    }catch(e2){aiDiv.querySelector('.bubble').innerHTML='<div style="color:var(--red)">⚠️ '+esc(e2.message)+'</div>'}
+  }
+  busy=false;
+  document.getElementById('sendBtn').disabled=false;
+  saveChatMessages();
+  input.focus();
+}
+
+function saveHistory(q,a){
+  history.unshift({q:q,a:a,time:new Date().toLocaleString()});
+  if(history.length>50)history.pop();
+  localStorage.setItem('ec_history',JSON.stringify(history));
+  renderHistory();
+loadChatMessages();
+getDeviceInfo();
+}
+
+function saveChatMessages(){
+  var msgs=document.querySelectorAll('.chat-msg');
+  var data=[];
+  msgs.forEach(function(m){
+    var role=m.classList.contains('user')?'user':'ai';
+    var text=m.querySelector('.bubble')?m.querySelector('.bubble').textContent:'';
+    data.push({role:role,text:text});
+  });
+  localStorage.setItem('ec_msgs',JSON.stringify(data));
+}
+function loadChatMessages(){
+  try{
+    var data=JSON.parse(localStorage.getItem('ec_msgs')||'[]');
+    if(!data.length)return;
+    document.getElementById('emptyState')&&document.getElementById('emptyState').remove();
+    data.forEach(function(m){
+      var d=document.createElement('div');d.className='chat-msg '+m.role;
+      if(m.role==='user'){
+        d.innerHTML='<div class="bubble">'+esc(m.text)+'</div>';
+      }else{
+        d.innerHTML='<div class="name">⚡ ENRIQUE CODEX</div><div class="bubble">'+marked.parse(m.text)+'</div>';
+      }
+      document.getElementById('chatMessages').appendChild(d);
+    });
+    msgCount=data.length;
+    document.getElementById('msgBadge').textContent=msgCount;
+  }catch(e){}
+}
+function renderHistory(){
+  var el=document.getElementById('historyList');
+  if(!history.length){el.innerHTML='<div class="empty"><div class="icon">📁</div><h3>No History Yet</h3><p>Start chatting to save your code and conversations here.</p></div>';return}
+  el.innerHTML='';
+  history.forEach(function(h,i){
+    var d=document.createElement('div');d.className='history-item';
+    d.innerHTML='<h4>'+esc(h.q.slice(0,50))+'</h4><p>'+esc(h.a.slice(0,80))+'</p><div class="time">'+h.time+'</div>';
+    d.onclick=function(){
+      document.getElementById('codeEditor').value=h.a;
+      switchTab('editor');
+    };
+    el.appendChild(d);
+  });
+}
+
+function clearChat(){
+  document.getElementById('chatMessages').innerHTML='<div class="empty" id="emptyState"><div class="icon">⚡</div><h3>ENRIQUE CODEX</h3><p>Your AI coding assistant on mobile. Ask me to create websites, write code, or build apps!</p><div class="quick-btns"><div class="quick-btn" onclick="quickAsk(\'Create a landing page with HTML and CSS\')"><strong>🌐 Website</strong>Landing page</div><div class="quick-btn" onclick="quickAsk(\'Build a todo list app with JavaScript\')"><strong>📝 App</strong>Todo list</div><div class="quick-btn" onclick="quickAsk(\'Write a Python web scraper\')"><strong>🐍 Script</strong>Web scraper</div><div class="quick-btn" onclick="quickAsk(\'Create a calculator with HTML CSS JS\')"><strong>🧮 Tool</strong>Calculator</div></div></div>';
+  msgCount=0;document.getElementById('msgBadge').textContent='0';
+}
+
+function runCode(){
+  var code=document.getElementById('codeEditor').value;
+  if(!code.trim())return;
+  var frame=document.getElementById('previewFrame');
+  var doc=frame.contentDocument||frame.contentWindow.document;
+  doc.open();doc.write(code);doc.close();
+  switchTab('preview');
+}
+
+function clearEditor(){document.getElementById('codeEditor').value=''}
+function toggleTheme(){}
+
+renderHistory();
+loadChatMessages();
+getDeviceInfo();
+// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
+</script>
+</body>
+</html>
