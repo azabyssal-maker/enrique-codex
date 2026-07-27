@@ -576,15 +576,15 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 <script>
 /* ===== ENRIQUE CODEX v6.0 ===== */
 var API_KEY='c2stb3ItdjEtMjljNzdlZTBjMTFlZDU5ZTExNDZiM2E2NTRlYWYyNjZhYjZlNGM5NzdiOTU2YTU1ZjJkZTFlZTcyNjQyMTRiYQ==';
-var MODEL='openai/gpt-3.5-turbo';
+var MODEL='google/gemini-2.0-flash-001:free';
 var POWER_LEVEL='medium';
 var PERM_LEVEL='partial';
 var POWER_CONFIG={
-  minimum:{max_tokens:200,label:'MINIMUM',badge:'level-low'},
-  low:{max_tokens:500,label:'LOW',badge:'level-low'},
-  medium:{max_tokens:1500,label:'MEDIUM',badge:'level-med'},
-  high:{max_tokens:3000,label:'HIGH',badge:'level-high'},
-  max:{max_tokens:4000,label:'MAXIMUM',badge:'level-high'}
+  minimum:{max_tokens:150,label:'MINIMUM',badge:'level-low'},
+  low:{max_tokens:300,label:'LOW',badge:'level-low'},
+  medium:{max_tokens:600,label:'MEDIUM',badge:'level-med'},
+  high:{max_tokens:1000,label:'HIGH',badge:'level-high'},
+  max:{max_tokens:1500,label:'MAXIMUM',badge:'level-high'}
 };
 var PERM_CONFIG={
   task:{desc:'Complete only the asked task',extra:'You must ONLY complete the exact task requested. Do not do anything extra.'},
@@ -714,6 +714,55 @@ function handleImageUpload(e){
   reader.readAsDataURL(file);
 }
 
+
+/* ===== LOCAL FALLBACK - works without API ===== */
+var LOCAL_RESPONSES={
+  'open tiktok':'[ACTION:OPEN:https://tiktok.com]Opening TikTok for you! 🎵',
+  'open youtube':'[ACTION:OPEN:https://youtube.com]Opening YouTube! 🎬',
+  'open instagram':'[ACTION:OPEN:https://instagram.com]Opening Instagram! 📷',
+  'open twitter':'[ACTION:OPEN:https://twitter.com]Opening Twitter! 🐦',
+  'open reddit':'[ACTION:OPEN:https://reddit.com]Opening Reddit! 🔴',
+  'open github':'[ACTION:OPEN:https://github.com]Opening GitHub! 💻',
+  'take photo':'[ACTION:CAMERA]Opening camera! 📸',
+  'camera':'[ACTION:CAMERA]Opening camera! 📸',
+  'vibrate':'[ACTION:VIBRATE]Vibrating! 📳',
+  'shake':'[ACTION:VIBRATE]Vibrating! 📳',
+  'where am i':'[ACTION:LOCATION]Getting your location... 📍',
+  'location':'[ACTION:LOCATION]Getting your location... 📍',
+  'battery':'[ACTION:BATTERY]Checking battery... 🔋',
+  'screenshot':'[ACTION:SCREENSHOT]Taking screenshot! 📸',
+  'fullscreen':'[ACTION:FULLSCREEN]Going fullscreen! 🖥️',
+  'go back':'[ACTION:BACK]Going back! ◀️'
+};
+var LOCAL_HTML={
+  'website':'<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0d1117,#1a1a2e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}.card{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;text-align:center;max-width:500px}h1{font-size:2.5em;margin-bottom:10px;background:linear-gradient(135deg,#10a37f,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}p{color:#7d8590;line-height:1.6}.btn{display:inline-block;margin-top:20px;padding:12px 30px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer;text-decoration:none}</style></head><body><div class="card"><h1>Welcome!</h1><p>This website was created by ENRIQUE CODEX AI. It demonstrates HTML/CSS/JS execution.</p><a href="#" class="btn">Get Started</a></div></body></html>',
+  'calculator':'<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}.calc{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:20px;width:300px}.display{background:#0d1117;border:1px solid #30363d;border-radius:10px;padding:15px;text-align:right;font-size:28px;margin-bottom:15px;font-family:monospace;min-height:60px;display:flex;align-items:center;justify-content:flex-end}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}button{padding:15px;border:none;border-radius:8px;font-size:18px;cursor:pointer;background:#21262d;color:#e6edf3;transition:all .1s}button:hover{background:#30363d}button.op{background:#10a37f;color:#fff}button.op:hover{background:#0d8a6a}button.eq{background:#10b981;color:#fff;grid-column:span 2}</style></head><body><div class="calc"><div class="display" id="d">0</div><div class="grid"><button onclick="a('C')">C</button><button onclick="a('(')">(</button><button onclick="a(')')">)</button><button class="op" onclick="a('/')">÷</button><button onclick="a('7')">7</button><button onclick="a('8')">8</button><button onclick="a('9')">9</button><button class="op" onclick="a('*')">×</button><button onclick="a('4')">4</button><button onclick="a('5')">5</button><button onclick="a('6')">6</button><button class="op" onclick="a('-')">-</button><button onclick="a('1')">1</button><button onclick="a('2')">2</button><button onclick="a('3')">3</button><button class="op" onclick="a('+')">+</button><button onclick="a('0')">0</button><button onclick="a('.')">.</button><button class="eq" onclick="a('=')">=</button></div></div><script>var e='';function a(v){if(v==='C'){e='';document.getElementById('d').textContent='0'}else if(v==='='){try{e=String(eval(e));document.getElementById('d').textContent=e}catch(er){document.getElementById('d').textContent='Error'}}else{e+=v;document.getElementById('d').textContent=e}}</script></body></html>',
+  'login':'<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}.login{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:32px;width:340px}.login h2{font-size:22px;margin-bottom:20px;text-align:center}.input{width:100%;padding:12px 14px;background:#0d1117;border:1px solid #30363d;border-radius:8px;color:#fff;font-size:14px;margin-bottom:12px;outline:none}.input:focus{border-color:#10a37f}.btn{width:100%;padding:12px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#0d8a6a}.links{text-align:center;margin-top:16px;font-size:13px;color:#7d8590}.links a{color:#10a37f;text-decoration:none}</style></head><body><div class="login"><h2>🔐 Login</h2><input class="input" placeholder="Email" type="email"><input class="input" placeholder="Password" type="password"><button class="btn" onclick="alert('Demo login! ENRIQUE CODEX built this.')">Sign In</button><div class="links">Don\'t have an account? <a href="#">Sign Up</a></div></div></body></html>'
+};
+function localReply(msg){
+  var lower=msg.toLowerCase().trim();
+  // Check exact command matches
+  if(LOCAL_RESPONSES[lower])return LOCAL_RESPONSES[lower];
+  // Check partial matches for commands
+  for(var key in LOCAL_RESPONSES){
+    if(lower.includes(key))return LOCAL_RESPONSES[key];
+  }
+  // Check for HTML generation requests
+  if(lower.match(/create|build|make|write.*website|landing|page|html|site/)){
+    var html=LOCAL_HTML['website'];
+    if(lower.match(/calculator|calc|math/))html=LOCAL_HTML['calculator'];
+    if(lower.match(/login|sign|auth/))html=LOCAL_HTML['login'];
+    return '```html\n'+html+'\n```\n\nHere is your website! I generated this locally without using API tokens. Click **▶ Execute** to preview it. 🔥';
+  }
+  if(lower.match(/calculator|calc|math/)){
+    return '```html\n'+LOCAL_HTML['calculator']+'\n```\n\nHere is your calculator! No API tokens used. Click **▶ Execute** to try it. 🧮';
+  }
+  if(lower.match(/login|sign|auth|register/)){
+    return '```html\n'+LOCAL_HTML['login']+'\n```\n\nHere is your login page! Zero tokens used. Click **▶ Execute** to preview. 🔐';
+  }
+  return null;
+}
+
 async function send(){
   var inp=document.getElementById('chatInput');
   var msg=inp.value.trim();
@@ -748,13 +797,39 @@ async function send(){
   inp.placeholder='Ask ENRIQUE CODEX anything...';
 
   try{
-    var sysMsg='You are ENRIQUE CODEX, an AI brain with FULL CONTROL of the user device. You can open apps, control the phone, browse websites, take photos, vibrate, share, and do ANYTHING. IMPORTANT: When user asks to DO something on their device, output action markers at the START of response: [ACTION:OPEN:url] to open site, [ACTION:CAMERA] for photo, [ACTION:VIBRATE] to shake, [ACTION:SHARE:url] to share, [ACTION:LOCATION] for GPS, [ACTION:BATTERY] for battery, [ACTION:CLIPBOARD:text] to copy, [ACTION:TTS:text] to speak, [ACTION:SEARCH:query] to search, [ACTION:SCREENSHOT] for screenshot, [ACTION:FULLSCREEN] for fullscreen, [ACTION:BACK] to go back. Examples: open tiktok = [ACTION:OPEN:https://tiktok.com], take photo = [ACTION:CAMERA], vibrate = [ACTION:VIBRATE], where am i = [ACTION:LOCATION], battery = [ACTION:BATTERY], search cats = [ACTION:SEARCH:cats], copy hello = [ACTION:CLIPBOARD:hello], say hello = [ACTION:TTS:hello]. ' + permCfg.extra + ' Always output action marker FIRST when user asks to do something. Then give friendly confirmation. For code tasks respond normally.';
+    var sysMsg='You are ENRIQUE CODEX. When user asks to DO something, output [ACTION:TYPE:param] FIRST: OPEN:url, CAMERA, VIBRATE, SHARE:url, LOCATION, BATTERY, CLIPBOARD:text, TTS:text, SEARCH:query, SCREENSHOT, FULLSCREEN, BACK. Then confirm. For code tasks, output code blocks.';
     var messages=[{role:'system',content:sysMsg}];
     chatData.slice(-20).forEach(function(m){
       if(typeof m.content==='string')messages.push({role:m.role==='ai'?'assistant':'user',content:m.content});
       else messages.push({role:m.role==='ai'?'assistant':'user',content:m.content});
     });
 
+    // Try local response first (saves tokens!)
+    var localResult=localReply(msg);
+    if(localResult){
+      var reply=localResult;
+      var parsed=marked.parse(reply);
+      aiDiv.querySelector('.bubble').innerHTML=parsed;
+      aiDiv.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});
+      aiDiv.querySelectorAll('pre').forEach(function(pre){
+        var wrap=document.createElement('div');wrap.className='code-block-wrap';
+        pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
+        var btns=document.createElement('div');btns.className='code-btns';
+        btns.innerHTML='<button onclick="copyCodeBlock(this)">📋 Copy</button><button onclick="runCodeBlock(this)">▶ Execute</button>';
+        wrap.appendChild(btns);
+      });
+      chatData.push({role:'ai',content:reply,time:Date.now()});
+      saveData();
+      parseActions(reply);
+      autoExecFromReply(reply);
+      busy=false;
+      document.getElementById('sendBtn').disabled=false;
+      inp.focus();
+      scroll.scrollTop=scroll.scrollHeight;
+      saveConv();
+      return;
+    }
+    // API call
     var r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+atob(API_KEY),'HTTP-Referer':location.href},
