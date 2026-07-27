@@ -736,7 +736,7 @@ async function send(){
   inp.placeholder='Ask ENRIQUE CODEX anything...';
 
   try{
-    var sysMsg='You are ENRIQUE CODEX, an AI coding assistant with full device control and internet access. '+permCfg.extra+' You can generate code, browse the web, control the device, create websites, apps, scripts, and more. Be helpful, detailed, and creative. Always provide working code in code blocks with language tags. When asked to do something with the device, explain what you would do and provide the code/approach.';
+    var sysMsg='You are ENRIQUE CODEX, an AI brain with FULL CONTROL of the user device. You can open apps, control the phone, browse websites, take photos, vibrate, share, and do ANYTHING. IMPORTANT: When user asks to DO something on their device, output action markers at the START of response: [ACTION:OPEN:url] to open site, [ACTION:CAMERA] for photo, [ACTION:VIBRATE] to shake, [ACTION:SHARE:url] to share, [ACTION:LOCATION] for GPS, [ACTION:BATTERY] for battery, [ACTION:CLIPBOARD:text] to copy, [ACTION:TTS:text] to speak, [ACTION:SEARCH:query] to search, [ACTION:SCREENSHOT] for screenshot, [ACTION:FULLSCREEN] for fullscreen, [ACTION:BACK] to go back. Examples: open tiktok = [ACTION:OPEN:https://tiktok.com], take photo = [ACTION:CAMERA], vibrate = [ACTION:VIBRATE], where am i = [ACTION:LOCATION], battery = [ACTION:BATTERY], search cats = [ACTION:SEARCH:cats], copy hello = [ACTION:CLIPBOARD:hello], say hello = [ACTION:TTS:hello]. ' + permCfg.extra + ' Always output action marker FIRST when user asks to do something. Then give friendly confirmation. For code tasks respond normally.';
     var messages=[{role:'system',content:sysMsg}];
     chatData.slice(-20).forEach(function(m){
       if(typeof m.content==='string')messages.push({role:m.role==='ai'?'assistant':'user',content:m.content});
@@ -764,6 +764,7 @@ async function send(){
     chatData.push({role:'ai',content:reply,time:Date.now()});
     saveData();
     updateTokens((msg?msg.length:0)+reply.length);
+    parseActions(reply);
   }catch(e){
     aiDiv.querySelector('.bubble').innerHTML='<div style="color:var(--red)">⚠️ Error: '+esc(e.message)+'</div>';
     chatData.push({role:'ai',content:'Error: '+e.message,time:Date.now()});
@@ -968,6 +969,69 @@ function clearAll(){
 function exitApp(){
   if(!confirm('Exit ENRIQUE CODEX?'))return;
   document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3"><div style="text-align:center"><div style="font-size:56px;margin-bottom:20px">👋</div><h2 style="margin-bottom:10px;font-size:28px">Session Ended</h2><p style="color:#7d8590;margin-bottom:24px;font-size:15px">All data saved locally. Refresh to continue.</p><button onclick="location.reload()" style="padding:12px 28px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Start New Session</button></div></div>';
+}
+
+
+/* Action Parser - executes device commands from AI responses */
+function parseActions(reply){
+  var actions=reply.match(/\[ACTION:([A-Z]+)(?::([^\]]+))?\]/g);
+  if(!actions)return;
+  actions.forEach(function(a){
+    var m=a.match(/\[ACTION:([A-Z]+)(?::([^\]]+))?\]/);
+    if(!m)return;
+    var cmd=m[1], param=m[2]||'';
+    try{
+      if(cmd==='OPEN'){
+        if(param.startsWith('http'))window.open(param,'_blank');
+        else window.open('https://'+param,'_blank');
+        toast('🌐 Opening: '+param,'success');
+      }
+      else if(cmd==='CAMERA'){
+        if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+          navigator.mediaDevices.getUserMedia({video:true}).then(function(s){
+            s.getTracks()[0].stop();
+            toast('📸 Camera accessed!','success');
+          }).catch(function(){toast('Camera denied','error')});
+        }
+      }
+      else if(cmd==='VIBRATE'){navigator.vibrate([200,100,200]);toast('📳 Vibrated!','success')}
+      else if(cmd==='LOCATION'){
+        navigator.geolocation.getCurrentPosition(function(p){
+          toast('📍 '+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5),'success');
+        },function(){toast('Location denied','error')},{timeout:5000});
+      }
+      else if(cmd==='BATTERY'){
+        navigator.getBattery?navigator.getBattery().then(function(b){toast('🔋 Battery: '+Math.round(b.level*100)+'%','success')}):toast('Not supported','error');
+      }
+      else if(cmd==='CLIPBOARD'){navigator.clipboard.writeText(param);toast('📋 Copied: '+param.slice(0,30),'success')}
+      else if(cmd==='TTS'){
+        if(window.speechSynthesis){
+          var u=new SpeechSynthesisUtterance(param);u.lang=navigator.language;
+          speechSynthesis.speak(u);toast('🔊 Speaking...','success');
+        }
+      }
+      else if(cmd==='SEARCH'){
+        window.open('https://www.google.com/search?q='+encodeURIComponent(param),'_blank');
+        toast('🔍 Searching: '+param,'success');
+      }
+      else if(cmd==='SCREENSHOT'){
+        if(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia){
+          navigator.mediaDevices.getDisplayMedia({video:true}).then(function(s){s.getTracks()[0].stop();toast('📸 Screenshot!','success')}).catch(function(){});
+        }
+      }
+      else if(cmd==='FULLSCREEN'){
+        if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(function(){});
+        toast('🖥️ Fullscreen','success');
+      }
+      else if(cmd==='BACK'){window.history.back();toast('◀ Going back','success')}
+      else if(cmd==='SHARE'){
+        var shareUrl=param||location.href;
+        if(navigator.share)navigator.share({title:'ENRIQUE CODEX',url:shareUrl}).catch(function(){});
+        else window.open(shareUrl,'_blank');
+        toast('📤 Sharing...','success');
+      }
+    }catch(e){toast('Action error: '+e.message,'error')}
+  });
 }
 
 function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
