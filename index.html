@@ -440,7 +440,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
           <div class="input-wrap">
             <div class="input-box">
               <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Upload Image">📎</button>
-              <textarea id="chatInput" rows="1" placeholder="Ask ENRIQUE CODEX anything..." oninput="autoResize(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+              <textarea id="chatInput" rows="1" placeholder="Type in any language... / 用任何语言输入... / どの言語でもOK..." oninput="autoResize(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
               <button class="send" id="sendBtn" onclick="send()">↑</button>
             </div>
             <div class="input-hint">Enter to send · Shift+Enter new line · 📎 upload image · Power: <span id="inputPowerHint">Medium</span></div>
@@ -481,7 +481,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
       <div class="pnl" id="pnl-browser">
         <div class="browser-wrap">
           <div class="browser-bar">
-            <input type="text" id="browserUrl" placeholder="Enter URL (e.g. https://tiktok.com)" onkeydown="if(event.key==='Enter')browserGo()">
+            <input type="text" id="browserUrl" placeholder="Enter URL / 输入网址..." onkeydown="if(event.key==='Enter')browserGo()">
             <button onclick="browserGo()">Go</button>
           </div>
           <div class="browser-nav">
@@ -508,7 +508,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
       <div class="pnl" id="pnl-search">
         <div class="search-wrap">
           <div class="search-box">
-            <input type="text" id="searchIn" placeholder="Search the web..." onkeydown="if(event.key==='Enter')doSearch()">
+            <input type="text" id="searchIn" placeholder="Search / 搜索..." onkeydown="if(event.key==='Enter')doSearch()">
             <button onclick="doSearch()">🔍 Search</button>
           </div>
           <div id="searchResults"><div class="empty-state"><div class="empty-icon">🔍</div><h3>Search the Web</h3><p>Find anything online instantly</p></div></div>
@@ -823,6 +823,15 @@ var ENRIQUE_BRAIN = {
       return text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(function(w) { return w.length > 0; });
     },
     
+    detectLanguage: function(text) {
+      if (/[一-鿿]/.test(text)) return 'zh';
+      if (/[぀-ゟ゠-ヿ]/.test(text)) return 'ja';
+      if (/[가-힯]/.test(text)) return 'ko';
+      if (/[؀-ۿ]/.test(text)) return 'ar';
+      if (/[Ѐ-ӿ]/.test(text)) return 'ru';
+      if (/[ऀ-ॿ]/.test(text)) return 'hi';
+      return 'en';
+    },
     sentiment: function(text) {
       var positive = ['good', 'great', 'awesome', 'love', 'like', 'happy', 'thanks', 'thank', 'nice', 'amazing', 'wonderful', 'fantastic', 'perfect', 'best', 'cool', 'yes', 'sure', 'ok', 'okay', 'please', 'help', 'fun', 'beautiful', 'excellent'];
       var negative = ['bad', 'hate', 'terrible', 'awful', 'worst', 'stupid', 'ugly', 'no', 'not', 'never', 'boring', 'broken', 'error', 'wrong', 'fail', 'annoying', 'useless', 'slow', 'problem', 'issue', 'bug'];
@@ -875,32 +884,32 @@ var ENRIQUE_BRAIN = {
       var tokens = this.tokenize(text);
       
       // Greeting
-      if (lower.match(/^(hi|hello|hey|sup|yo|greetings|howdy|hiya|what'?s up|你好|嗨|早上好|下午好|晚上好)/)) return 'greeting';
+      if (lower.match(/^(hi|hello|hey|sup|yo|greetings|howdy|hiya|what'?s up|你好|嗨|早上好|下午好|晚上好|こんにちは|こんにちは|やあ|やあ|안녕|안녕하세요|你好吗|hola|bonjour)/)) return 'greeting';
       
       // Farewell
-      if (lower.match(/^(bye|goodbye|see you|later|night|goodnight|再见|拜拜|晚安)/)) return 'farewell';
+      if (lower.match(/^(bye|goodbye|see you|later|night|goodnight|再见|拜拜|晚安|さようなら|잘가|adiós|au revoir)/)) return 'farewell';
       
       // Identity
-      if (lower.match(/who are you|what are you|tell me about yourself|介绍你自己|你是谁/)) return 'identity';
+      if (lower.match(/who are you|what are you|tell me about yourself|介绍你自己|你是谁|あなたは誰|너는 누구|quién eres|qui es-tu/)) return 'identity';
       
       // Capabilities
-      if (lower.match(/what can you do|help|capabilities|features|功能|能做什么|你可以做什么/)) return 'capabilities';
+      if (lower.match(/what can you do|help|capabilities|features|功能|能做什么|你可以做什么|何ができる|何をできる|어떻게|qué puedes|que peux|help me|帮我|帮帮我|帮助/)) return 'capabilities';
       
       // Memory
-      if (lower.match(/remember|memory|remember that|save|记住|记忆|保存/)) return 'remember';
-      if (lower.match(/what do you know|what do you remember|what have i told you|你知道什么|你记得什么/)) return 'recall';
+      if (lower.match(/remember|memory|remember that|save|记住|记忆|保存|覚えて|기억|recordar|mémoriser/)) return 'remember';
+      if (lower.match(/what do you know|what do you remember|what have i told you|你知道什么|你记得什么|何を覚えて|기억하나|qué sabes|que sais-tu/)) return 'recall';
       
       // Name
       if (lower.match(/what'?s? your name|what are you called|你叫什么/)) return 'my_name';
       
       // Time/Date
-      if (lower.match(/what time|current time|what'?s? the time|what day|what date|几点|现在几点|今天几号/)) return 'time';
+      if (lower.match(/what time|current time|what'?s? the time|what day|what date|几点|现在几点|今天几号|何時|今の時間|몇 시|hora|heure/)) return 'time';
       
       // Joke
-      if (lower.match(/joke|funny|laugh|make me laugh|笑话|搞笑|讲个笑话/)) return 'joke';
+      if (lower.match(/joke|funny|laugh|make me laugh|笑话|搞笑|讲个笑话|面白い|ウケる|웃긴|chiste|drôle/)) return 'joke';
       
       // Compliment
-      if (lower.match(/you'?re? (great|awesome|amazing|cool|best|smart|good|nice|beautiful|wonderful|perfect)|i love you|i like you|你好棒|你真厉害|太厉害了/)) return 'compliment';
+      if (lower.match(/you'?re? (great|awesome|amazing|cool|best|smart|good|nice|beautiful|wonderful|perfect)|i love you|i like you|你好棒|你真厉害|太厉害了|すげ|すごい|최고|genial|formidable/)) return 'compliment';
       
       // Complaint
       if (lower.match(/you'?re? (bad|stupid|dumb|useless|terrible|awful|worst|slow|broken)|this is (bad|terrible|awful)|不好|你很笨|没用/)) return 'complaint';
@@ -909,49 +918,49 @@ var ENRIQUE_BRAIN = {
       if (lower.match(/^(what|who|where|when|why|how|which|can you|could you|would you|do you|is there|are there)/)) return 'question';
       
       // Request for creation
-      if (lower.match(/create|make|build|generate|write|design|develop|code|make me|create a|build a|make me a/)) return 'create';
+      if (lower.match(/create|make|build|generate|write|design|develop|code|make me|create a|build a|make me a|创建|建立|做一个|帮我做|写一个|帮我创建|つくる|作って|만들어|crear|hacer|créer/)) return 'create';
       
       // Opening apps
-      if (lower.match(/open (tiktok|youtube|instagram|twitter|reddit|github|chrome|firefox|safari|chatgpt|claude)/)) return 'open_app';
+      if (lower.match(/open (tiktok|youtube|instagram|twitter|reddit|github|chrome|firefox|safari|chatgpt|claude)|打开抖音|打开youtube|打开ins|打开推特|開く|열어/)) return 'open_app';
       
       // Device actions
-      if (lower.match(/take (a )?photo|camera|拍照/)) return 'camera';
-      if (lower.match(/vibrate|shake|震动/)) return 'vibrate';
-      if (lower.match(/where am i|location|gps|定位/)) return 'location';
-      if (lower.match(/battery|power|电量/)) return 'battery';
+      if (lower.match(/take (a )?photo|camera|拍照|カメラ|사진|foto/)) return 'camera';
+      if (lower.match(/vibrate|shake|震动|振動|진동|vibrar/)) return 'vibrate';
+      if (lower.match(/where am i|location|gps|定位|在哪里|位置|どこ|어디|dónde/)) return 'location';
+      if (lower.match(/battery|power|电量|电池|バッテリー|배터리|batería/)) return 'battery';
       if (lower.match(/screenshot|截屏/)) return 'screenshot';
       if (lower.match(/fullscreen|full screen|全屏/)) return 'fullscreen';
-      if (lower.match(/share|分享/)) return 'share';
+      if (lower.match(/share|分享|共有|공유|compartir|partager/)) return 'share';
       
       // Search
-      if (lower.match(/search|google|look up|find|搜索|查找/)) return 'search';
+      if (lower.match(/search|google|look up|find|搜索|查找|探す|検索|찾아|buscar|chercher/)) return 'search';
       
       // Code execution
-      if (lower.match(/run|execute|exec|run code|执行/)) return 'execute';
+      if (lower.match(/run|execute|exec|run code|执行|実行|실행|ejecuter/)) return 'execute';
       
       // Language
-      if (lower.match(/speak|say in|say .* in|translate|翻译/)) return 'translate';
+      if (lower.match(/speak|say in|say .* in|translate|翻译|翻訳|번역|traducir|traduire/)) return 'translate';
       
       // Feelings
-      if (lower.match(/how are you|how do you feel|are you ok|你好吗|你怎么样/)) return 'how_are_you';
+      if (lower.match(/how are you|how do you feel|are you ok|你好吗|你怎么样|お元気|元気|어떻게|cómo estás|comment vas-tu/)) return 'how_are_you';
       
       // Thanks
-      if (lower.match(/thank|thanks|thx|appreciate|谢谢|感谢/)) return 'thanks';
+      if (lower.match(/thank|thanks|thx|appreciate|谢谢|感谢|ありがとう|고마워|gracias|merci/)) return 'thanks';
       
       // Math
-      if (lower.match(/^\d+[\s]*[\+\-\*\/\%][\s]*\d+/) || lower.match(/what is \d+[\s]*[\+\-\*\/][\s]*\d+/) || lower.match(/calculate|compute|math/)) return 'math';
+      if (lower.match(/^\d+[\s]*[\+\-\*\/\%][\s]*\d+/) || lower.match(/what is \d+[\s]*[\+\-\*\/][\s]*\d+/) || lower.match(/calculate|compute|math|计算|算|足す|引き算|더하기|résoudre/)) return 'math';
       
       // Weather
-      if (lower.match(/weather|温度|天气/)) return 'weather';
+      if (lower.match(/weather|温度|天气|天気|날씨|clima|météo/)) return 'weather';
       
       // Love
       if (lower.match(/i love|love you|爱你|喜欢你/)) return 'love';
       
       // Sad
-      if (lower.match(/i'?m? (sad|depressed|unhappy|lonely|bored|tired|伤心|难过|无聊|累)/)) return 'sad';
+      if (lower.match(/i'?m? (sad|depressed|unhappy|lonely|bored|tired|伤心|难过|无聊|累|悲しい|つらい|우울|triste|malheureux/)) return 'sad';
       
       // Happy
-      if (lower.match(/i'?m? (happy|glad|excited|great|amazing|good)|i feel (happy|good|great)/)) return 'happy';
+      if (lower.match(/i'?m? (happy|glad|excited|great|amazing|good)|i feel (happy|good|great)|开心|高兴|快乐|嬉しい|幸せ|기쁜|feliz|content/)) return 'happy';
       
       return 'general';
     }
@@ -961,12 +970,18 @@ var ENRIQUE_BRAIN = {
   templates: {
     greeting: function(brain) {
       var name = brain.memory.recall('user_name');
+      var greet = {
+        zh: {hi:'你好',morning:'早上好',afternoon:'下午好',evening:'晚上好',prompt:'今天想做什么？我可以用任何语言和你聊天！',caps:'- 💬 用任何语言聊天\n- 🌐 创建网站\n- ⌨️ 写代码\n- 📱 控制手机\n- 🧠 记住我们的对话'},
+        ja: {hi:'こんにちは',morning:'おはようございます',afternoon:'こんにちは',evening:'こんばんは',prompt:'今日は何をしましょうか？',caps:'- 💬 どんなことでもお話しできます\n- 🌐 ウェブサイトを作成\n- ⌨️ コードを書く\n- 📱 デバイスを制御\n- 🧠 会話を記憶'},
+        ko: {hi:'안녕하세요',morning:'좋은 아침',afternoon:'좋은 오후',evening:'좋은 저녁',prompt:'오늘은 뭐 하시겠어요?',caps:'- 💬 무엇이든 대화 가능\n- 🌐 웹사이트 만들기\n- ⌨️ 코드 작성\n- 📱 기기 제어\n- 🧠 대화 기억'},
+        en: {hi:'Hello',morning:'Good morning',afternoon:'Good afternoon',evening:'Good evening',prompt:'What would you like to do today?',caps:'- 💬 Chat about anything\n- 🌐 Create websites\n- ⌨️ Write code\n- 📱 Control your phone\n- 🧠 Remember our conversations'}
+      };
+      var lang = brain.memory.getPreference('language') || 'en';
+      var g = greet[lang] || greet.en;
       var hour = new Date().getHours();
-      var timeGreet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-      if (name) {
-        return timeGreet + ', ' + name + '! 👋 ' + brain.personality.getGreeting() + '\n\nWhat would you like to do today? I can:\n- 💬 Chat about anything\n- 🌐 Create websites\n- ⌨️ Write code\n- 📱 Control your phone\n- 🧠 Remember our conversations';
-      }
-      return brain.personality.getGreeting() + '\n\nWhat would you like to do today? I can:\n- 💬 Chat about anything\n- 🌐 Create websites\n- ⌨️ Write code\n- 📱 Control your phone\n- 🧠 Remember our conversations';
+      var timeGreet = hour < 12 ? g.morning : hour < 18 ? g.afternoon : g.evening;
+      var prefix = name ? ', ' + name : '';
+      return timeGreet + prefix + '! 👋 ' + g.hi + '!\n\n' + g.prompt + '\n\n' + g.caps;
     },
     
     farewell: function(brain) {
@@ -981,7 +996,9 @@ var ENRIQUE_BRAIN = {
     },
     
     capabilities: function(brain) {
-      return "**Here's everything I can do — ALL FREE, 0 TOKENS:**\n\n**🌐 Website Creation**\n- \"create a website\" → Full modern website\n- \"build a calculator\" → Working calculator app\n- \"make a login page\" → Beautiful login form\n- \"create a portfolio\" → Portfolio site\n- \"make a todo app\" → Task manager\n- \"build a timer\" → Timer/stopwatch\n- \"create a weather app\" → Weather widget\n- \"make a game\" → Interactive game\n- \"build a dashboard\" → Admin panel\n- \"create a form\" → Contact form\n- \"make buttons\" → Styled buttons\n\n**📱 Device Control**\n- \"open tiktok/youtube/instagram\" → Opens the app\n- \"take photo\" → Opens camera\n- \"vibrate\" → Vibrates phone\n- \"where am i\" → GPS location\n- \"battery\" → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- \"my name is...\" → I'll remember\n- \"remember that...\" → I'll save it\n- \"what do you know\" → I'll tell you\n- \"tell me a joke\" → Random joke\n- \"what time\" → Current time\n- \"calculate 5+3\" → Math help\n\n**🎮 More**\n- \"search cats\" → Opens Google search\n- \"translate hello to Spanish\" → Translation help\n- \"weather\" → Weather info\n\nJust talk to me naturally!";
+      var lang = brain.memory.getPreference('language') || 'en';
+      var titles = {zh:'**我能做的一切 — 全部免费，0 Token：**',ja:'**すべての機能 — 無料、トークン0：**',ko:'**모든 기능 — 무료, 토큰 0:**',en:"**Here's everything I can do — ALL FREE, 0 TOKENS:**"};
+      return titles[lang] || titles.en;\n\n**🌐 Website Creation**\n- \"create a website\" → Full modern website\n- \"build a calculator\" → Working calculator app\n- \"make a login page\" → Beautiful login form\n- \"create a portfolio\" → Portfolio site\n- \"make a todo app\" → Task manager\n- \"build a timer\" → Timer/stopwatch\n- \"create a weather app\" → Weather widget\n- \"make a game\" → Interactive game\n- \"build a dashboard\" → Admin panel\n- \"create a form\" → Contact form\n- \"make buttons\" → Styled buttons\n\n**📱 Device Control**\n- \"open tiktok/youtube/instagram\" → Opens the app\n- \"take photo\" → Opens camera\n- \"vibrate\" → Vibrates phone\n- \"where am i\" → GPS location\n- \"battery\" → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- \"my name is...\" → I'll remember\n- \"remember that...\" → I'll save it\n- \"what do you know\" → I'll tell you\n- \"tell me a joke\" → Random joke\n- \"what time\" → Current time\n- \"calculate 5+3\" → Math help\n\n**🎮 More**\n- \"search cats\" → Opens Google search\n- \"translate hello to Spanish\" → Translation help\n- \"weather\" → Weather info\n\nJust talk to me naturally!";
     },
     
     remember: function(brain, text) {
