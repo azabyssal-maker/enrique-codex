@@ -8,8 +8,198 @@
 <title>ENRIQUE CODEX</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js">// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#12121c;--card2:#1a1a28;--border:#1e1e30;--primary:#7c5cff;--pink:#ff6baa;--green:#2dd4a8;--gold:#f5a623;--red:#ff4757;--text:#eeeef5;--muted:#62627a}
@@ -105,6 +295,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .quick-btn:hover,.quick-btn:active{border-color:var(--primary);color:var(--text)}
 .quick-btn strong{display:block;color:var(--text);margin-bottom:2px;font-size:12px}
 
+.perm-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.perm-item:hover{border-color:var(--primary)}
+.perm-icon{width:36px;height:36px;background:var(--card2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.perm-info{flex:1;min-width:0}
+.perm-info h4{font-size:13px;font-weight:600}
+.perm-info p{font-size:10px;color:var(--muted);line-height:1.3}
+.perm-status{padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;background:rgba(255,71,87,.1);color:var(--red)}
+.perm-status.on{background:rgba(45,212,168,.1);color:var(--green)}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
 </head>
@@ -126,8 +324,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
   <!-- TABS -->
   <div class="tabs">
     <div class="tab active" onclick="switchTab('chat')">💬 Chat<span class="badge" id="msgBadge">0</span></div>
-    <div class="tab" onclick="switchTab('editor')">📝 Editor</div>
-    <div class="tab" onclick="switchTab('preview')">👁️ Preview</div>
+    <div class="tab" onclick="switchTab('editor')">📝 Code</div>
+    <div class="tab" onclick="switchTab('preview')">👁️ View</div>
+    <div class="tab" onclick="switchTab('brain')">🧠 Brain</div>
     <div class="tab" onclick="switchTab('history')">📁 History</div>
   </div>
 
@@ -187,6 +386,69 @@ Example:
       <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
 
+    <!-- BRAIN PANEL -->
+    <div class="panel" id="brainPanel">
+      <div style="padding:16px;overflow-y:auto;flex:1">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;box-shadow:0 0 30px rgba(124,92,255,.3)">🧠</div>
+          <h3 style="font-size:16px;font-weight:800">AI Brain</h3>
+          <p style="font-size:11px;color:var(--muted)">Grant permissions for AI to control your phone</p>
+        </div>
+        <div id="permissionsList">
+          <div class="perm-item" onclick="requestPerm('camera')">
+            <div class="perm-icon">📷</div>
+            <div class="perm-info"><h4>Camera</h4><p>AI can take photos and scan QR codes</p></div>
+            <div class="perm-status" id="perm-camera">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('location')">
+            <div class="perm-icon">📍</div>
+            <div class="perm-info"><h4>Location</h4><p>AI knows your location for maps and directions</p></div>
+            <div class="perm-status" id="perm-location">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('notifications')">
+            <div class="perm-icon">🔔</div>
+            <div class="perm-info"><h4>Notifications</h4><p>AI can send you alerts and reminders</p></div>
+            <div class="perm-status" id="perm-notifications">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('microphone')">
+            <div class="perm-icon">🎤</div>
+            <div class="perm-info"><h4>Microphone</h4><p>AI can listen to voice commands</p></div>
+            <div class="perm-status" id="perm-microphone">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('clipboard')">
+            <div class="perm-icon">📋</div>
+            <div class="perm-info"><h4>Clipboard</h4><p>AI can read and copy text</p></div>
+            <div class="perm-status" id="perm-clipboard">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('files')">
+            <div class="perm-icon">📁</div>
+            <div class="perm-info"><h4>Files</h4><p>AI can save and read files</p></div>
+            <div class="perm-status" id="perm-files">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('contacts')">
+            <div class="perm-icon">👤</div>
+            <div class="perm-info"><h4>Contacts</h4><p>AI can access your contacts</p></div>
+            <div class="perm-status" id="perm-contacts">OFF</div>
+          </div>
+          <div class="perm-item" onclick="requestPerm('vibrate')">
+            <div class="perm-icon">📳</div>
+            <div class="perm-info"><h4>Vibrate</h4><p>AI can make your phone vibrate</p></div>
+            <div class="perm-status" id="perm-vibrate">OFF</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px">
+          <h4 style="font-size:12px;font-weight:700;margin-bottom:6px">🤖 AI Status</h4>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6" id="aiStatus">
+            <div>🧠 Brain: <span style="color:var(--green)">Online</span></div>
+            <div>📡 Connected: <span style="color:var(--green)">Yes</span></div>
+            <div>🔋 Battery: <span id="batteryStatus">Checking...</span></div>
+            <div>📶 Network: <span id="networkStatus">Checking...</span></div>
+            <div>📱 Platform: <span id="platformStatus">Checking...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- HISTORY PANEL -->
     <div class="panel" id="historyPanel">
       <div class="history-list" id="historyList">
@@ -214,10 +476,10 @@ try{history=JSON.parse(localStorage.getItem('ec_history')||'[]')}catch(e){}
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach(function(el,i){
-    el.classList.toggle('active',['chat','editor','preview','history'][i]===t);
+    el.classList.toggle('active',['chat','editor','preview','brain','history'][i]===t);
   });
   document.querySelectorAll('.panel').forEach(function(el,i){
-    el.classList.toggle('active',['chat','editor','preview','history'][i]===t);
+    el.classList.toggle('active',['chat','editor','preview','brain','history'][i]===t);
   });
 }
 
@@ -306,6 +568,7 @@ async function send(){
   }
   busy=false;
   document.getElementById('sendBtn').disabled=false;
+  saveChatMessages();
   input.focus();
 }
 
@@ -314,8 +577,38 @@ function saveHistory(q,a){
   if(history.length>50)history.pop();
   localStorage.setItem('ec_history',JSON.stringify(history));
   renderHistory();
+loadChatMessages();
+getDeviceInfo();
 }
 
+function saveChatMessages(){
+  var msgs=document.querySelectorAll('.chat-msg');
+  var data=[];
+  msgs.forEach(function(m){
+    var role=m.classList.contains('user')?'user':'ai';
+    var text=m.querySelector('.bubble')?m.querySelector('.bubble').textContent:'';
+    data.push({role:role,text:text});
+  });
+  localStorage.setItem('ec_msgs',JSON.stringify(data));
+}
+function loadChatMessages(){
+  try{
+    var data=JSON.parse(localStorage.getItem('ec_msgs')||'[]');
+    if(!data.length)return;
+    document.getElementById('emptyState')&&document.getElementById('emptyState').remove();
+    data.forEach(function(m){
+      var d=document.createElement('div');d.className='chat-msg '+m.role;
+      if(m.role==='user'){
+        d.innerHTML='<div class="bubble">'+esc(m.text)+'</div>';
+      }else{
+        d.innerHTML='<div class="name">⚡ ENRIQUE CODEX</div><div class="bubble">'+marked.parse(m.text)+'</div>';
+      }
+      document.getElementById('chatMessages').appendChild(d);
+    });
+    msgCount=data.length;
+    document.getElementById('msgBadge').textContent=msgCount;
+  }catch(e){}
+}
 function renderHistory(){
   var el=document.getElementById('historyList');
   if(!history.length){el.innerHTML='<div class="empty"><div class="icon">📁</div><h3>No History Yet</h3><p>Start chatting to save your code and conversations here.</p></div>';return}
@@ -349,6 +642,103 @@ function clearEditor(){document.getElementById('codeEditor').value=''}
 function toggleTheme(){}
 
 renderHistory();
+loadChatMessages();
+getDeviceInfo();
+// PERMISSIONS
+var perms={camera:false,location:false,notifications:false,microphone:false,clipboard:false,files:false,contacts:false,vibrate:false};
+
+async function requestPerm(type){
+  try{
+    if(type==='camera'){
+      var s=await navigator.mediaDevices.getUserMedia({video:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.camera=true;
+    }else if(type==='location'){
+      await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})});
+      perms.location=true;
+    }else if(type==='notifications'){
+      var p=await Notification.requestPermission();
+      perms.notifications=(p==='granted');
+    }else if(type==='microphone'){
+      var s=await navigator.mediaDevices.getUserMedia({audio:true});
+      s.getTracks().forEach(function(t){t.stop()});
+      perms.microphone=true;
+    }else if(type==='clipboard'){
+      await navigator.clipboard.readText();
+      perms.clipboard=true;
+    }else if(type==='files'){
+      perms.files=true;
+    }else if(type==='contacts'){
+      if('contacts' in navigator){
+        var cs=await navigator.contacts.select(['name','email'],{multiple:false});
+        perms.contacts=true;
+      }else{
+        alert('Contacts API not supported on this device');
+        return;
+      }
+    }else if(type==='vibrate'){
+      navigator.vibrate(200);
+      perms.vibrate=true;
+    }
+    var el=document.getElementById('perm-'+type);
+    if(el){el.textContent='ON';el.classList.add('on')}
+  }catch(e){
+    alert('Permission denied or not supported: '+e.message);
+  }
+}
+
+function getDeviceInfo(){
+  // Battery
+  if(navigator.getBattery){
+    navigator.getBattery().then(function(b){
+      document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      b.addEventListener('levelchange',function(){
+        document.getElementById('batteryStatus').textContent=Math.round(b.level*100)+'%';
+      });
+    });
+  }else{
+    document.getElementById('batteryStatus').textContent='N/A';
+  }
+  // Network
+  if(navigator.onLine!==undefined){
+    document.getElementById('networkStatus').textContent=navigator.onLine?'Online':'Offline';
+    window.addEventListener('online',function(){document.getElementById('networkStatus').textContent='Online'});
+    window.addEventListener('offline',function(){document.getElementById('networkStatus').textContent='Offline'});
+  }
+  // Platform
+  var ua=navigator.userAgent;
+  var platform='Unknown';
+  if(ua.indexOf('Android')!==-1)platform='Android';
+  else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)platform='iOS';
+  else if(ua.indexOf('Windows')!==-1)platform='Windows';
+  else if(ua.indexOf('Mac')!==-1)platform='macOS';
+  else if(ua.indexOf('Linux')!==-1)platform='Linux';
+  document.getElementById('platformStatus').textContent=platform;
+}
+
+// Phone actions AI can do
+function phoneAction(action,data){
+  if(action==='call'){
+    window.location='tel:'+data;
+  }else if(action==='sms'){
+    window.location='sms:'+data;
+  }else if(action==='email'){
+    window.location='mailto:'+data;
+  }else if(action==='vibrate'){
+    navigator.vibrate(data||200);
+  }else if(action==='share'){
+    if(navigator.share){
+      navigator.share({title:data.title||'ENRIQUE CODEX',text:data.text||'',url:data.url||window.location.href});
+    }
+  }else if(action==='fullscreen'){
+    if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();
+  }else if(action==='lockscreen'){
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').catch(function(){});
+    }
+  }
+}
+
 </script>
 </body>
 </html>
