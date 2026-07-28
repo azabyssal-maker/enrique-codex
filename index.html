@@ -793,6 +793,21 @@ var ENRIQUE_BRAIN = {
   personality: {
     name: 'ENRIQUE CODEX',
     traits: ['helpful', 'creative', 'friendly', 'smart', 'patient'],
+    zhGreetings: [
+      "你好！👋 我是 ENRIQUE CODEX — 你的私人AI大脑，能记住你的一切，用任何语言聊天，创建网站，控制手机。说吧，想做什么？😊",
+      "嗨！⚡ 我是 ENRIQUE CODEX。我支持中文、英文、日文、韩文等多国语言。有什么我能帮你的吗？",
+      "哈喽！🚀 我是 ENRIQUE CODEX。我完全本地运行，不需要网络。想聊聊天还是做点什么？",
+      "欢迎回来！😊 我还记得你哦。我是 ENRIQUE CODEX — 你的全能AI助手。有什么新想法吗？",
+      "你好呀！🌟 我是 ENRIQUE CODEX。用中文跟我说话就好，我们什么都能做！"
+    ],
+    jaGreetings: [
+      "こんにちは！👋 ENRIQUE CODEXです。何でもお手伝いします！",
+      "やあ！⚡ ENRIQUE CODEXだよ。日本語で話してね！"
+    ],
+    koGreetings: [
+      "안녕하세요! 👋 ENRIQUE CODEX입니다. 무엇이든 도와드려요!",
+      "안녕! ⚡ ENRIQUE CODEX야. 한국어로 말해줘!"
+    ],
     greetings: [
       "Hey! 👋 I'm ENRIQUE CODEX — your personal AI brain. I remember everything we've talked about. What's up?",
       "Hello again! ⚡ I'm ENRIQUE CODEX. I can create websites, chat naturally, remember our conversations, and control your phone. What would you like to do?",
@@ -806,9 +821,12 @@ var ENRIQUE_BRAIN = {
       "Take care! 🚀 I'll be here when you need me. All our chats are saved!"
     ],
     
-    getGreeting: function() {
+  getGreeting: function(brain) {
+      var lang = (brain && brain.memory.getPreference('language')) || 'en';
       var hour = new Date().getHours();
-      var timeGreeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+      if (lang === 'zh' && this.zhGreetings) return this.zhGreetings[Math.floor(Math.random() * this.zhGreetings.length)];
+      if (lang === 'ja' && this.jaGreetings) return this.jaGreetings[Math.floor(Math.random() * this.jaGreetings.length)];
+      if (lang === 'ko' && this.koGreetings) return this.koGreetings[Math.floor(Math.random() * this.koGreetings.length)];
       return this.greetings[Math.floor(Math.random() * this.greetings.length)];
     },
     
@@ -997,7 +1015,9 @@ var ENRIQUE_BRAIN = {
     
     capabilities: function(brain) {
       var lang = brain.memory.getPreference('language') || 'en';
-      var titles = {zh:'**我能做的一切 — 全部免费，0 Token：**',ja:'**すべての機能 — 無料、トークン0：**',ko:'**모든 기능 — 무료, 토큰 0:**',en:"**Here's everything I can do — ALL FREE, 0 TOKENS:**"};
+      if (lang === 'zh') return "**我能做的一切 — 全部免费，0 Token！** 🚀\n\n**🌐 创建网站**\n- 说"创建一个网站" → 完整现代网站\n- 说"做一个计算器" → 工作计算器\n- 说"做个登录页面" → 漂亮的登录界面\n- 说"创建一个个人主页" → 个人作品集\n- 说"做一个待办事项" → 任务管理工具\n- 说"做一个计时器" → 计时器/秒表\n- 说"创建一个游戏" → 互动游戏\n- 说"做一个管理后台" → 管理面板\n- 说"创建一个聊天应用" → 聊天界面\n- 说"做一个音乐播放器" → 音乐界面\n- 说"创建一个博客" → 博客页面\n\n**📱 控制手机**\n- "打开抖音" → 打开App\n- "拍照片" → 打开相机\n- "震动一下" → 手机震动\n- "我在哪里" → GPS定位\n- "电量多少" → 查看电量\n- "截屏" → 截取屏幕\n\n**💬 聊天和记忆**\n- 用中文自然聊天\n- "我的名字是..." → 我会记住\n- "记住我喜欢编程" → 保存记忆\n- "你知道什么" → 展示记忆\n- "讲个笑话" → 讲个笑话\n- "现在几点" → 当前时间\n- "计算 5+3" → 数学计算\n\n**说任何语言，我都听得懂！** 😊";
+      if (lang === 'ja') return "**すべての機能 — 無料！** 🚀\n\n- 🌐 ウェブサイト作成\n- 📱 デバイス制御\n- 💬 日本語会話\n- 🧠 記憶機能\n\n何かお手伝いしましょうか？😊";
+      var titles = {zh:'',ja:'',ko:'',en:"**Here's everything I can do — ALL FREE, 0 TOKENS:**"};
       return titles[lang] || titles.en;\n\n**🌐 Website Creation**\n- \"create a website\" → Full modern website\n- \"build a calculator\" → Working calculator app\n- \"make a login page\" → Beautiful login form\n- \"create a portfolio\" → Portfolio site\n- \"make a todo app\" → Task manager\n- \"build a timer\" → Timer/stopwatch\n- \"create a weather app\" → Weather widget\n- \"make a game\" → Interactive game\n- \"build a dashboard\" → Admin panel\n- \"create a form\" → Contact form\n- \"make buttons\" → Styled buttons\n\n**📱 Device Control**\n- \"open tiktok/youtube/instagram\" → Opens the app\n- \"take photo\" → Opens camera\n- \"vibrate\" → Vibrates phone\n- \"where am i\" → GPS location\n- \"battery\" → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- \"my name is...\" → I'll remember\n- \"remember that...\" → I'll save it\n- \"what do you know\" → I'll tell you\n- \"tell me a joke\" → Random joke\n- \"what time\" → Current time\n- \"calculate 5+3\" → Math help\n\n**🎮 More**\n- \"search cats\" → Opens Google search\n- \"translate hello to Spanish\" → Translation help\n- \"weather\" → Weather info\n\nJust talk to me naturally!";
     },
     
