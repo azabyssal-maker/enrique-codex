@@ -408,37 +408,41 @@ async function callAI(messages, onChunk){
       return null;
     }
     
-    if(STREAMING && onChunk){
-      var reader = res.body.getReader();
-      var decoder = new TextDecoder();
-      var fullText = '';
-      
-      while(true){
-        var {done, value} = await reader.read();
-        if(done) break;
+    if(STREAMING && onChunk && res.body){
+      try {
+        var reader = res.body.getReader();
+        var decoder = new TextDecoder();
+        var fullText = '';
         
-        var chunk = decoder.decode(value, {stream: true});
-        var lines = chunk.split('\\n');
-        for(var l of lines){
-          if(l.startsWith('data: ')){
-            var d = l.substring(6);
-            if(d === '[DONE]') continue;
-            try {
-              var j = JSON.parse(d);
-              var content = j.choices?.[0]?.delta?.content || '';
-              if(content){
-                fullText += content;
-                onChunk(content);
-              }
-            } catch(e){}
+        while(true){
+          var {done, value} = await reader.read();
+          if(done) break;
+          
+          var chunk = decoder.decode(value, {stream: true});
+          var lines = chunk.split('\\n');
+          for(var l of lines){
+            if(l.startsWith('data: ')){
+              var d = l.substring(6);
+              if(d === '[DONE]') continue;
+              try {
+                var j = JSON.parse(d);
+                var content = j.choices?.[0]?.delta?.content || '';
+                if(content){
+                  fullText += content;
+                  onChunk(content);
+                }
+              } catch(e){}
+            }
           }
         }
+        return fullText;
+      } catch(e){
+        // Streaming failed, fall back to non-streaming
       }
-      return fullText;
-    } else {
-      var data = await res.json();
-      return data.choices?.[0]?.message?.content || '';
     }
+    // Non-streaming fallback
+    var data = await res.json();
+    return data.choices?.[0]?.message?.content || '';
   } catch(e){
     toast('Network error: ' + e.message, 'bad');
     return null;
