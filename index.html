@@ -850,7 +850,7 @@ import { CreateMLCEngine } from "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.
 
 window.ENRIQUE = {
   engine: null, loading: false, loaded: false,
-  modelId: "Phi-3.5-mini-instruct-q4f16_1-MLC",
+  modelId: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
   convos: JSON.parse(localStorage.getItem('ea_webllm_convos')||'[]'),
   
   load: async function() {
@@ -897,7 +897,7 @@ window.ENRIQUE = {
     try {
       var reply = await this.engine.chat.completions.create({
         messages: [
-          {role:'system',content:'You are ENRIQUE AI — a powerful coding assistant like OpenAI Codex. Create websites, write code, build apps. Respond in Chinese (中文) unless asked otherwise. Always output COMPLETE working code in code blocks.'},
+          {role:'system',content:'You are ENRIQUE AI, a powerful AI assistant like OpenAI Codex. You can speak Chinese and English. Always respond in the same language the user uses. When writing code, output complete working code inside code blocks. Be detailed, helpful, and think like a real AI.'},
           ...messages
         ],
         max_tokens: (window.POWER && window.CUR) ? (POWER[CUR]||1500) : 1500,
