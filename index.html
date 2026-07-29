@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"><!-- deployed: Wed Jul 29 17:42:46 +08 2026 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -126,7 +126,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 /* ===== WELCOME ===== */
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px 24px;overflow-y:auto}
 .welcome-icon{width:80px;height:80px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;margin-bottom:24px;box-shadow:0 12px 32px rgba(16,163,127,.3)}
-.welcome h2{font-size:32px;font-weight:900;margin-bottom:10px}
+.welcome h2{font-size:32px;font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .welcome p{font-size:15px;color:var(--muted);max-width:480px;line-height:1.7}
 .sugs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;max-width:480px;width:100%}
 .sug{padding:18px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);text-align:left;cursor:pointer;transition:all .2s}
@@ -136,8 +136,8 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 .sug span{font-size:12px;color:var(--muted)}
 
 /* ===== CHAT ===== */
-.chat-scroll{flex:1;overflow-y:auto;padding:20px;padding-bottom:130px;max-width:900px;margin:0 auto;width:100%}
-.msg{margin-bottom:18px;display:flex;gap:14px;animation:fadeUp .3s ease}
+.chat-scroll{flex:1;overflow-y:auto;padding:20px;padding-bottom:150px;max-width:960px;margin:0 auto;width:100%}
+.msg{margin-bottom:22px;display:flex;gap:16px;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .msg.user{justify-content:flex-end}
 .msg .av{width:36px;height:36px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;font-weight:700}
@@ -146,9 +146,9 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 .msg .content{max-width:85%}
 .msg .label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px}
 .msg .label .model-tag{font-size:9px;padding:2px 6px;border-radius:4px;background:var(--card2);color:var(--muted2);font-weight:600}
-.msg .bubble{padding:14px 18px;border-radius:18px;font-size:15px;line-height:1.75;color:var(--text2)}
-.msg.user .bubble{background:var(--primary);color:#fff;border-radius:18px 18px 4px 18px}
-.msg.ai .bubble{background:var(--card);border:1px solid var(--border)}
+.msg .bubble{padding:16px 20px;border-radius:20px;font-size:15px;line-height:1.8;color:var(--text2)}
+.msg.user .bubble{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-radius:20px 20px 6px 20px}
+.msg.ai .bubble{background:var(--card);border:1px solid var(--border);border-radius:20px 20px 20px 6px}
 .msg .bubble pre{background:var(--code-bg);border:1px solid var(--code-border);border-radius:var(--radius-sm);padding:14px;overflow-x:auto;margin:12px 0;font-size:13px}
 .msg .bubble code{font-family:'JetBrains Mono',monospace;font-size:13px}
 .msg .bubble :not(pre)>code{background:var(--card2);padding:3px 7px;border-radius:5px;font-size:13px}
@@ -276,19 +276,28 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-320px;top:0;bottom:0;width:300px;box-shadow:var(--shadow2);transition:left .3s}
+  .sidebar{position:fixed;left:-320px;top:0;bottom:0;width:300px;box-shadow:var(--shadow2);transition:left .3s;z-index:100}
   .sidebar.open{left:0}
   .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
   .sidebar.open~.sidebar-overlay{display:block}
   .hamburger{display:flex}
   .menu-close{display:flex}
   .sugs{grid-template-columns:1fr}
-  .chat-scroll{padding:14px;padding-bottom:120px}
-  .tabs{padding:0 12px}
-  .tab{padding:10px 14px;font-size:13px}
-  .input-area{padding:10px 14px 16px}
+  .chat-scroll{padding:14px;padding-bottom:130px}
+  .tabs{padding:0 10px;gap:2px}
+  .tab{padding:10px 12px;font-size:12px}
+  .input-area{padding:12px 14px 18px;padding-bottom:calc(18px + env(safe-area-inset-bottom, 0px))}
   .main-head .left{gap:6px}
   .device-grid{grid-template-columns:1fr 1fr 1fr}
+  .msg .content{max-width:92%}
+  .msg .bubble{padding:13px 16px;font-size:14px}
+  .msg .av{width:30px;height:30px;font-size:14px}
+  .input-box{padding:10px 12px;border-radius:16px}
+  .welcome h2{font-size:26px}
+  .welcome-icon{width:64px;height:64px;font-size:32px}
+  .main-head{padding:10px 14px}
+  .model-sel{font-size:12px;padding:5px 10px;max-width:130px}
+  .sidebar{width:280px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
@@ -383,7 +392,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
     <div class="sidebar-foot">
       <div class="theme-row" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span style="flex:1">Dark Mode</span><div class="sw" id="themeSw"></div></div>
       <button class="exit-btn" onclick="exitApp()">⏏ Exit Session</button>
-      <div class="sidebar-info">ENRIQUE CODEX v6.0 · Codex AI Brain</div>
+      <div class="sidebar-info">ENRIQUE CODEX v7.0 · AI Brain · 亿知识</div>
     </div>
   </nav>
   <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -574,7 +583,7 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg)
 </div>
 
 <script>
-/* ===== ENRIQUE CODEX v6.0 ===== */
+/* ===== ENRIQUE CODEX v7.0 ===== */
 var API_KEY='c2stb3ItdjEtMjljNzdlZTBjMTFlZDU5ZTExNDZiM2E2NTRlYWYyNjZhYjZlNGM5NzdiOTU2YTU1ZjJkZTFlZTcyNjQyMTRiYQ==';
 var MODEL='google/gemini-2.0-flash-001:free';
 var POWER_LEVEL='medium';
@@ -975,7 +984,7 @@ var ENRIQUE_BRAIN = {
       if (lower.match(/i love|love you|爱你|喜欢你/)) return 'love';
       
       // Sad
-      if (lower.match(/i'?m? (sad|depressed|unhappy|lonely|bored|tired|伤心|难过|无聊|累|悲しい|つらい|우울|triste|malheureux/)) return 'sad';
+      if (lower.match(/i'?m? (sad|depressed|unhappy|lonely|bored|tired|伤心|难过|无聊|累|悲しい|つらい|우울|triste|malheureux)/)) return 'sad';
       
       // Happy
       if (lower.match(/i'?m? (happy|glad|excited|great|amazing|good)|i feel (happy|good|great)|开心|高兴|快乐|嬉しい|幸せ|기쁜|feliz|content/)) return 'happy';
@@ -1015,10 +1024,10 @@ var ENRIQUE_BRAIN = {
     
     capabilities: function(brain) {
       var lang = brain.memory.getPreference('language') || 'en';
-      if (lang === 'zh') return "**我能做的一切 — 全部免费，0 Token！** 🚀\n\n**🌐 创建网站**\n- 说"创建一个网站" → 完整现代网站\n- 说"做一个计算器" → 工作计算器\n- 说"做个登录页面" → 漂亮的登录界面\n- 说"创建一个个人主页" → 个人作品集\n- 说"做一个待办事项" → 任务管理工具\n- 说"做一个计时器" → 计时器/秒表\n- 说"创建一个游戏" → 互动游戏\n- 说"做一个管理后台" → 管理面板\n- 说"创建一个聊天应用" → 聊天界面\n- 说"做一个音乐播放器" → 音乐界面\n- 说"创建一个博客" → 博客页面\n\n**📱 控制手机**\n- "打开抖音" → 打开App\n- "拍照片" → 打开相机\n- "震动一下" → 手机震动\n- "我在哪里" → GPS定位\n- "电量多少" → 查看电量\n- "截屏" → 截取屏幕\n\n**💬 聊天和记忆**\n- 用中文自然聊天\n- "我的名字是..." → 我会记住\n- "记住我喜欢编程" → 保存记忆\n- "你知道什么" → 展示记忆\n- "讲个笑话" → 讲个笑话\n- "现在几点" → 当前时间\n- "计算 5+3" → 数学计算\n\n**说任何语言，我都听得懂！** 😊";
+      if (lang === 'zh') return "**我能做的一切 — 全部免费，0 Token！** 🚀\n\n**🌐 创建网站**\n- 说\u201c创建一个网站\u201d → 完整现代网站\n- 说\u201c做一个计算器\u201d → 工作计算器\n- 说\u201c做个登录页面\u201d → 漂亮的登录界面\n- 说\u201c创建一个个人主页\u201d → 个人作品集\n- 说\u201c做一个待办事项\u201d → 任务管理工具\n- 说\u201c做一个计时器\u201d → 计时器/秒表\n- 说\u201c创建一个游戏\u201d → 互动游戏\n- 说\u201c做一个管理后台\u201d → 管理面板\n- 说\u201c创建一个聊天应用\u201d → 聊天界面\n- 说\u201c做一个音乐播放器\u201d → 音乐界面\n- 说\u201c创建一个博客\u201d → 博客页面\n\n**📱 控制手机**\n- \u201c打开抖音\u201d → 打开App\n- \u201c拍照片\u201d → 打开相机\n- \u201c震动一下\u201d → 手机震动\n- \u201c我在哪里\u201d → GPS定位\n- \u201c电量多少\u201d → 查看电量\n- \u201c截屏\u201d → 截取屏幕\n\n**💬 聊天和记忆**\n- 用中文自然聊天\n- \u201c我的名字是...\u201d → 我会记住\n- \u201c记住我喜欢编程\u201d → 保存记忆\n- \u201c你知道什么\u201d → 展示记忆\n- \u201c讲个笑话\u201d → 讲个笑话\n- \u201c现在几点\u201d → 当前时间\n- \u201c计算 5+3\u201d → 数学计算\n\n**说任何语言，我都听得懂！** 😊";
       if (lang === 'ja') return "**すべての機能 — 無料！** 🚀\n\n- 🌐 ウェブサイト作成\n- 📱 デバイス制御\n- 💬 日本語会話\n- 🧠 記憶機能\n\n何かお手伝いしましょうか？😊";
-      var titles = {zh:'',ja:'',ko:'',en:"**Here's everything I can do — ALL FREE, 0 TOKENS:**"};
-      return titles[lang] || titles.en;\n\n**🌐 Website Creation**\n- \"create a website\" → Full modern website\n- \"build a calculator\" → Working calculator app\n- \"make a login page\" → Beautiful login form\n- \"create a portfolio\" → Portfolio site\n- \"make a todo app\" → Task manager\n- \"build a timer\" → Timer/stopwatch\n- \"create a weather app\" → Weather widget\n- \"make a game\" → Interactive game\n- \"build a dashboard\" → Admin panel\n- \"create a form\" → Contact form\n- \"make buttons\" → Styled buttons\n\n**📱 Device Control**\n- \"open tiktok/youtube/instagram\" → Opens the app\n- \"take photo\" → Opens camera\n- \"vibrate\" → Vibrates phone\n- \"where am i\" → GPS location\n- \"battery\" → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- \"my name is...\" → I'll remember\n- \"remember that...\" → I'll save it\n- \"what do you know\" → I'll tell you\n- \"tell me a joke\" → Random joke\n- \"what time\" → Current time\n- \"calculate 5+3\" → Math help\n\n**🎮 More**\n- \"search cats\" → Opens Google search\n- \"translate hello to Spanish\" → Translation help\n- \"weather\" → Weather info\n\nJust talk to me naturally!";
+      var titles = {zh:'',ja:'',ko:'',en:"**Here's everything I can do — ALL FREE, 0 TOKENS!**\n\n**🌐 Website Creation**\n- create a website → Full modern website\n- build a calculator → Working calculator app\n- make a login page → Beautiful login form\n- create a portfolio → Portfolio site\n- make a todo app → Task manager\n- build a timer → Timer/stopwatch\n- create a weather app → Weather widget\n- make a game → Interactive game\n- build a dashboard → Admin panel\n- create a form → Contact form\n- make buttons → Styled buttons\n\n**📱 Device Control**\n- open tiktok/youtube/instagram → Opens the app\n- take photo → Opens camera\n- vibrate → Vibrates phone\n- where am i → GPS location\n- battery → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- my name is... → Ill remember\n- remember that... → Ill save it\n- what do you know → Ill tell you\n- tell me a joke → Random joke\n- what time → Current time\n- calculate 5+3 → Math help\n\n**🎮 More**\n- search cats → Opens Google search\n- translate hello to Spanish → Translation help\n- weather → Weather info\n\nJust talk to me naturally!"};
+      return titles[lang] || titles.en;
     },
     
     remember: function(brain, text) {
@@ -1255,7 +1264,7 @@ var ENRIQUE_BRAIN = {
     },
         general: function(text, brain) {
       var lang = brain.memory.getPreference('language') || 'en';
-      if (lang === 'zh') return '嗯，我理解你说的！🤔\n\n我是 **ENRIQUE CODEX**，你的私人AI大脑。我可以做很多事情：\n\n- 🌐 **创建网站** — 说"帮我创建一个网站"\n- 🧮 **做计算器** — 说"帮我做个计算器"\n- 📱 **控制手机** — 说"打开抖音"或"拍照片"\n- 💬 **用中文聊天** — 我完全支持中文！\n- 🧠 **记忆** — 我会记住所有对话\n- ⏱️ **工具** — 计时器、待办事项、天气\n\n你想做什么？😊';
+      if (lang === 'zh') return '嗯，我理解你说的！🤔\n\n我是 **ENRIQUE CODEX**，你的私人AI大脑。我可以做很多事情：\n\n- 🌐 **创建网站** — 说"帮我创建一个网站"\n- 🧮 **做计算器** — 说"帮我做个计算器"\n- 📱 **控制手机** — 说“打开抖音”或“拍照片”\n- 💬 **用中文聊天** — 我完全支持中文！\n- 🧠 **记忆** — 我会记住所有对话\n- ⏱️ **工具** — 计时器、待办事项、天气\n\n你想做什么？😊';
       if (lang === 'ja') return 'なるほど！🤔\n\n私は **ENRIQUE CODEX** です。何でもできます：\n\n- 🌐 ウェブサイト作成\n- 📱 デバイス制御\n- 💬 日本語対応\n- 🧠 記憶機能\n\n何をしましょうか？😊';
       if (lang === 'ko') return '알겠어요! 🤔\n\n저는 **ENRIQUE CODEX**입니다. 무엇이든 할 수 있어요:\n\n- 🌐 웹사이트 만들기\n- 📱 기기 제어\n- 💬 한국어 대화\n- 🧠 기억 기능\n\n무엇을 할까요? 😊';
       // Check learned responses
