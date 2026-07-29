@@ -143,6 +143,17 @@ button,input,textarea{font-family:inherit}
 .mp-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;width:0%;transition:width .3s}
 .mp-text{font-size:8px;color:var(--muted2);margin-top:3px;text-align:center}
 
+
+.mode-grid-3{display:flex;gap:4px}
+.mode-grid-3 .mode-btn{flex:1;padding:6px 2px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:14px;font-weight:700;color:var(--muted);transition:all .15s;line-height:1.2}
+.mode-grid-3 .mode-btn span{display:block;font-size:8px;font-weight:600;color:var(--muted2);margin-top:1px}
+.mode-grid-3 .mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
+.mode-grid-3 .mode-btn.on span{color:var(--primary)}
+.sub-label{font-size:9px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.model-select select{width:100%;padding:5px 6px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:9px;outline:none;margin-bottom:5px;cursor:pointer}
+.apikey{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box;margin-bottom:4px}
+.apikey:focus{border-color:var(--primary)}
+
 </style>
 </head>
 <body>
@@ -182,24 +193,47 @@ button,input,textarea{font-family:inherit}
 
     <div class="sec">
       <div class="sec-label">🤖 AI Engine</div>
-      <div class="mode-grid">
-        <div class="mode-btn on" id="modeLocal" onclick="setMode('local')">🧠 Local</div>
-        <div class="mode-btn" id="modeWebLLM" onclick="setMode('webllm')">⚡ ENRIQUE</div>
+      <div class="mode-grid-3">
+        <div class="mode-btn on" id="modeLocal" onclick="setMode('local')">🧠<span>Local</span></div>
+        <div class="mode-btn" id="modeBrain" onclick="setMode('brain')">⚡<span>Brain</span></div>
+        <div class="mode-btn" id="modePro" onclick="setMode('pro')">🔥<span>Pro</span></div>
       </div>
-      <div id="webllmSettings" style="display:none;margin-top:8px">
-        <div class="model-info" id="modelInfo">🔮 ENRIQUE Brain v1.0</div>
+      <div id="brainSettings" style="display:none;margin-top:8px">
+        <div class="sub-label">Brain (Local WebLLM)</div>
         <div class="model-status" id="modelStatus">⚪ Not loaded</div>
-        <button class="model-btn" id="modelBtn" onclick="loadENRIQUE()">📥 Load ENRIQUE Brain</button>
+        <div class="model-select">
+          <select id="brainModel">
+            <option value="Qwen2.5-1.5B-Instruct-q4f16_1-MLC">Qwen 1.5B (Fast, 900MB)</option>
+            <option value="Qwen2.5-7B-Instruct-q4f16_1-MLC">Qwen 7B (Strong, 4GB)</option>
+          </select>
+        </div>
+        <button class="model-btn" id="modelBtn" onclick="loadBrain()">📥 Load Brain</button>
         <div class="model-progress" id="modelProgress" style="display:none">
           <div class="mp-bar"><div class="mp-fill" id="mpFill"></div></div>
-          <div class="mp-text" id="mpText">Downloading ENRIQUE Brain... (~2GB)</div>
+          <div class="mp-text" id="mpText">Downloading...</div>
         </div>
-        <div class="api-hint">100% local · Free · WebGPU required (Chrome/Edge)</div>
+        <div class="api-hint">100% local · Free · WebGPU</div>
+      </div>
+      <div id="proSettings" style="display:none;margin-top:8px">
+        <div class="sub-label">Pro (Cloud API)</div>
+        <input class="apikey" id="proKey" type="password" placeholder="OpenRouter API Key" spellcheck="false">
+        <div class="model-select">
+          <select id="proModel">
+            <option value="openai/gpt-4o">GPT-4o (Best)</option>
+            <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+            <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+            <option value="google/gemini-2.0-flash-exp">Gemini Flash (Free)</option>
+            <option value="meta-llama/llama-3.1-8b-instruct">Llama 3.1 8B (Free)</option>
+            <option value="mistralai/mistral-7b-instruct">Mistral 7B (Free)</option>
+          </select>
+        </div>
+        <button class="model-btn" onclick="saveProKey()">Save Key</button>
+        <div class="api-hint">Get key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai</a></div>
       </div>
     </div>
 
     <div class="chat-list" id="chatList"></div>
-    <div class="sb-foot" id="sbFoot">ENRIQUE AI v7.0 · 🧠 Local mode</div>
+    <div class="sb-foot" id="sbFoot">ENRIQUE AI · 🧠 Local mode</div>
   </div>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
@@ -253,7 +287,7 @@ var CUR = 'med';
 var DATA = [];
 var TOKENS = 0;
 var BUSY = false;
-var MODE = 'local'; // 'local' or 'webllm'
+var MODE = 'local'; // 'local', 'brain', or 'pro' // 'local' or 'webllm'
 var API_KEY = localStorage.getItem('ea_apikey') || '';
 var API_MODEL = localStorage.getItem('ea_apimodel') || 'google/gemini-2.0-flash-001';
 var API_CONVO = JSON.parse(localStorage.getItem('ea_aconvo')||'[]');
@@ -356,19 +390,19 @@ function clearChat(){
 function setMode(m){
   MODE = m;
   document.getElementById('modeLocal').classList.toggle('on', m==='local');
-  document.getElementById('modeWebLLM').classList.toggle('on', m==='webllm');
-  document.getElementById('webllmSettings').style.display = m==='webllm' ? 'block' : 'none';
-  var labels = {local:'🧠 Local mode', webllm:'⚡ ENRIQUE Brain'};
-  document.getElementById('sbFoot').textContent = 'ENRIQUE AI v7.0 · ' + (labels[m]||'🧠 Local mode');
+  document.getElementById('modeBrain').classList.toggle('on', m==='brain');
+  document.getElementById('modePro').classList.toggle('on', m==='pro');
+  document.getElementById('brainSettings').style.display = m==='brain' ? 'block' : 'none';
+  document.getElementById('proSettings').style.display = m==='pro' ? 'block' : 'none';
+  var labels = {local:'Local mode', brain:'ENRIQUE Brain', pro:'ENRIQUE Pro'};
+  document.getElementById('sbFoot').textContent = 'ENRIQUE AI · ' + (labels[m]||'Local mode');
   localStorage.setItem('ea_mode', m);
   toast('Switched to ' + (labels[m]||m));
-  if(m==='webllm' && window.ENRIQUE && !ENRIQUE.loaded && !ENRIQUE.loading){
-    setTimeout(function(){ loadENRIQUE(); }, 500);
+  if(m==='brain' && window.ENRIQUE && !ENRIQUE.loaded && !ENRIQUE.loading){
+    setTimeout(function(){ loadBrain(); }, 500);
   }
 }
 
-
-// AI calls handled by WebLLM module
 
 var BRAIN = {
   facts: JSON.parse(localStorage.getItem('ea_facts')||'{}'),
@@ -705,18 +739,29 @@ function send(){
 
   // Process
   setTimeout(function(){
-    if(MODE === 'webllm' && window.ENRIQUE && ENRIQUE.loaded){
-      // Use ENRIQUE Brain (WebLLM local AI)
-      var convos = ENRIQUE.convos || [];
-      var msgs = convos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
-      msgs.push({role:'user', content:msg});
-      
+    var aiFn = null;
+    var aiMsgs = [];
+    var aiConvos = [];
+    
+    if(MODE === 'brain' && window.ENRIQUE && ENRIQUE.loaded){
+      aiFn = chatENRIQUE;
+      aiConvos = ENRIQUE.convos || [];
+      aiMsgs = aiConvos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
+      aiMsgs.push({role:'user', content:msg});
+    } else if(MODE === 'pro' && PRO_KEY){
+      aiFn = callPro;
+      aiConvos = PRO_CONVO || [];
+      aiMsgs = aiConvos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
+      aiMsgs.push({role:'user', content:msg});
+    }
+    
+    if(aiFn){
+      // Use AI engine (Brain or Pro)
       bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
       var fullReply = '';
       
-      chatENRIQUE(msgs, function(chunk){
+      aiFn(aiMsgs, function(chunk){
         fullReply += chunk;
-        // Format the response with markdown-style rendering
         var html = esc(fullReply)
           .replace(/```(\\w+)?\\n([\\s\\S]*?)```/g, '<pre><code class="lang-$1">$2</code></pre>')
           .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -726,8 +771,6 @@ function send(){
           .replace(/## (.+)/g, '<h2>$1</h2>');
         bubble.innerHTML = html;
         $('msgs').scrollTop = $('msgs').scrollHeight;
-        
-        // Add copy buttons
         bubble.querySelectorAll('pre').forEach(function(pre){
           if(!pre.nextElementSibling || !pre.nextElementSibling.classList.contains('cp-btn')){
             var b = document.createElement('span');
@@ -744,10 +787,11 @@ function send(){
       }).then(function(reply){
         if(reply){
           DATA.push({r:'a',c:reply,t:Date.now()});
-          ENRIQUE.convos.push({r:'u',c:msg,t:Date.now()});
-          ENRIQUE.convos.push({r:'a',c:reply,t:Date.now()});
-          if(ENRIQUE.convos.length > 30) ENRIQUE.convos = ENRIQUE.convos.slice(-30);
-          localStorage.setItem('ea_webllm_convos', JSON.stringify(ENRIQUE.convos));
+          aiConvos.push({r:'u',c:msg,t:Date.now()});
+          aiConvos.push({r:'a',c:reply,t:Date.now()});
+          if(aiConvos.length > 30) aiConvos = aiConvos.slice(-30);
+          if(MODE==='brain') localStorage.setItem('ea_webllm_convos', JSON.stringify(ENRIQUE.convos));
+          else localStorage.setItem('ea_proconvo', JSON.stringify(PRO_CONVO));
           TOKENS += msg.length + reply.length;
           save();
         }
@@ -827,21 +871,18 @@ function render(){
 }
 
 // ===== INIT =====
-// Restore mode
 var savedMode = localStorage.getItem('ea_mode');
-if(savedMode === 'webllm'){
-  setMode('webllm');
+if(savedMode === 'brain' || savedMode === 'pro'){
+  setMode(savedMode);
 }
-
 updateUI();
 render();
-
-// If WebLLM was previously loaded, check status
-if(localStorage.getItem('ea_brain_loaded') === 'true' && savedMode === 'webllm'){
-  setTimeout(function(){
-    var btn = document.getElementById('modelBtn');
-    if(btn) btn.textContent = '⏳ Reloading...';
-  }, 100);
+// Restore Pro settings
+var pk = localStorage.getItem('ea_prokey');
+if(pk){ PRO_KEY = pk; var el = document.getElementById('proKey'); if(el) el.value = pk; }
+// Auto-load brain if needed
+if(localStorage.getItem('ea_brain_loaded') === 'true' && savedMode === 'brain'){
+  setTimeout(function(){ loadBrain(); }, 1000);
 }
 </script>
 
@@ -926,7 +967,7 @@ window.ENRIQUE = {
   }
 };
 
-window.loadENRIQUE = function() { return ENRIQUE.load(); };
+window.loadBrain = function() { return ENRIQUE.load(); };
 window.chatENRIQUE = function(msgs, cb) { return ENRIQUE.chat(msgs, cb); };
 
 // Auto-load if previously loaded
