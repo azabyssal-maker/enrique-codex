@@ -4,16 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>ENRIQUE AI</title>
+<title>ENRIQUE AI - Neural Network</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d8a6a;--green:#10b981;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--shadow2:0 8px 24px rgba(0,0,0,.5)}
+:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--shadow2:0 8px 24px rgba(0,0,0,.5)}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,system-ui,sans-serif}
 button,input,textarea{font-family:inherit}
 .app{display:flex;height:100vh;height:100dvh}
-
-/* ===== SIDEBAR ===== */
 .sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;overflow:hidden}
 .sb-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
 .sb-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
@@ -22,33 +20,21 @@ button,input,textarea{font-family:inherit}
 .newchat{display:block;margin:10px 14px;padding:9px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
 .newchat:hover{border-color:var(--primary);background:var(--primary-l)}
 .newchat span{display:inline-block;margin-right:6px}
-
-/* Power */
 .sec{padding:10px 14px;border-bottom:1px solid var(--border)}
 .sec-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.p-grid{display:flex;gap:4px}
-.p-btn{flex:1;padding:6px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:9px;font-weight:700;color:var(--muted);transition:all .15s;line-height:1.2}
-.p-btn:hover,.p-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.p-btn .p-num{display:block;font-size:7px;color:var(--muted2);margin-top:1px}
-.p-btn.on .p-num{color:var(--primary)}
-
-/* Device */
-.d-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
-.d-btn{padding:6px 4px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:16px;transition:all .15s}
-.d-btn:hover{border-color:var(--primary);background:var(--primary-l)}
-.d-btn span{display:block;font-size:8px;font-weight:600;color:var(--text);margin-top:1px}
-
+.sub-label{font-size:9px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.nn-info{font-size:8px;color:var(--muted2);margin-bottom:4px;line-height:1.3}
+.model-status{font-size:9px;color:var(--muted2);margin-bottom:6px}
+.model-btn{width:100%;padding:7px;border:1.5px solid var(--primary);border-radius:6px;background:var(--primary-l);color:var(--primary);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.model-btn:hover{background:var(--primary);color:#fff}
+.model-btn:disabled{opacity:.4;cursor:default}
+.model-progress{margin-top:6px}
+.mp-bar{height:3px;background:var(--card2);border-radius:2px;overflow:hidden}
+.mp-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;width:0%;transition:width .3s}
+.mp-text{font-size:8px;color:var(--muted2);margin-top:2px;text-align:center}
 .chat-list{flex:1;overflow-y:auto;padding:4px 8px}
-.chat-item{padding:8px 10px;font-size:12px;color:var(--muted);cursor:pointer;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.chat-item:hover{background:var(--card2);color:var(--text)}
-.chat-item.on{background:var(--primary-l);color:var(--primary);font-weight:600}
-
 .sb-foot{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center}
-
-/* ===== MAIN ===== */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-
-/* Top bar */
 .top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px}
 .top .menu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
 .top .brand{font-size:14px;font-weight:700;flex:1;min-width:0}
@@ -56,41 +42,26 @@ button,input,textarea{font-family:inherit}
 .top .tokens{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
 .top .act{display:flex;gap:6px}
 .top .act button{width:28px;height:28px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
-
-/* Chat messages */
 .msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
 .msgs-inner{max-width:680px;margin:0 auto}
-
 .msg{margin-bottom:14px;display:flex;gap:10px;animation:up .2s ease}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.u{justify-content:flex-end}
-.msg-av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.msg.a .msg-av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
-.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted)}
+.msg.u{justify-content:flex-end}.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted)}
 .msg-b{max-width:88%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
 .msg.u .msg-b{background:var(--primary);color:#fff;border-radius:12px 12px 4px 12px}
 .msg.a .msg-b{background:var(--card);border:1px solid var(--border);border-radius:12px 12px 12px 4px}
-.msg-b p{margin-bottom:6px}.msg-b p:last-child{margin-bottom:0}
-.msg-b code{font-size:12px;font-family:'JetBrains Mono',monospace}
-.msg-b :not(pre)>code{background:var(--card2);padding:2px 5px;border-radius:4px;font-size:12px}
 .msg-b pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;overflow-x:auto;margin:8px 0;font-size:12px;max-height:400px}
-.msg-b a{color:var(--blue)}
-.msg-b ul,.msg-b ol{padding-left:18px;margin:4px 0}
-.msg-b img{max-width:180px;border-radius:8px;margin:4px 0}
+.msg-b code{font-size:12px;font-family:monospace}
+.msg-b :not(pre)>code{background:var(--card2);padding:2px 5px;border-radius:4px;font-size:12px}
 .msg-b .cp-btn{display:inline-block;font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--card);color:var(--muted);cursor:pointer;margin-top:4px}
 .msg-b .cp-btn:active{background:var(--primary-l);border-color:var(--primary)}
-
-/* Input bar */
 .inp-bar{flex-shrink:0;padding:8px 10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);background:var(--bg2);position:relative;z-index:5}
 .ibar{display:flex;align-items:center;gap:8px;max-width:680px;margin:0 auto}
 .ifield{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:14px;outline:none;transition:all .2s}
 .ifield:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(16,163,127,.08)}
 .ifield::placeholder{color:var(--muted2)}
 .isend{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .15s}
-.isend:active{transform:scale(.92)}
-.isend:disabled{opacity:.3}
-
-/* Welcome */
+.isend:active{transform:scale(.92)}.isend:disabled{opacity:.3}
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;min-height:60vh}
 .wlc-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;margin-bottom:14px;box-shadow:0 6px 20px rgba(16,163,127,.2)}
 .wlc-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
@@ -98,68 +69,27 @@ button,input,textarea{font-family:inherit}
 .wlc-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:420px}
 .wlc-chip{padding:7px 12px;border:1px solid var(--border);border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--card);color:var(--text)}
 .wlc-chip:active{transform:scale(.95);border-color:var(--primary);background:var(--primary-l)}
-
-/* Toast */
 .toast{position:fixed;top:16px;right:16px;padding:10px 16px;border-radius:10px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow2);font-size:13px;font-weight:500;z-index:999;animation:slide .2s ease;max-width:280px}
 @keyframes slide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
 .toast.ok{border-color:var(--green);color:var(--green)}
 .toast.bad{border-color:var(--red);color:var(--red)}
-
-/* Overlay */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 .overlay.on{display:block}
-
-/* Mobile */
+.api-hint a{color:var(--blue);text-decoration:none}
 @media(max-width:768px){
   .sidebar{position:fixed;left:-290px;top:0;bottom:0;z-index:100;transition:left .25s}
-  .sidebar.open{left:0}
-  .overlay.on{display:block}
-  .top .menu{display:flex}
-  .sb-close{display:flex}
-  .msgs{padding:12px 10px}
-  .msg-b{font-size:13px;padding:9px 12px}
+  .sidebar.open{left:0}.overlay.on{display:block}
+  .top .menu{display:flex}.sb-close{display:flex}
+  .msgs{padding:12px 10px}.msg-b{font-size:13px;padding:9px 12px}
 }
-
-/* Typing */
-.typing{display:flex;gap:4px;padding:4px 0}.typing span{width:5px;height:5px;border-radius:50%;background:var(--primary);animation:blink .8s infinite}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+.typing{display:flex;gap:4px;padding:4px 0}.typing span{width:5px;height:5px;border-radius:50%;background:var(--primary);animation:blink .8s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
-
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-
-.model-info{font-size:10px;font-weight:700;color:var(--text);margin-bottom:2px}
-.model-status{font-size:9px;color:var(--muted2);margin-bottom:6px}
-.model-btn{width:100%;padding:8px;border:1.5px solid var(--primary);border-radius:8px;background:var(--primary-l);color:var(--primary);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
-.model-btn:hover{background:var(--primary);color:#fff}
-.model-btn:disabled{opacity:.4;cursor:default}
-.model-progress{margin-top:8px}
-.mp-bar{height:4px;background:var(--card2);border-radius:2px;overflow:hidden}
-.mp-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;width:0%;transition:width .3s}
-.mp-text{font-size:8px;color:var(--muted2);margin-top:3px;text-align:center}
-
-
-.mode-grid-3{display:flex;gap:4px}
-.mode-grid-3 .mode-btn{flex:1;padding:6px 2px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:14px;font-weight:700;color:var(--muted);transition:all .15s;line-height:1.2}
-.mode-grid-3 .mode-btn span{display:block;font-size:8px;font-weight:600;color:var(--muted2);margin-top:1px}
-.mode-grid-3 .mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.mode-grid-3 .mode-btn.on span{color:var(--primary)}
-.sub-label{font-size:9px;font-weight:700;color:var(--muted);margin-bottom:4px}
-.model-select select{width:100%;padding:5px 6px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:9px;outline:none;margin-bottom:5px;cursor:pointer}
-.apikey{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box;margin-bottom:4px}
-.apikey:focus{border-color:var(--primary)}
-
 </style>
 </head>
 <body>
 
 <div class="app">
-  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sb-head">
       <div class="sb-icon">E</div>
@@ -167,81 +97,29 @@ button,input,textarea{font-family:inherit}
       <button class="sb-close" onclick="toggleSidebar()">✕</button>
     </div>
     <button class="newchat" onclick="newChat()"><span>+</span> New Chat</button>
-    
     <div class="sec">
-      <div class="sec-label">⚡ Power Level</div>
-      <div class="p-grid">
-        <div class="p-btn" data-p="min" onclick="setPower('min')">Min<span class="p-num">200</span></div>
-        <div class="p-btn" data-p="low" onclick="setPower('low')">Low<span class="p-num">500</span></div>
-        <div class="p-btn on" data-p="med" onclick="setPower('med')">Med<span class="p-num">1500</span></div>
-        <div class="p-btn" data-p="high" onclick="setPower('high')">High<span class="p-num">3000</span></div>
-        <div class="p-btn" data-p="max" onclick="setPower('max')">Max<span class="p-num">4000</span></div>
+      <div class="sec-label">🧠 Neural Network</div>
+      <div style="margin-top:8px">
+        <div class="sub-label">From Scratch RNN · 100% Original</div>
+        <div class="model-status" id="nnStatus">⚪ Fresh network</div>
+        <div class="nn-info" id="nnInfo"></div>
+        <button class="model-btn" id="trainBtn" onclick="trainNN()">🎓 Train ENRIQUE</button>
+        <div class="model-progress" id="trainProgress" style="display:none">
+          <div class="mp-bar"><div class="mp-fill" id="trainFill"></div></div>
+          <div class="mp-text" id="trainText">Training...</div>
+        </div>
+        <div class="api-hint" style="margin-top:6px;font-size:8px">No API · No libraries · Pure JS</div>
       </div>
     </div>
-
-    <div class="sec">
-      <div class="sec-label">📱 Device</div>
-      <div class="d-grid">
-        <div class="d-btn" onclick="devAct('camera')">📸<span>Camera</span></div>
-        <div class="d-btn" onclick="devAct('location')">📍<span>GPS</span></div>
-        <div class="d-btn" onclick="devAct('battery')">🔋<span>Battery</span></div>
-        <div class="d-btn" onclick="devAct('vibrate')">📳<span>Vibrate</span></div>
-        <div class="d-btn" onclick="devAct('share')">📤<span>Share</span></div>
-        <div class="d-btn" onclick="devAct('fullscreen')">🖥️<span>Full</span></div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="sec-label">🤖 AI Engine</div>
-      <div class="mode-grid-3">
-        <div class="mode-btn on" id="modeLocal" onclick="setMode('local')">🧠<span>Local</span></div>
-        <div class="mode-btn" id="modeBrain" onclick="setMode('brain')">⚡<span>Brain</span></div>
-        <div class="mode-btn" id="modePro" onclick="setMode('pro')">🔥<span>Pro</span></div>
-      </div>
-      <div id="brainSettings" style="display:none;margin-top:8px">
-        <div class="sub-label">Brain (Local WebLLM)</div>
-        <div class="model-status" id="modelStatus">⚪ Not loaded</div>
-        <div class="model-select">
-          <select id="brainModel">
-            <option value="Qwen2.5-1.5B-Instruct-q4f16_1-MLC">Qwen 1.5B (Fast, 900MB)</option>
-            <option value="Qwen2.5-7B-Instruct-q4f16_1-MLC">Qwen 7B (Strong, 4GB)</option>
-          </select>
-        </div>
-        <button class="model-btn" id="modelBtn" onclick="loadBrain()">📥 Load Brain</button>
-        <div class="model-progress" id="modelProgress" style="display:none">
-          <div class="mp-bar"><div class="mp-fill" id="mpFill"></div></div>
-          <div class="mp-text" id="mpText">Downloading...</div>
-        </div>
-        <div class="api-hint">100% local · Free · WebGPU</div>
-      </div>
-      <div id="proSettings" style="display:none;margin-top:8px">
-        <div class="sub-label">Pro (Cloud API)</div>
-        <input class="apikey" id="proKey" type="password" placeholder="OpenRouter API Key" spellcheck="false">
-        <div class="model-select">
-          <select id="proModel">
-            <option value="openai/gpt-4o">GPT-4o (Best)</option>
-            <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
-            <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
-            <option value="google/gemini-2.0-flash-exp">Gemini Flash (Free)</option>
-            <option value="meta-llama/llama-3.1-8b-instruct">Llama 3.1 8B (Free)</option>
-            <option value="mistralai/mistral-7b-instruct">Mistral 7B (Free)</option>
-          </select>
-        </div>
-        <button class="model-btn" onclick="saveProKey()">Save Key</button>
-        <div class="api-hint">Get key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai</a></div>
-      </div>
-    </div>
-
     <div class="chat-list" id="chatList"></div>
-    <div class="sb-foot" id="sbFoot">ENRIQUE AI · 🧠 Local mode</div>
+    <div class="sb-foot" id="sbFoot">ENRIQUE AI · From Scratch Neural Network</div>
   </div>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-  <!-- Main -->
   <div class="main">
     <div class="top">
       <button class="menu" onclick="toggleSidebar()">☰</button>
-      <span class="brand">ENRIQUE <span class="tag" id="pwrTag">MED</span></span>
+      <span class="brand">ENRIQUE <span class="tag">NN</span></span>
       <span class="tokens" id="tokenDisplay">0</span>
       <div class="act">
         <button onclick="clearChat()" title="Clear">🗑️</button>
@@ -253,18 +131,14 @@ button,input,textarea{font-family:inherit}
         <div class="welcome" id="welcome">
           <div class="wlc-icon">⚡</div>
           <div class="wlc-title">ENRIQUE AI</div>
-          <div class="wlc-sub">Like Codex — chat, code, create. Full power controls.</div>
+          <div class="wlc-sub">A neural network built from scratch in JavaScript</div>
           <div class="wlc-chips">
-            <div class="wlc-chip" onclick="ask('Create a modern responsive website with dark theme')">🌐 Website</div>
-            <div class="wlc-chip" onclick="ask('Create a full e-commerce store')">🛍️ Shop</div>
-            <div class="wlc-chip" onclick="ask('Build a dashboard with analytics')">📊 Dashboard</div>
-            <div class="wlc-chip" onclick="ask('Write a Python automation script')">🐍 Python</div>
-            <div class="wlc-chip" onclick="ask('Create a music player app')">🎵 Music</div>
-            <div class="wlc-chip" onclick="ask('Build a calculator app')">🧮 Calc</div>
-            <div class="wlc-chip" onclick="ask('Scan WiFi networks')">📡 WiFi</div>
-            <div class="wlc-chip" onclick="ask('Create a todo app')">📝 Todo</div>
-            <div class="wlc-chip" onclick="ask('Tell me a joke')">😂 Joke</div>
-            <div class="wlc-chip" onclick="ask('What can you do')">💡 Help</div>
+            <div class="wlc-chip" onclick="ask(&#39;Hello&#39;)">👋 Hello</div>
+            <div class="wlc-chip" onclick="ask(&#39;Create a website&#39;)">🌐 Website</div>
+            <div class="wlc-chip" onclick="ask(&#39;Write Python code&#39;)">🐍 Python</div>
+            <div class="wlc-chip" onclick="ask(&#39;What can you do&#39;)">💡 Help</div>
+            <div class="wlc-chip" onclick="ask(&#39;Tell me a joke&#39;)">😂 Joke</div>
+            <div class="wlc-chip" onclick="ask(&#39;你是谁&#39;)">🤔 你是谁</div>
           </div>
         </div>
       </div>
@@ -272,7 +146,7 @@ button,input,textarea{font-family:inherit}
 
     <div class="inp-bar">
       <div class="ibar">
-        <textarea class="ifield" id="inp" rows="1" placeholder="Type anything..." style="resize:none;overflow:hidden;padding-top:10px;padding-bottom:10px;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)" oninput="autoResize(this)"></textarea>
+        <textarea class="ifield" id="inp" rows="1" placeholder="Train me by chatting..." style="resize:none;overflow:hidden;padding-top:10px;padding-bottom:10px;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea>
         <button class="isend" id="sendBtn" onclick="send()">↑</button>
       </div>
     </div>
@@ -280,19 +154,13 @@ button,input,textarea{font-family:inherit}
 </div>
 
 <script>
-/* ===== ENRIQUE AI v7.0 ===== */
-var VERSION = '7.0';
+/* ===== ENRIQUE AI - Pure JavaScript Neural Network ===== */
+var VERSION = '9.0';
 var POWER = {min:200, low:500, med:1500, high:3000, max:4000};
 var CUR = 'med';
 var DATA = [];
 var TOKENS = 0;
 var BUSY = false;
-var MODE = 'local'; // 'local', 'brain', or 'pro' // 'local' or 'webllm'
-var API_KEY = localStorage.getItem('ea_apikey') || '';
-var API_MODEL = localStorage.getItem('ea_apimodel') || 'google/gemini-2.0-flash-001';
-var API_CONVO = JSON.parse(localStorage.getItem('ea_aconvo')||'[]');
-var STREAMING = true;
-
 
 // Load saved data
 try{
@@ -323,47 +191,14 @@ function toast(msg, t){
 }
 
 function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px"}
-function updateUI(){
-  $('tokenDisplay').textContent = TOKENS.toLocaleString() + ' tokens';
-  // Power tag
-  var names = {min:'MIN', low:'LOW', med:'MED', high:'HIGH', max:'MAX'};
-  $('pwrTag').textContent = names[CUR] || 'MED';
-  // Power buttons
-  document.querySelectorAll('.p-btn').forEach(function(b){
-    b.classList.toggle('on', b.dataset.p === CUR);
-  });
-  // Token count in header
-  $('tokenDisplay').textContent = TOKENS > 0 ? TOKENS.toLocaleString() + ' tok' : '0';
-}
 
-function setPower(v){
-  CUR = v;
-  save();
-  toast('Power: '+v.toUpperCase()+' ('+POWER[v]+' tokens)','ok');
+function updateUI(){
+  document.getElementById('tokenDisplay').textContent = TOKENS > 0 ? TOKENS.toLocaleString() + ' tok' : '0';
 }
 
 function toggleSidebar(){
-  $('sidebar').classList.toggle('open');
-  $('overlay').classList.toggle('on');
-}
-
-function devAct(type){
-  toggleSidebar();
-  if(type === 'camera'){
-    if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)
-      navigator.mediaDevices.getUserMedia({video:true}).then(function(s){s.getTracks().forEach(function(t){t.stop()})});
-    toast('📸 Camera','ok');
-  } else if(type === 'location'){
-    navigator.geolocation.getCurrentPosition(function(p){toast('📍 '+p.coords.latitude.toFixed(4)+', '+p.coords.longitude.toFixed(4),'ok')},function(){},{timeout:3000});
-  } else if(type === 'battery'){
-    if(navigator.getBattery) navigator.getBattery().then(function(b){toast('🔋 '+Math.round(b.level*100)+'%','ok')});
-  } else if(type === 'vibrate'){
-    navigator.vibrate(200); toast('📳 Vibrated','ok');
-  } else if(type === 'share'){
-    if(navigator.share) navigator.share({title:'ENRIQUE AI',url:location.href}).catch(function(){});
-  } else if(type === 'fullscreen'){
-    if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
-  }
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
 }
 
 function newChat(){
@@ -384,328 +219,485 @@ function clearChat(){
   toast('Cleared','ok');
 }
 
-/* ===== ENRIQUE BRAIN v7 ===== */
-
-// ===== AI ENGINE =====
-function setMode(m){
-  MODE = m;
-  document.getElementById('modeLocal').classList.toggle('on', m==='local');
-  document.getElementById('modeBrain').classList.toggle('on', m==='brain');
-  document.getElementById('modePro').classList.toggle('on', m==='pro');
-  document.getElementById('brainSettings').style.display = m==='brain' ? 'block' : 'none';
-  document.getElementById('proSettings').style.display = m==='pro' ? 'block' : 'none';
-  var labels = {local:'Local mode', brain:'ENRIQUE Brain', pro:'ENRIQUE Pro'};
-  document.getElementById('sbFoot').textContent = 'ENRIQUE AI · ' + (labels[m]||'Local mode');
-  localStorage.setItem('ea_mode', m);
-  toast('Switched to ' + (labels[m]||m));
-  if(m==='brain' && window.ENRIQUE && !ENRIQUE.loaded && !ENRIQUE.loading){
-    setTimeout(function(){ loadBrain(); }, 500);
-  }
+function ask(q){
+  $('inp').value = q;
+  send();
 }
 
 
+// ===== BRAIN (Rule-based Fallback) =====
 var BRAIN = {
-  facts: JSON.parse(localStorage.getItem('ea_facts')||'{}'),
-  convos: JSON.parse(localStorage.getItem('ea_convos')||'[]'),
-  rem: function(k,v){this.facts[k]={v:v,t:Date.now()};localStorage.setItem('ea_facts',JSON.stringify(this.facts))},
-  rec: function(k){
-    if(this.facts[k]) return this.facts[k].v;
-    for(var f in this.facts) if(f.toLowerCase().includes(k.toLowerCase())) return this.facts[f].v;
-    return null;
-  },
-  add: function(u,a){
-    this.convos.push({u:u,a:a,t:Date.now()});
-    if(this.convos.length>30) this.convos=this.convos.slice(-30);
-    localStorage.setItem('ea_convos',JSON.stringify(this.convos));
-  },
+  facts: {},
+  convos: [],
+  rem: function(k,v){this.facts[k]={v:v,t:Date.now()}},
+  rec: function(k){ return this.facts[k] ? this.facts[k].v : null; },
+  add: function(u,a){this.convos.push({u:u,a:a,t:Date.now()});if(this.convos.length>30)this.convos=this.convos.slice(-30);},
   process: function(msg, power){
     var m = msg.toLowerCase().trim();
-    var p = power||'med';
-    var maxT = POWER[p]||1500;
-    
-    // Greeting
-    if(/^(hi|hello|hey|你好|嗨|您好|sup|yo)/.test(m)){
-      var n = this.rec('name');
-      return 'Hey'+(n?', '+n:'')+'! 👋 I\'m **ENRIQUE AI** — your personal coding assistant. I can create websites, write code, control your phone. What do you want to build?';
+    if(/^(hi|hello|hey|你好|嗨)/.test(m)) return 'Hello! I\'m ENRIQUE AI. I\'m still learning - the more you talk to me, the smarter I get! 🧠 Train me by clicking "Train ENRIQUE" in the sidebar.';
+    if(/你是谁|who are you/.test(m)) return 'I\'m ENRIQUE AI - a neural network created from scratch in JavaScript! No libraries, no APIs, no pre-trained models. Just pure math and code. Every conversation makes me smarter.';
+    if(/what can you do|help|功能/.test(m)) return 'I can learn from our conversations! Just chat with me. Click "Train ENRIQUE" in the sidebar to train my neural network. I can talk in Chinese or English. The more you talk, the better I get!';
+    if(/joke|笑话/.test(m)){var j=['Why did the neural network cross the road? To get to the other layer!','What do you call a AI that sings? A neur-harmonic network!','I\'m still learning jokes. Ask me again after I\'m trained!'];return j[Math.floor(Math.random()*j.length)];}
+    if(/create|make|build|写|做|创建/.test(m)){
+      if(/website|site|web|网页/.test(m)) return 'I can learn to create websites! For now, here\'s what I know:\n\n```html\n<!DOCTYPE html><html><body><h1>Hello World</h1><p>Train me to make better sites!</p></body></html>\n```\nTell me more and train my neural network!';
+      if(/python|script/.test(m)) return '```python\nprint("Hello from ENRIQUE AI!")\n# Train me to write better code!\n```';
+      return 'I\'m learning to code! Keep chatting and training me to get better.';
     }
-    
-    // Identity
-    if(/你是谁|who are you|what are you|tell me about/.test(m)){
-      return 'I\'m **ENRIQUE AI** ⚡ — like OpenAI Codex but runs in your browser.\\n\\n**My powers:**\\n- 💻 **Code** in any language (JS, Python, HTML)\\n- 🌐 **Create** full websites, apps, dashboards\\n- 🧠 **Remember** everything we discuss\\n- 📱 **Control** your phone (camera, GPS, etc.)\\n- 🔍 **Search** the web\\n- ⚡ Adjustable **Power Level** (Min→Max)\\n\\n100% local, 0 tokens, infinite memory.';
-    }
-    
-    // Capabilities
-    if(/what can you do|help|功能|你能做什么|capabilities|commands/.test(m)){
-      return '**ENRIQUE AI — Full Commands:**\\n\\n**💻 Code\\u0026Create**\\n- "create a website" → HTML/CSS site\\n- "write Python script" → Python automation\\n- "build a calculator" → JS calculator\\n- "make a shop" → E-commerce page\\n- "create a dashboard" → Admin panel\\n- "make a music player" → Audio UI\\n- "build a game" → Click game\\n- "create a todo app" → Task manager\\n\\n**📱 Device Control**\\n- "open camera", "take photo"\\n- "where am I", "GPS"\\n- "battery", "vibrate", "fullscreen"\\n\\n**🔍 Web**\\n- "search [query]" → Opens Google\\n- "open youtube/instagram/tiktok"\\n\\n**💬 Chat**\\n- "my name is..." → Remembered\\n- "remember [something]"\\n- "what do you know"\\n- "tell me a joke"\\n- "calculate [math]"\\n\\n**⚡ Power Levels:**\\nMIN=200 | LOW=500 | MED=1500 | HIGH=3000 | MAX=4000\\n\\nJust type naturally!';
-    }
-    
-    // Name
-    if(/my name is |i am |im |call me /.test(m)){
-      var match = m.match(/(?:my name is |i am |im |call me )(\\w+)/i);
-      if(match){this.rem('name',match[1]);return 'Nice to meet you, **'+match[1]+'**! I\'ll remember you. 😊';}
-    }
-    
-    // Remember
-    if(/remember /.test(m)){
-      var match = m.match(/remember (that )?(.+)/i);
-      if(match){this.rem('fact_'+Date.now(),match[2]);return '✅ Saved: **'+match[2]+'**';}
-    }
-    
-    // Recall
-    if(/what do you know|what do you remember|你知道什么/.test(m)){
-      var facts = Object.keys(this.facts).filter(function(k){return k!=='name'}).map(function(k){return BRAIN.facts[k].v});
-      var name = this.rec('name');
-      var r = '**My memory:**\\n';
-      if(name) r += '\\n👤 Name: **'+name+'**';
-      for(var i=0;i<facts.length;i++) r += '\\n📌 '+facts[i];
-      r += '\\n\\n💬 We\'ve had **'+this.convos.length+'** conversations.';
-      return r;
-    }
-    
-    // Time
-    if(/time|几点|现在/.test(m)){
-      return '🕐 **'+new Date().toLocaleString()+'**';
-    }
-    
-    // Joke
-    if(/joke|funny|laugh|笑话/.test(m)){
-      var jokes = [
-        'Why do programmers prefer dark mode? — Light attracts bugs! 🐛',
-        'A SQL query walks into a bar, sees 2 tables: "Can I JOIN you?"',
-        'Why was the JS dev sad? — He didn\'t Node how to Express himself!',
-        'There are 10 types of people: those who understand binary and those who don\'t.',
-        'Why was the computer cold? — It left its Windows open!',
-        'How many programmers to change a light bulb? — None, that\'s hardware!',
-        'What\'s a computer\'s favorite snack? — Microchips!'
-      ];
-      return jokes[Math.floor(Math.random()*jokes.length)];
-    }
-    
-    // Math
-    if(/^\\d+\\s*[\\+\\-\\*\\/]\\s*\\d+/.test(m) || /calculate|计算|calc/.test(m)){
-      var expr = m.replace(/[^0-9+\-*/().%\s]/g,'').trim();
-      try{
-        var r = Function('"use strict"; return ('+expr+')')();
-        if(!isNaN(r)&&isFinite(r)) return '**'+expr+' = '+r+'** 🧮';
-      }catch(e){}
-    }
-    
-    // Create / Build / Code — the real power
-    if(/create|make|build|generate|write|开发|创建|建立|做|写/.test(m)){
-      if(/website|site|landing|web|page|网页|网站/.test(m)) return '```html\\n'+CODE.website+'\\n```\\n\\n✅ **Modern website created!** '+(p==='max'||p==='high'?'Full responsive with gradient hero.':'');
-      if(/calculator|calc|计算器/.test(m)) return '```html\\n'+CODE.calculator+'\\n```\\n\\n✅ **Calculator built!** '+(p==='max'?'With dynamic grid and operator colors.':'');
-      if(/login|sign.?in|register|登录|注册/.test(m)) return '```html\\n'+CODE.login+'\\n```\\n\\n✅ **Login page ready!**';
-      if(/todo|task|待办|任务/.test(m)) return '```html\\n'+CODE.todo+'\\n```\\n\\n✅ **Todo app created!** '+(p==='max'?'With local storage and done states.':'');
-      if(/shop|store|ecommerce|商店|购物/.test(m)) return '```html\\n'+CODE.shop+'\\n```\\n\\n✅ **Shop created!** Product grid with pricing.';
-      if(/dashboard|admin|仪表盘/.test(m)) return '```html\\n'+CODE.dashboard+'\\n```\\n\\n✅ **Dashboard built!** Analytics cards + activity table.';
-      if(/music|player|音乐/.test(m)) return '```html\\n'+CODE.music+'\\n```\\n\\n✅ **Music player created!** With album art, progress, controls.';
-      if(/game|游戏/.test(m)) return '```html\\n'+CODE.game+'\\n```\\n\\n✅ **Game created!** Click-to-hit with timer.';
-      if(/form|contact|表单/.test(m)) return '```html\\n'+CODE.form+'\\n```\\n\\n✅ **Contact form created!**';
-      if(/chat|messenger|聊天/.test(m)) return '```html\\n'+CODE.chat+'\\n```\\n\\n✅ **Chat app created!** With auto-reply.';
-      if(/weather|天气/.test(m)) return '```html\\n'+CODE.weather+'\\n```\\n\\n✅ **Weather widget created!**';
-      if(/timer|计时/.test(m)) return '```html\\n'+CODE.timer+'\\n```\\n\\n✅ **Timer created!**';
-      if(/wifi|network|scan|网络/.test(m)) return '```html\\n'+CODE.wifi+'\\n```\\n\\n✅ **WiFi Analyzer created!** Scans nearby networks (demo).';
-      if(/python|script|automation/.test(m)) return '```python\\nimport os\\nimport sys\\nfrom datetime import datetime\\n\\n# Auto-generated by ENRIQUE AI\\nprint("ENRIQUE AI Python Script")\\nprint("Time:", datetime.now())\\nprint("Power Level:", "'+p.toUpperCase()+'", "Max Tokens:", '+maxT+')\\n\\n# Your automation code here\\ndef main():\\n    print("Hello from ENRIQUE AI! 🤖")\\n    # Add your logic\\n    pass\\n\\nif __name__ == "__main__":\\n    main()\\n```\\n\\n✅ **Python script created!** Copy and run.';
-      if(/javascript|js|node/.test(m)) return '```javascript\\n// ENRIQUE AI — Generated Code\\nconst app = {\\n  name: "ENRIQUE AI",\\n  power: "'+p.toUpperCase()+'",\\n  maxTokens: '+maxT+',\\n  created: new Date().toISOString()\\n};\\n\\n// Your logic here\\nfunction main() {\\n  console.log("Hello from ENRIQUE AI! 🤖");\\n  return app;\\n}\\n\\nconsole.log(main());\\n```\\n\\n✅ **JavaScript code generated!**';
-      return 'Try: "create a website", "write Python script", "make a dashboard", "build a game"';
-    }
-    
-    // Search
-    if(/search|google|find|搜索|查找/.test(m)){
-      var match = m.match(/(?:search|google|find|搜索|查找)\\s+(?:for\\s+)?(.+)/i);
-      if(match){ window.open('https://www.google.com/search?q='+encodeURIComponent(match[1]),'_blank'); return '🔍 Searching for **'+match[1]+'**...'; }
-      return 'What should I search? Try "search latest AI news"';
-    }
-    
-    // Open app
-    if(/open /.test(m)){
-      var apps = {tiktok:'tiktok.com',youtube:'youtube.com',instagram:'instagram.com',twitter:'x.com',github:'github.com',chrome:'google.com',google:'google.com'};
-      for(var k in apps) if(m.indexOf(k)>=0){ window.open('https://'+apps[k],'_blank'); return 'Opening **'+k+'**...'; }
-      var u = m.match(/open (.+)/i);
-      if(u) window.open('https://'+u[1],'_blank');
-      return 'Opening...';
-    }
-    
-    // Camera/Photo
-    if(/camera|photo|拍照|相机/.test(m)){
-      if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)
-        navigator.mediaDevices.getUserMedia({video:true}).then(function(s){s.getTracks().forEach(function(t){t.stop()})});
-      return '📸 Camera opened!';
-    }
-    
-    // GPS
-    if(/where am i|location|gps|定位|位置/.test(m)){
-      navigator.geolocation.getCurrentPosition(function(p){toast('📍 '+p.coords.latitude.toFixed(4)+', '+p.coords.longitude.toFixed(4),'ok')},function(){},{timeout:3000});
-      return '📍 Getting location...';
-    }
-    
-    // Battery
-    if(/battery|电量/.test(m)){
-      if(navigator.getBattery) navigator.getBattery().then(function(b){toast('🔋 '+Math.round(b.level*100)+'%','ok')});
-      return '🔋 Checking battery...';
-    }
-    
-    // Thanks
-    if(/thank|thanks|谢/.test(m)) return 'You\'re welcome! 😊';
-    
-    // Compliment
-    if(/love|great|awesome|cool|amazing|棒|厉害|nice|good/.test(m)) return 'Thanks! 😊 You\'re awesome too!';
-    
-    // Farewell
-    if(/bye|goodbye|see you|再见|拜拜|88/.test(m)) return 'Goodbye! 👋 Come back anytime!';
-    
-    // Power level query
-    if(/power|token|level|等级/.test(m)) return '⚡ Current Power: **'+p.toUpperCase()+'** — Max tokens: **'+maxT+'**\\n\\nAdjust in sidebar: MIN=200 · LOW=500 · MED=1500 · HIGH=3000 · MAX=4000';
-    
-    // Codex / like you
-    if(/codex|像你|like you/.test(m)) return 'Yes! I\'m **ENRIQUE AI** — built to be like Codex but runs entirely in your browser!\\n\\n**What I can do like Codex:**\\n- 💻 Generate any code\\n- 🌐 Create full websites\\n- 🐍 Python scripts\\n- 🧠 Remember conversations\\n- 📱 Device control\\n\\n**My Power Levels:**\\nJust like Codex has different execution levels, I have MIN→MAX. Set it in the sidebar! ⚡';
-    
-    // Default
-    var n = this.rec('name');
-    var defs = [
-      'I\'m ready! Try "create a website", "write Python code", "search something", or ask "what can you do"!',
-      'Got it. I can code in any language, build websites, and control your phone. What shall we build?',
-      'Listening! '+(n?'Hey '+n+', ': '')+'Power is **'+p.toUpperCase()+'** ('+maxT+' tok). Try "build a dashboard" or "create a shop"!'
-    ];
-    return defs[Math.floor(Math.random()*defs.length)];
+    return 'Interesting! I\'m still learning to understand. Keep talking to me and click "Train ENRIQUE" - every conversation helps me learn! 🧠';
   }
 };
 
-/* ===== CODE TEMPLATES ===== */
-var CODE = {
-  website: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>ENRIQUE Site</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}h1{font-size:clamp(2em,5vw,3.5em);font-weight:900;background:linear-gradient(135deg,#10a37f,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}p{color:#7d7d90;max-width:500px;font-size:1.1em;line-height:1.6;margin-bottom:30px}.btn{padding:14px 28px;border-radius:10px;background:#10a37f;color:#fff;text-decoration:none;font-weight:600;display:inline-block;transition:all .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,163,127,.3)}.features{padding:60px 20px;max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}.f{padding:24px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.f h3{color:#10a37f;margin-bottom:6px}.f p{color:#7d7d90;font-size:13px}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><h1>Built with ENRIQUE AI</h1><p>Full responsive website generated in seconds. 100% free, local, private.</p><a class="btn" href="#">Get Started →</a><div class="features"><div class="f"><h3>⚡ Fast</h3><p>Generated instantly</p></div><div class="f"><h3>🎨 Modern</h3><p>Clean dark design</p></div><div class="f"><h3>📱 Responsive</h3><p>Works everywhere</p></div></div></body></html>`,
-  calculator: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Calc</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.calc{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:20px;width:300px}.disp{background:#0a0a0f;border:1px solid #2a2a3a;border-radius:10px;padding:16px;text-align:right;font-size:28px;font-family:monospace;min-height:56px;display:flex;align-items:center;justify-content:flex-end;color:#e4e4ec;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}button{padding:16px;border:none;border-radius:8px;font-size:18px;font-weight:600;cursor:pointer;background:#20202e;color:#e4e4ec;transition:all .1s}button:active{transform:scale(.93)}.op{background:#10a37f;color:#fff}.eq{background:#10b981;color:#fff;grid-column:span 2}.clr{background:#f85149;color:#fff}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="calc"><div class="disp" id="d">0</div><div class="grid"><button class="clr" onclick="c()">C</button><button onclick="c(\'('\')">(</button><button onclick="c(\')\'\')">)</button><button class="op" onclick="c(\'/\'\')">÷</button><button onclick="c(\'7\'\')">7</button><button onclick="c(\'8\'\')">8</button><button onclick="c(\'9\'\')">9</button><button class="op" onclick="c(\'*\'\')">×</button><button onclick="c(\'4\'\')">4</button><button onclick="c(\'5\'\')">5</button><button onclick="c(\'6\'\')">6</button><button class="op" onclick="c(\'-\'\')">−</button><button onclick="c(\'1\'\')">1</button><button onclick="c(\'2\'\')">2</button><button onclick="c(\'3\'\')">3</button><button class="op" onclick="c(\'+\'\')">+</button><button onclick="c(\'0\'\')">0</button><button onclick="c(\'.\'\')">.</button><button class="eq" onclick="c(\'=\'\')">=</button></div></div>\u003Cscript>var e="",d=document.getElementById("d");function c(v){if(v==="C"||!v){e="";d.textContent="0"}else if(v==="="){try{e=String(eval(e));d.textContent=e}catch(er){d.textContent="Error"}}else{e+=v;d.textContent=e}}<\/script></body></html>`,
-  login: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.card{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:32px;width:100%;max-width:360px}h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}.sub{color:#7d7d90;font-size:13px;text-align:center;margin-bottom:24px}.f{margin-bottom:14px}label{font-size:12px;font-weight:600;color:#7d7d90;display:block;margin-bottom:4px}input{width:100%;padding:11px 14px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:14px;outline:none}input:focus{border-color:#10a37f}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:#10a37f;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.btn:hover{background:#0d8a6a}.foot{text-align:center;margin-top:14px;font-size:13px;color:#7d7d90}.foot a{color:#10a37f;text-decoration:none}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="card"><h2>Welcome Back</h2><p class="sub">Sign in to continue</p><div class="f"><label>Email</label><input placeholder="you@email.com"></div><div class="f"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn">Sign In</button><p class="foot">No account? <a href="#">Sign up</a></p></div></body></html>`,
-  todo: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.todo{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:24px;width:100%;max-width:360px}h2{margin-bottom:16px}.row{display:flex;gap:8px;margin-bottom:16px}.row input{flex:1;padding:10px;background:#0a0a0f;border:1.5px solid #2a2a3a;border-radius:8px;color:#e4e4ec;font-size:14px;outline:none}.row input:focus{border-color:#10a37f}.row button{padding:10px 16px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer}.item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #2a2a3a;border-radius:8px;margin-bottom:6px;cursor:pointer}.item.done{text-decoration:line-through;color:#4a4a5e}.chk{width:20px;height:20px;border:2px solid #4a4a5e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}.item.done .chk{background:#10a37f;border-color:#10a37f;color:#fff}.del{color:#f85149;cursor:pointer;font-size:14px;margin-left:auto}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="todo"><h2>📝 Todo</h2><div class="row"><textarea class="ifield" id="inp" rows="1" placeholder="Type anything..." style="resize:none;overflow:hidden;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea><button onclick="add()">Add</button></div><ul id="list"></ul></div>\u003Cscript>var items=[];function add(){var v=document.getElementById("inp").value.trim();if(!v)return;items.push({t:v,d:0});document.getElementById("inp").value="";render()}function tog(i){items[i].d=+!items[i].d;render()}function del(i){items.splice(i,1);render()}function render(){var l=document.getElementById("list"),h="";items.forEach(function(it,i){h+=\'<li class="item\'+(it.d?\' done\':\'\')+\'" onclick="tog(\'+i+\')"><div class="chk">\'+(it.d?\'✓\':\'\')+\'</div><span>\'+it.t+\'</span><span class="del" onclick="event.stopPropagation();del(\'+i+\')">✕</span></li>\'});l.innerHTML=h}<\\/script></body></html>`,
-  shop: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec}nav{padding:14px 20px;border-bottom:1px solid #2a2a3a;display:flex;align-items:center;justify-content:space-between}.brand{font-size:18px;font-weight:800;color:#10a37f}.hero{padding:50px 20px;text-align:center}.hero h1{font-size:32px;font-weight:900;margin-bottom:10px}.hero p{color:#7d7d90;font-size:15px}.btn{display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:20px}.products{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:800px;margin:0 auto}.product{background:#181825;border:1px solid #2a2a3a;border-radius:12px;padding:20px;text-align:center}.product h3{font-size:16px;margin-bottom:4px}.price{font-size:20px;font-weight:700;color:#10a37f;margin-bottom:8px}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><nav><div class="brand">ENRIQUE Shop</div><span style="color:#7d7d90">Cart (0)</span></nav><div class="hero"><h1>AI Store</h1><p>Premium AI-powered products</p><a class="btn">Browse All →</a></div><div class="products"><div class="product"><h3>AI Widget</h3><div class="price">$29</div></div><div class="product"><h3>Neural Chip</h3><div class="price">$199</div></div><div class="product"><h3>Cloud Kit</h3><div class="price">$89</div></div></div></body></html>`,
-  dashboard: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;padding:20px}.dash h1{font-size:26px;font-weight:900;margin-bottom:4px}.dash p{color:#7d7d90;font-size:13px;margin-bottom:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}.card{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.card .num{font-size:28px;font-weight:900;color:#10a37f}.card .lbl{font-size:12px;color:#7d7d90;margin-top:2px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.panel{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.panel h3{font-size:14px;font-weight:700;margin-bottom:12px}table{width:100%;font-size:12px}table th,table td{padding:8px 0;text-align:left;border-bottom:1px solid #20202e}table th{color:#7d7d90;font-weight:600;font-size:10px;text-transform:uppercase}.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}.badge.g{background:rgba(16,185,129,.15);color:#10b981}.badge.r{background:rgba(248,81,73,.15);color:#f85149}@media(max-width:480px){.grid2{grid-template-columns:1fr}}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="dash"><h1>📊 Analytics</h1><p>Real-time metrics</p><div class="cards"><div class="card"><div class="num">24K</div><div class="lbl">Users</div></div><div class="card"><div class="num">$48K</div><div class="lbl">Revenue</div></div><div class="card"><div class="num">94%</div><div class="lbl">Uptime</div></div><div class="card"><div class="num">1.8K</div><div class="lbl">Active</div></div></div><div class="grid2"><div class="panel"><h3>Activity</h3><table><tr><th>User</th><th>Status</th></tr><tr><td>@enrique</td><td><span class="badge g">Done</span></td></tr><tr><td>@dev</td><td><span class="badge r">Error</span></td></tr><tr><td>@coder</td><td><span class="badge g">Done</span></td></tr></table></div></div></div></body></html>`,
-  music: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;align-items:center;justify-content:center}.player{text-align:center;width:320px}.art{width:160px;height:160px;border-radius:20px;background:linear-gradient(135deg,#10a37f,#34d399);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 12px 36px rgba(16,163,127,.25)}h3{font-size:20px;font-weight:800} p{color:#7d7d90;font-size:13px;margin-bottom:20px}.bar{width:100%;height:4px;background:#20202e;border-radius:4px;margin-bottom:6px}.bar-in{width:40%;height:100%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:4px}.time{display:flex;justify-content:space-between;font-size:11px;color:#4a4a5e;margin-bottom:20px}.ctrls{display:flex;align-items:center;justify-content:center;gap:20px}.cbtn{width:48px;height:48px;border:2px solid #2a2a3a;border-radius:50%;background:#181825;color:#e4e4ec;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}.cbtn.p{width:56px;height:56px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;font-size:24px;box-shadow:0 6px 20px rgba(16,163,127,.25)}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="player"><div class="art">🎵</div><h3>Neural Dreams</h3><p>ENRIQUE AI</p><div class="bar"><div class="bar-in"></div></div><div class="time"><span>1:48</span><span>4:02</span></div><div class="ctrls"><button class="cbtn">⏮</button><button class="cbtn p">▶</button><button class="cbtn">⏭</button></div></div></body></html>`,
-  game: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}h2{font-size:24px;font-weight:900}.score{font-size:18px;color:#7d7d90}.btn{padding:14px 28px;border:none;border-radius:10px;background:#10a37f;color:#fff;font-size:16px;font-weight:700;cursor:pointer}.btn:hover{background:#0d8a6a}#target{width:60px;height:60px;background:#f85149;border-radius:12px;position:fixed;cursor:pointer;display:none;animation:pop .15s ease}@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><h2>🎮 Click Game</h2><div class="score" id="sc">Score: 0</div><button class="btn" onclick="start()">Start</button><div id="target" onclick="hit()"></div>\u003Cscript>var sc=0,t;function start(){sc=0;document.getElementById("sc").textContent="Score: 0";move();t=setInterval(move,700);setTimeout(function(){clearInterval(t);document.getElementById("target").style.display="none";alert("Score: "+sc)}),15000}function move(){var e=document.getElementById("target");e.style.display="block";e.style.left=Math.random()*(innerWidth-80)+"px";e.style.top=Math.random()*(innerHeight-80)+"px"}function hit(){sc++;document.getElementById("sc").textContent="Score: "+sc;move()}\u003C/script></body></html>`,
-  form: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.wrap{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:28px;width:100%;max-width:400px}h2{font-size:20px;font-weight:800;margin-bottom:4px}.sub{color:#7d7d90;font-size:13px;margin-bottom:20px}.f{margin-bottom:14px}label{font-size:12px;font-weight:600;color:#7d7d90;display:block;margin-bottom:4px}input,textarea,select{width:100%;padding:10px 12px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:13px;outline:none;font-family:inherit}input:focus,textarea:focus{border-color:#10a37f}textarea{min-height:80px;resize:vertical}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,#10a37f,#34d399);color:#fff;font-size:15px;font-weight:700;cursor:pointer}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="wrap"><h2>📧 Contact</h2><p class="sub">Send us a message</p><div class="f"><label>Name</label><input placeholder="Your name"></div><div class="f"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="f"><label>Message</label><textarea placeholder="Tell us..."></textarea></div><button class="btn">Send →</button></div></body></html>`,
-  chat: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;flex-direction:column}.ch{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #2a2a3a}.ch .a{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}.ch h3{font-size:15px;font-weight:700}.ch .s{width:6px;height:6px;border-radius:50%;background:#10b981}.ms{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}.m{max-width:75%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5}.mine{background:#10a37f;color:#fff;align-self:flex-end;border-radius:14px 14px 4px}.their{background:#181825;color:#e4e4ec;align-self:flex-start;border-radius:14px 14px 14px 4px}.inp{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #2a2a3a}.inp input{flex:1;padding:10px 14px;border:1.5px solid #2a2a3a;border-radius:20px;background:#111118;color:#e4e4ec;font-size:14px;outline:none}.inp input:focus{border-color:#10a37f}.inp button{padding:10px 18px;border:none;border-radius:20px;background:#10a37f;color:#fff;font-weight:600;cursor:pointer}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="ch"><div class="a">E</div><h3>ENRIQUE AI</h3><div class="s"></div></div><div class="ms" id="msgs"><div class="m their">Hello! 👋</div></div><div class="inp"><input id="iinp" placeholder="Type..." onkeydown="if(event.key===\'Enter\')snd()"><button onclick="snd()">Send</button></div>\u003Cscript>function snd(){var i=document.getElementById("iinp");var v=i.value.trim();if(!v)return;var m=document.getElementById("msgs");var d=document.createElement("div");d.className="m mine";d.textContent=v;m.appendChild(d);i.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=["Interesting!","Tell me more!","Cool!","I see!","Nice!"][Math.floor(Math.random()*5)];var e=document.createElement("div");e.className="m their";e.textContent=r;m.appendChild(e);m.scrollTop=m.scrollHeight},800)}\u003C/script></body></html>`,
-  weather: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weather</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center}.w{padding:28px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:300px;text-align:center}.w .icon{font-size:48px;margin-bottom:8px}.w .temp{font-size:42px;font-weight:900;color:#10a37f}.w .desc{color:#7d7d90;font-size:14px;margin-top:4px}.w .detail{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #2a2a3a;font-size:13px;color:#7d7d90}.w .detail span{display:flex;flex-direction:column;align-items:center;gap:2px}.w .detail .v{color:#e4e4ec;font-weight:600}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="w"><div class="icon">☀️</div><div class="temp">26°C</div><div class="desc">Sunny</div><div class="detail"><span>💧 <span class="v">45%</span>Humidity</span><span>💨 <span class="v">12</span>Wind</span><span>🌡️ <span class="v">1012</span>Pressure</span></div></div></body></html>`,
-  timer: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Timer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.t{text-align:center;padding:32px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:280px}.time{font-size:56px;font-weight:800;font-family:monospace;color:#e4e4ec;margin:16px 0}.ctrls{display:flex;gap:10px;justify-content:center}button{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}.s{background:#10a37f;color:#fff}.r{background:#f85149;color:#fff}.l{background:#20202e;color:#e4e4ec}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="t"><h2>⏱️ Timer</h2><div class="time" id="t">00:00</div><div class="ctrls"><button class="s" id="b" onclick="to()">Start</button><button class="r" onclick="re()">Reset</button></div></div>\u003Cscript>var s=0,run=0;function f(n){return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}function to(){if(run){clearInterval(run);document.getElementById("b").textContent="Resume"}else{run=setInterval(function(){s++;document.getElementById("t").textContent=f(s)},1000);document.getElementById("b").textContent="Pause"}run=!run}function re(){clearInterval(run);s=0;run=0;document.getElementById("t").textContent=f(0);document.getElementById("b").textContent="Start"}\u003C/script></body></html>`,
-  wifi: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>WiFi Analyzer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;padding:20px}.h{font-size:18px;font-weight:900;margin-bottom:4px}.s{color:#7d7d90;font-size:12px;margin-bottom:14px}.net{background:#181825;border:1px solid #2a2a3a;border-radius:10px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}.net .sig{font-size:18px;width:30px;text-align:center}.net .info{flex:1}.net .name{font-size:13px;font-weight:600}.net .detail{font-size:10px;color:#7d7d90}.net .bar{width:40px;height:30px;display:flex;align-items:flex-end;gap:2px}.net .bar span{flex:1;background:linear-gradient(180deg,#10a37f,#34d399);border-radius:2px;min-height:3px}.refresh{width:100%;padding:8px;border:none;border-radius:8px;background:#10a37f;color:#fff;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;text-align:center}.lock{font-size:11px}
-.mode-grid{display:flex;gap:4px}
-.mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
-.mode-btn.on{border-color:var(--primary);color:var(--primary);background:var(--primary-l)}
-.apikey{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:all .2s;box-sizing:border-box}
-.apikey:focus{border-color:var(--primary)}
-.apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
-.api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
-.api-hint a{color:var(--blue);text-decoration:none}
-\u003C/style></head><body><div class="h">📡 WiFi Scanner</div><div class="s">Networks found: <span id="cnt">8</span></div><div id="list"></div><button class="refresh" onclick="scan()">🔄 Scan Again</button>\u003Cscript>var names=["ENRIQUE_5G","Home_Net","Neighbor","Cafe_Guest","IoT_Net","Office","Starbucks","Library"],sigs=["🔒","🔒","🔓","🔓","🔒","🔒","🔓","🔒"];function scan(){var l=document.getElementById("list");l.innerHTML="";var order=[0,1,2,3,4,5,6,7];for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}order.forEach(function(idx){var s=Math.floor(Math.random()*40+50);var bars=Math.floor(s/18)+1;var d=document.createElement("div");d.className="net";var h="";for(var b=0;b<4;b++)h+="<span style=\\"height:"+(b<bars?Math.random()*60+40+"%":"3px")+"\\"></span>";d.innerHTML=\'<div class="sig">\'+(bars>2?"🟢":"🟡")+\'</div><div class="info"><div class="name">\'+names[idx]+\'</div><div class="detail">CH\'+[1,6,11,36,40,44,149][Math.floor(Math.random()*7)]+\' · \'+s+\' dBm</div></div><div class="bar">\'+h+\'</div><div class="lock">\'+sigs[idx]+\'</div>\';l.appendChild(d)})}document.getElementById("cnt").textContent="8";scan()}\u003C/script></body></html>`,
-};
+// ===== Neural Network Code =====
+// ===== ENRIQUE Neural Network - From Scratch =====
+// No libraries, no APIs, no pre-trained models.
+// A character-level RNN that learns from conversations.
 
-// ===== SEND FUNCTION =====
+class Matrix {
+  constructor(rows, cols, vals) {
+    this.rows = rows;
+    this.cols = cols;
+    this.data = new Float32Array(rows * cols);
+    if (vals) {
+      for (let i = 0; i < rows * cols; i++) this.data[i] = vals[i] || 0;
+    } else {
+      // Xavier initialization
+      const scale = Math.sqrt(2.0 / (rows + cols));
+      for (let i = 0; i < rows * cols; i++) {
+        this.data[i] = (Math.random() * 2 - 1) * scale;
+      }
+    }
+  }
+  
+  get(r, c) { return this.data[r * this.cols + c]; }
+  set(r, c, v) { this.data[r * this.cols + c] = v; }
+  
+  // Matrix multiply: this * other
+  mul(other) {
+    if (this.cols !== other.rows) throw Error(`mul dims: ${this.rows}x${this.cols} * ${other.rows}x${other.cols}`);
+    const out = new Matrix(this.rows, other.cols);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < other.cols; j++) {
+        let sum = 0;
+        for (let k = 0; k < this.cols; k++) {
+          sum += this.get(i, k) * other.get(k, j);
+        }
+        out.set(i, j, sum);
+      }
+    }
+    return out;
+  }
+  
+  // Add another matrix or scalar
+  add(other) {
+    if (typeof other === 'number') {
+      const out = new Matrix(this.rows, this.cols);
+      for (let i = 0; i < this.rows * this.cols; i++) out.data[i] = this.data[i] + other;
+      return out;
+    }
+    if (this.rows !== other.rows || this.cols !== other.cols) throw Error('add dims');
+    const out = new Matrix(this.rows, this.cols);
+    for (let i = 0; i < this.rows * this.cols; i++) out.data[i] = this.data[i] + other.data[i];
+    return out;
+  }
+  
+  // Element-wise multiply
+  elmul(other) {
+    const out = new Matrix(this.rows, this.cols);
+    for (let i = 0; i < this.rows * this.cols; i++) out.data[i] = this.data[i] * other.data[i];
+    return out;
+  }
+  
+  // Apply function element-wise
+  map(fn) {
+    const out = new Matrix(this.rows, this.cols);
+    for (let i = 0; i < this.rows * this.cols; i++) out.data[i] = fn(this.data[i]);
+    return out;
+  }
+  
+  // Transpose
+  T() {
+    const out = new Matrix(this.cols, this.rows);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        out.set(j, i, this.get(i, j));
+      }
+    }
+    return out;
+  }
+  
+  // Copy
+  copy() {
+    const out = new Matrix(this.rows, this.cols);
+    out.data = new Float32Array(this.data);
+    return out;
+  }
+  
+  // Scale by scalar
+  scale(s) {
+    const out = new Matrix(this.rows, this.cols);
+    for (let i = 0; i < this.rows * this.cols; i++) out.data[i] = this.data[i] * s;
+    return out;
+  }
+}
+
+// ===== Activation Functions =====
+function tanh(x) { return Math.tanh(x); }
+function dtanh(y) { return 1 - y * y; }
+function sigmoid(x) { return 1 / (1 + Math.exp(-Math.max(-50, Math.min(50, x)))); }
+function dsigmoid(y) { return y * (1 - y); }
+function softmax(x) {
+  const max = Math.max(...x);
+  const exps = x.map(v => Math.exp(v - max));
+  const sum = exps.reduce((a, b) => a + b, 0);
+  return exps.map(v => v / sum);
+}
+
+// ===== ENRIQUE RNN =====
+class ENRIQUERNN {
+  constructor(vocabSize, hiddenSize = 128, embedSize = 32) {
+    this.vs = vocabSize;
+    this.hs = hiddenSize;
+    this.es = embedSize;
+    
+    // Embedding
+    this.Wex = new Matrix(vocabSize, embedSize);  // vocab -> embed
+    
+    // RNN weights
+    this.Wxh = new Matrix(embedSize, hiddenSize);  // input -> hidden
+    this.Whh = new Matrix(hiddenSize, hiddenSize); // hidden -> hidden
+    this.bh = new Matrix(1, hiddenSize);           // hidden bias
+    
+    // Output weights
+    this.Why = new Matrix(hiddenSize, vocabSize);  // hidden -> output
+    this.by = new Matrix(1, vocabSize);            // output bias
+    
+    this.iter = 0;
+    this.smoothLoss = 0;
+  }
+  
+  // Forward pass for one step
+  stepForward(ix, hprev) {
+    // ix: input character index, hprev: previous hidden state
+    const x = new Matrix(1, this.es);
+    for (let j = 0; j < this.es; j++) {
+      x.set(0, j, this.Wex.get(ix, j));
+    }
+    
+    // h = tanh(x * Wxh + hprev * Whh + bh)
+    const xWxh = x.mul(this.Wxh);
+    const hWhh = hprev.mul(this.Whh);
+    const hRaw = xWxh.add(hWhh).add(this.bh);
+    const h = hRaw.map(tanh);
+    
+    // y = h * Why + by -> softmax
+    const yRaw = h.mul(this.Why).add(this.by);
+    const yProbs = softmax([...yRaw.data]);
+    
+    return { h, yProbs, x, hRaw };
+  }
+  
+  // Sample a character from probability distribution
+  sample(yProbs, temperature = 0.8) {
+    // Apply temperature
+    const scaled = yProbs.map(p => Math.pow(p, 1/temperature));
+    const sum = scaled.reduce((a, b) => a + b, 0);
+    const normed = scaled.map(p => p / sum);
+    
+    // Sample
+    let r = Math.random();
+    for (let i = 0; i < normed.length; i++) {
+      r -= normed[i];
+      if (r <= 0) return i;
+    }
+    return normed.length - 1;
+  }
+  
+  // Generate text
+  generate(chars, charToIdx, seed, length = 200, temperature = 0.7) {
+    let h = new Matrix(1, this.hs);
+    let out = seed || '';
+    
+    // Prime with seed
+    for (let ch of seed || '') {
+      const ix = charToIdx[ch] !== undefined ? charToIdx[ch] : 0;
+      const fwd = this.stepForward(ix, h);
+      h = fwd.h;
+    }
+    
+    // Generate
+    for (let i = 0; i < length; i++) {
+      const lastChar = out[out.length - 1] || ' ';
+      const ix = charToIdx[lastChar] !== undefined ? charToIdx[lastChar] : 0;
+      const fwd = this.stepForward(ix, h);
+      h = fwd.h;
+      const nextIx = this.sample(fwd.yProbs, temperature);
+      out += chars[nextIx] || '?';
+    }
+    
+    return out;
+  }
+  
+  // Train on a sequence (BPTT)
+  train(seq, charToIdx, lr = 0.01) {
+    if (seq.length < 2) return;
+    
+    const seqIndices = [];
+    for (let ch of seq) {
+      seqIndices.push(charToIdx[ch] !== undefined ? charToIdx[ch] : 0);
+    }
+    
+    // Forward pass: store all states
+    const states = [];
+    let h = new Matrix(1, this.hs);
+    
+    for (let t = 0; t < seqIndices.length - 1; t++) {
+      const fwd = this.stepForward(seqIndices[t], h);
+      states.push({ ...fwd, h_prev: h.copy(), ix: seqIndices[t], target: seqIndices[t + 1] });
+      h = fwd.h;
+    }
+    
+    // Loss
+    let loss = 0;
+    for (let t = 0; t < states.length; t++) {
+      loss += -Math.log(Math.max(states[t].yProbs[states[t].target], 1e-8));
+    }
+    this.smoothLoss = this.smoothLoss * 0.999 + loss / states.length * 0.001;
+    
+    // Backward pass
+    const dWxh = new Matrix(this.es, this.hs);
+    const dWhh = new Matrix(this.hs, this.hs);
+    const dbh = new Matrix(1, this.hs);
+    const dWhy = new Matrix(this.hs, this.vs);
+    const dby = new Matrix(1, this.vs);
+    const dWex = new Matrix(this.vs, this.es);
+    
+    let dhNext = new Matrix(1, this.hs);
+    
+    for (let t = states.length - 1; t >= 0; t--) {
+      const st = states[t];
+      
+      // dy = softmax gradient
+      const dy = new Matrix(1, this.vs);
+      for (let i = 0; i < this.vs; i++) {
+        dy.set(0, i, st.yProbs[i]);
+      }
+      dy.set(0, st.target, dy.get(0, st.target) - 1);
+      
+      // dWhy += h.T * dy
+      const hT = st.h.T();
+      const dWhy_part = hT.mul(dy);
+      for (let i = 0; i < this.hs * this.vs; i++) dWhy.data[i] += dWhy_part.data[i];
+      
+      // dby += dy
+      for (let i = 0; i < this.vs; i++) dby.data[i] += dy.data[i];
+      
+      // dh = dy * Why.T + dhNext
+      const dhRaw = dy.mul(this.Why.T()).add(dhNext);
+      
+      // dh_mod = dh * dtanh(h_raw)
+      const dhMod = dhRaw.elmul(st.hRaw.map(v => dtanh(tanh(v))));
+      
+      // dWxh += x.T * dhMod
+      const xT = st.x.T();
+      const dWxh_part = xT.mul(dhMod);
+      for (let i = 0; i < this.es * this.hs; i++) dWxh.data[i] += dWxh_part.data[i];
+      
+      // dWhh += h_prev.T * dhMod
+      const hpT = st.h_prev.T();
+      const dWhh_part = hpT.mul(dhMod);
+      for (let i = 0; i < this.hs * this.hs; i++) dWhh.data[i] += dWhh_part.data[i];
+      
+      // dbh += dhMod
+      for (let i = 0; i < this.hs; i++) dbh.data[i] += dhMod.data[i];
+      
+      // dhNext = dhMod * Whh.T
+      dhNext = dhMod.mul(this.Whh.T());
+      
+      // dWex for embedding
+      for (let j = 0; j < this.es; j++) {
+        dWex.data[st.ix * this.es + j] += dhMod.data[j];
+      }
+    }
+    
+    // Clip gradients
+    const clip = (v, max) => Math.max(-max, Math.min(max, v));
+    
+    // Update weights
+    const update = (W, dW) => {
+      for (let i = 0; i < W.rows * W.cols; i++) {
+        W.data[i] -= lr * clip(dW.data[i], 5);
+      }
+    };
+    
+    update(this.Wxh, dWxh);
+    update(this.Whh, dWhh);
+    update(this.bh, dbh);
+    update(this.Why, dWhy);
+    update(this.by, dby);
+    update(this.Wex, dWex);
+    
+    this.iter++;
+  }
+  
+  // Save weights to JSON
+  save() {
+    const toArr = (m) => Array.from(m.data);
+    return {
+      vs: this.vs, hs: this.hs, es: this.es,
+      Wex: toArr(this.Wex), Wxh: toArr(this.Wxh),
+      Whh: toArr(this.Whh), bh: toArr(this.bh),
+      Why: toArr(this.Why), by: toArr(this.by),
+      iter: this.iter, smoothLoss: this.smoothLoss
+    };
+  }
+  
+  // Load weights from JSON
+  load(data) {
+    const fromArr = (m, arr) => { m.data = new Float32Array(arr); };
+    this.vs = data.vs; this.hs = data.hs; this.es = data.es;
+    fromArr(this.Wex, data.Wex);
+    fromArr(this.Wxh, data.Wxh);
+    fromArr(this.Whh, data.Whh);
+    fromArr(this.bh, data.bh);
+    fromArr(this.Why, data.Why);
+    fromArr(this.by, data.by);
+    this.iter = data.iter || 0;
+    this.smoothLoss = data.smoothLoss || 0;
+  }
+}
+
+// ===== ENRIQUE Brain =====
+// Build vocabulary from conversation data
+function buildVocab(texts) {
+  const chars = new Set();
+  for (let t of texts) {
+    for (let ch of t) chars.add(ch);
+  }
+  const sorted = Array.from(chars).sort();
+  const charToIdx = {};
+  const idxToChar = {};
+  sorted.forEach((ch, i) => { charToIdx[ch] = i; idxToChar[i] = ch; });
+  return { chars: sorted, charToIdx, idxToChar, size: sorted.length };
+}
+
+// Default vocabulary (common Chinese + English chars)
+function defaultVocab() {
+  const chars = ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?;:\'"-()[]{}@#$%^&*+=/\\|~`<> \n\t的一是不了人我在有他这中大来上国个到说们为和地出要时看没只如开会可对生年发成部民能方进同经法面又分前平定后然间因长期把多公从里事好她些还其动两动手已外小高点长当都水化得自她什但者于些又她'
+  const unique = Array.from(new Set(chars)).sort();
+  const charToIdx = {};
+  const idxToChar = {};
+  unique.forEach((ch, i) => { charToIdx[ch] = i; idxToChar[i] = ch; });
+  return { chars: unique, charToIdx, idxToChar, size: unique.length };
+}
+
+console.log('ENRIQUE Neural Network module loaded');
+
+
+// ===== NN Integration =====
+var ENRIQUE_NN = null;
+var NN_VOCAB = defaultVocab();
+var NN_TRAINED = false;
+var NN_CONVO = JSON.parse(localStorage.getItem('ea_nn_convo')||'[]');
+
+// Try to load saved weights
+try {
+  var saved = localStorage.getItem('ea_nn_weights');
+  if(saved) {
+    var data = JSON.parse(saved);
+    ENRIQUE_NN = new ENRIQUERNN(data.vs, data.hs, data.es);
+    ENRIQUE_NN.load(data);
+    NN_TRAINED = true;
+    NN_VOCAB = {chars: [], charToIdx: {}, idxToChar: {}, size: data.vs};
+  }
+} catch(e) {}
+
+if(!ENRIQUE_NN) {
+  ENRIQUE_NN = new ENRIQUERNN(NN_VOCAB.size, 128, 32);
+}
+
+updateNNStatus();
+
+function updateNNStatus() {
+  var s = document.getElementById('nnStatus');
+  var i = document.getElementById('nnInfo');
+  if(!s || !i) return;
+  if(NN_TRAINED) {
+    s.textContent = '✅ Trained (' + ENRIQUE_NN.iter + ' iters)';
+    i.textContent = 'Loss: ' + ENRIQUE_NN.smoothLoss.toFixed(4) + ' · Vocab: ' + ENRIQUE_NN.vs + ' chars';
+  } else {
+    s.textContent = '⚪ Fresh network';
+    i.textContent = 'Params: ~' + (ENRIQUE_NN.vs * 32 + 32*128 + 128*128 + 128*ENRIQUE_NN.vs + ENRIQUE_NN.vs) + ' · Chat to train!';
+  }
+}
+
+function trainNN() {
+  var status = document.getElementById('nnStatus');
+  var progress = document.getElementById('trainProgress');
+  var fill = document.getElementById('trainFill');
+  var text = document.getElementById('trainText');
+  if(!progress) return;
+  
+  progress.style.display = 'block';
+  if(status) status.textContent = '⏳ Training...';
+  
+  setTimeout(function() {
+    var allText = NN_CONVO.map(function(m){ return m.c; }).join(' ');
+    if(allText.length < 10) {
+      allText = 'Hello! I am ENRIQUE AI. I learn from conversations. I can write code. 你好！我是从零创建的 AI。我可以学习。';
+    }
+    
+    var vocab = buildVocab([allText].concat(NN_CONVO.map(function(m){return m.c})));
+    ENRIQUE_NN = new ENRIQUERNN(vocab.size, 128, 32);
+    NN_VOCAB = vocab;
+    
+    var totalEpochs = Math.min(50, Math.max(5, Math.floor(allText.length / 10)));
+    for(var epoch = 0; epoch < totalEpochs; epoch++) {
+      ENRIQUE_NN.train(allText, vocab.charToIdx, 0.01);
+      var pct = Math.round((epoch + 1) / totalEpochs * 100);
+      if(fill) fill.style.width = pct + '%';
+      if(text) text.textContent = 'Epoch ' + (epoch+1) + '/' + totalEpochs;
+    }
+    
+    NN_TRAINED = true;
+    if(progress) progress.style.display = 'none';
+    if(status) status.textContent = '✅ Trained! (' + ENRIQUE_NN.iter + ' iters)';
+    
+    localStorage.setItem('ea_nn_weights', JSON.stringify(ENRIQUE_NN.save()));
+    toast('🧠 ENRIQUE NN trained!');
+    updateNNStatus();
+  }, 100);
+}
+
+function nnRespond(msg) {
+  if(!ENRIQUE_NN || !NN_TRAINED) return null;
+  
+  var response = ENRIQUE_NN.generate(NN_VOCAB.chars, NN_VOCAB.charToIdx, msg, 200, 0.7);
+  response = response.substring(msg.length).trim();
+  if(response.length > 300) response = response.substring(0, 300);
+  var stopIdx = response.lastIndexOf('。');
+  if(stopIdx > 20) response = response.substring(0, stopIdx + 1);
+  stopIdx = response.lastIndexOf('.');
+  if(stopIdx > 20 && stopIdx > response.lastIndexOf('。')) response = response.substring(0, stopIdx + 1);
+  return response || '';
+}
+
+function learnFromConvo(msg, reply) {
+  if(!ENRIQUE_NN) return;
+  NN_CONVO.push({r:'u', c:msg, t:Date.now()});
+  NN_CONVO.push({r:'a', c:reply, t:Date.now()});
+  if(NN_CONVO.length > 50) NN_CONVO = NN_CONVO.slice(-50);
+  localStorage.setItem('ea_nn_convo', JSON.stringify(NN_CONVO));
+  
+  setTimeout(function() {
+    ENRIQUE_NN.train(msg + ' ' + reply, NN_VOCAB.charToIdx, 0.005);
+    if(ENRIQUE_NN.iter % 5 === 0) {
+      localStorage.setItem('ea_nn_weights', JSON.stringify(ENRIQUE_NN.save()));
+      updateNNStatus();
+    }
+  }, 500);
+}
+
+// ===== SEND =====
 function send(){
   var inp = $('inp');
   var msg = inp.value.trim();
@@ -713,7 +705,6 @@ function send(){
   BUSY = true;
   $('sendBtn').disabled = true;
 
-  // Remove welcome
   var w = $('welcome');
   if(w) w.remove();
 
@@ -727,123 +718,63 @@ function send(){
   DATA.push({r:'u',c:msg,t:Date.now()});
   save();
 
-  // AI response container
+  // AI response
   var a = document.createElement('div');
   a.className = 'msg a';
   a.innerHTML = '<div class="msg-av">E</div><div class="msg-b"><div class="typing"><span></span><span></span><span></span></div></div>';
   inner.appendChild(a);
   var bubble = a.querySelector('.msg-b');
   $('msgs').scrollTop = $('msgs').scrollHeight;
-
   inp.value = '';
 
-  // Process
   setTimeout(function(){
-    var aiFn = null;
-    var aiMsgs = [];
-    var aiConvos = [];
+    var reply = '';
     
-    if(MODE === 'brain' && window.ENRIQUE && ENRIQUE.loaded){
-      aiFn = chatENRIQUE;
-      aiConvos = ENRIQUE.convos || [];
-      aiMsgs = aiConvos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
-      aiMsgs.push({role:'user', content:msg});
-    } else if(MODE === 'pro' && PRO_KEY){
-      aiFn = callPro;
-      aiConvos = PRO_CONVO || [];
-      aiMsgs = aiConvos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
-      aiMsgs.push({role:'user', content:msg});
-    }
-    
-    if(aiFn){
-      // Use AI engine (Brain or Pro)
-      bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
-      var fullReply = '';
-      
-      aiFn(aiMsgs, function(chunk){
-        fullReply += chunk;
-        var html = esc(fullReply)
-          .replace(/```(\\w+)?\\n([\\s\\S]*?)```/g, '<pre><code class="lang-$1">$2</code></pre>')
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>')
-          .replace(/\\n/g, '<br>')
-          .replace(/### (.+)/g, '<h3>$1</h3>')
-          .replace(/## (.+)/g, '<h2>$1</h2>');
-        bubble.innerHTML = html;
-        $('msgs').scrollTop = $('msgs').scrollHeight;
-        bubble.querySelectorAll('pre').forEach(function(pre){
-          if(!pre.nextElementSibling || !pre.nextElementSibling.classList.contains('cp-btn')){
-            var b = document.createElement('span');
-            b.className = 'cp-btn';
-            b.textContent = '📋 Copy';
-            b.onclick = function(){
-              navigator.clipboard.writeText(pre.textContent);
-              b.textContent = '✅ Copied';
-              setTimeout(function(){b.textContent='📋 Copy'},1500);
-            };
-            pre.after(b);
-          }
-        });
-      }).then(function(reply){
-        if(reply){
-          DATA.push({r:'a',c:reply,t:Date.now()});
-          aiConvos.push({r:'u',c:msg,t:Date.now()});
-          aiConvos.push({r:'a',c:reply,t:Date.now()});
-          if(aiConvos.length > 30) aiConvos = aiConvos.slice(-30);
-          if(MODE==='brain') localStorage.setItem('ea_webllm_convos', JSON.stringify(ENRIQUE.convos));
-          else localStorage.setItem('ea_proconvo', JSON.stringify(PRO_CONVO));
-          TOKENS += msg.length + reply.length;
-          save();
-        }
-        BUSY = false;
-        $('sendBtn').disabled = false;
-        inp.focus();
-      });
+    if(NN_TRAINED && ENRIQUE_NN) {
+      // Use neural network
+      reply = nnRespond(msg);
+      if(!reply) reply = BRAIN.process(msg, CUR);
     } else {
-      // Use LOCAL brain
-      try {
-        var reply = BRAIN.process(msg, CUR);
-        BRAIN.add(msg, reply);
-
-        var html = reply
-          .replace(/### (.+)/g, '<h3>$1</h3>')
-          .replace(/## (.+)/g, '<h2>$1</h2>')
-          .replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>')
-          .replace(/```(\\w+)?\\n([\\s\\S]*?)```/g, '<pre><code>$2</code></pre>')
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\\n/g, '<br>')
-          .replace(/- (.+)/g, function(m,p){return '\\u2022 '+p+'<br>'});
-
-        bubble.innerHTML = html;
-
-        // Copy buttons
-        bubble.querySelectorAll('pre').forEach(function(pre){
-          var b = document.createElement('span');
-          b.className = 'cp-btn';
-          b.textContent = '📋 Copy';
-          b.onclick = function(){
-            navigator.clipboard.writeText(pre.textContent);
-            b.textContent = '✅ Copied';
-            setTimeout(function(){b.textContent='📋 Copy'},1500);
-          };
-          pre.after(b);
-        });
-
-        DATA.push({r:'a',c:reply,t:Date.now()});
-        TOKENS += msg.length + reply.length;
-        save();
-        $('msgs').scrollTop = $('msgs').scrollHeight;
-      } catch(e){
-        bubble.innerHTML = '<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';
-      }
-      BUSY = false;
-      $('sendBtn').disabled = false;
-      inp.focus();
+      // Use rule-based fallback
+      reply = BRAIN.process(msg, CUR);
     }
+    
+    try {
+      var html = reply
+        .replace(/### (.+)/g, '<h3>$1</h3>')
+        .replace(/## (.+)/g, '<h2>$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\`\`\`(\w+)?\n([\s\S]*?)\`\`\`/g, '<pre><code>$2</code></pre>')
+        .replace(/\`([^\`]+)\`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>')
+        .replace(/- (.+)/g, function(m,p){return '• '+p+'<br>'});
+
+      bubble.innerHTML = html;
+
+      bubble.querySelectorAll('pre').forEach(function(pre){
+        var b = document.createElement('span');
+        b.className = 'cp-btn';
+        b.textContent = '📋 Copy';
+        b.onclick = function(){
+          navigator.clipboard.writeText(pre.textContent);
+          b.textContent = '✅ Copied';
+          setTimeout(function(){b.textContent='📋 Copy'},1500);
+        };
+        pre.after(b);
+      });
+
+      DATA.push({r:'a',c:reply,t:Date.now()});
+      TOKENS += msg.length + reply.length;
+      save();
+      $('msgs').scrollTop = $('msgs').scrollHeight;
+      learnFromConvo(msg, reply);
+    } catch(e){
+      bubble.innerHTML = '<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';
+    }
+    BUSY = false;
+    $('sendBtn').disabled = false;
+    inp.focus();
   }, 200);
-}function ask(q){
-  $('inp').value = q;
-  send();
 }
 
 // ===== RENDER =====
@@ -852,7 +783,7 @@ function render(){
   inner.innerHTML = '';
 
   if(!DATA.length){
-    inner.innerHTML = '<div class="welcome" id="welcome"><div class="wlc-icon">⚡</div><div class="wlc-title">ENRIQUE AI</div><div class="wlc-sub">Like Codex — chat, code, create. Full power controls.</div><div class="wlc-chips"><div class="wlc-chip" onclick="ask(\'Create a modern responsive website with dark theme\')">🌐 Website</div><div class="wlc-chip" onclick="ask(\'Create a full e-commerce store\')">🛍️ Shop</div><div class="wlc-chip" onclick="ask(\'Build a dashboard with analytics\')">📊 Dashboard</div><div class="wlc-chip" onclick="ask(\'Write a Python automation script\')">🐍 Python</div><div class="wlc-chip" onclick="ask(\'Create a music player app\')">🎵 Music</div><div class="wlc-chip" onclick="ask(\'Build a calculator app\')">🧮 Calc</div><div class="wlc-chip" onclick="ask(\'Scan WiFi networks\')">📡 WiFi</div><div class="wlc-chip" onclick="ask(\'Create a todo app\')">📝 Todo</div><div class="wlc-chip" onclick="ask(\'Tell me a joke\')">😂 Joke</div><div class="wlc-chip" onclick="ask(\'What can you do\')">💡 Help</div></div></div>';
+    inner.innerHTML = '<div class="welcome" id="welcome"><div class="wlc-icon">⚡</div><div class="wlc-title">ENRIQUE AI</div><div class="wlc-sub">A neural network built from scratch<br>Talk to train it!</div><div class="wlc-chips"><div class="wlc-chip" onclick="ask(&#39;Hello&#39;)">👋 Hello</div><div class="wlc-chip" onclick="ask(&#39;Create a website&#39;)">🌐 Website</div><div class="wlc-chip" onclick="ask(&#39;Write Python code&#39;)">🐍 Python</div><div class="wlc-chip" onclick="ask(&#39;What can you do&#39;)">💡 Help</div><div class="wlc-chip" onclick="ask(&#39;Tell me a joke&#39;)">😂 Joke</div><div class="wlc-chip" onclick="ask(&#39;你是谁&#39;)">🤔 你是谁</div></div></div>';
     return;
   }
 
@@ -862,7 +793,7 @@ function render(){
     var av = m.r==='u'?'U':'E';
     var txt = esc(typeof m.c==='string'?m.c:'');
     if(m.r==='a'){
-      txt = txt.replace(/### (.+)/g,'<h3>$1</h3>').replace(/## (.+)/g,'<h2>$1</h2>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/```(\w+)?\n([\s\S]*?)```/g,'<pre><code>$2</code></pre>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>').replace(/- (.+)/g,function(m,p){return '• '+p+'<br>'});
+      txt = txt.replace(/### (.+)/g,'<h3>$1</h3>').replace(/## (.+)/g,'<h2>$1</h2>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\`\`\`(\w+)?\n([\s\S]*?)\`\`\`/g,'<pre><code>$2</code></pre>').replace(/\`([^\`]+)\`/g,'<code>$1</code>').replace(/\n/g,'<br>').replace(/- (.+)/g,function(m,p){return '• '+p+'<br>'});
     }
     d.innerHTML = '<div class="msg-av">'+av+'</div><div class="msg-b">'+txt+'</div>';
     inner.appendChild(d);
@@ -871,108 +802,8 @@ function render(){
 }
 
 // ===== INIT =====
-var savedMode = localStorage.getItem('ea_mode');
-if(savedMode === 'brain' || savedMode === 'pro'){
-  setMode(savedMode);
-}
 updateUI();
 render();
-// Restore Pro settings
-var pk = localStorage.getItem('ea_prokey');
-if(pk){ PRO_KEY = pk; var el = document.getElementById('proKey'); if(el) el.value = pk; }
-// Auto-load brain if needed
-if(localStorage.getItem('ea_brain_loaded') === 'true' && savedMode === 'brain'){
-  setTimeout(function(){ loadBrain(); }, 1000);
-}
-</script>
-
-<script type="module">
-import { CreateMLCEngine } from "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.73/+esm";
-
-window.ENRIQUE = {
-  engine: null, loading: false, loaded: false,
-  modelId: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
-  convos: JSON.parse(localStorage.getItem('ea_webllm_convos')||'[]'),
-  
-  load: async function() {
-    if(this.engine) { this.setStatus('loaded'); return true; }
-    if(this.loading) return false;
-    this.loading = true;
-    this.setStatus('loading');
-    var btn = document.getElementById('modelBtn');
-    var prog = document.getElementById('modelProgress');
-    var fill = document.getElementById('mpFill');
-    var txt = document.getElementById('mpText');
-    if(btn) btn.disabled = true;
-    if(prog) prog.style.display = 'block';
-    if(txt) txt.textContent = 'Downloading ENRIQUE Brain... (~2GB)';
-    
-    try {
-      this.engine = await CreateMLCEngine(this.modelId, {
-        initProgressCallback: function(p) {
-          var pct = Math.round((p.loaded / p.total) * 100);
-          if(isNaN(pct)) pct = 0;
-          if(fill) fill.style.width = pct + '%';
-          if(txt) txt.textContent = (p.text||'Downloading...') + ' (' + pct + '%)';
-        }
-      });
-      this.loaded = true; this.loading = false;
-      this.setStatus('loaded');
-      if(btn) { btn.textContent = '✅ Brain Loaded'; btn.disabled = true; }
-      if(txt) txt.textContent = 'ENRIQUE Brain ready!';
-      if(fill) fill.style.width = '100%';
-      localStorage.setItem('ea_brain_loaded', 'true');
-      toast('🧠 ENRIQUE Brain loaded!');
-      return true;
-    } catch(e) {
-      this.loading = false;
-      this.setStatus('error');
-      if(btn) { btn.textContent = '⚠️ Retry'; btn.disabled = false; }
-      if(txt) txt.textContent = 'Error: ' + (e.message||'').substring(0,50);
-      return false;
-    }
-  },
-  
-  chat: async function(messages, onChunk) {
-    if(!this.engine) { toast('Brain not loaded','bad'); return null; }
-    try {
-      var reply = await this.engine.chat.completions.create({
-        messages: [
-          {role:'system',content:'You are ENRIQUE AI, a powerful AI assistant like OpenAI Codex. You can speak Chinese and English. Always respond in the same language the user uses. When writing code, output complete working code inside code blocks. Be detailed, helpful, and think like a real AI.'},
-          ...messages
-        ],
-        max_tokens: (window.POWER && window.CUR) ? (POWER[CUR]||1500) : 1500,
-        temperature: 0.7,
-        stream: true
-      });
-      var fullText = '';
-      for await (var chunk of reply) {
-        var c = chunk.choices?.[0]?.delta?.content || '';
-        if(c) { fullText += c; if(onChunk) onChunk(c); }
-      }
-      return fullText;
-    } catch(e) {
-      toast('Brain error: ' + (e.message||'').substring(0,30), 'bad');
-      return null;
-    }
-  },
-  
-  setStatus: function(s) {
-    var el = document.getElementById('modelStatus');
-    if(!el) return;
-    var icons = {loading:'⏳',loaded:'✅',error:'⚠️',notloaded:'⚪'};
-    var texts = {loading:'Loading...',loaded:'Ready!',error:'Error',notloaded:'Not loaded'};
-    el.textContent = (icons[s]||'⚪') + ' ' + (texts[s]||s);
-    el.style.color = s==='loaded' ? 'var(--green)' : s==='error' ? 'var(--red)' : 'var(--muted2)';
-  }
-};
-
-window.loadBrain = function() { return ENRIQUE.load(); };
-window.chatENRIQUE = function(msgs, cb) { return ENRIQUE.chat(msgs, cb); };
-
-// Auto-load if previously loaded
-if(localStorage.getItem('ea_brain_loaded')==='true') setTimeout(function(){ENRIQUE.load()},1000);
 </script>
 </body>
 </html>
-// cache bust Thu Jul 30 01:13:39 +08 2026
