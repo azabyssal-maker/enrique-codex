@@ -132,6 +132,17 @@ button,input,textarea{font-family:inherit}
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
+
+.model-info{font-size:10px;font-weight:700;color:var(--text);margin-bottom:2px}
+.model-status{font-size:9px;color:var(--muted2);margin-bottom:6px}
+.model-btn{width:100%;padding:8px;border:1.5px solid var(--primary);border-radius:8px;background:var(--primary-l);color:var(--primary);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.model-btn:hover{background:var(--primary);color:#fff}
+.model-btn:disabled{opacity:.4;cursor:default}
+.model-progress{margin-top:8px}
+.mp-bar{height:4px;background:var(--card2);border-radius:2px;overflow:hidden}
+.mp-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;width:0%;transition:width .3s}
+.mp-text{font-size:8px;color:var(--muted2);margin-top:3px;text-align:center}
+
 </style>
 </head>
 <body>
@@ -173,18 +184,17 @@ button,input,textarea{font-family:inherit}
       <div class="sec-label">🤖 AI Engine</div>
       <div class="mode-grid">
         <div class="mode-btn on" id="modeLocal" onclick="setMode('local')">🧠 Local</div>
-        <div class="mode-btn" id="modeAPI" onclick="setMode('api')">☁️ Smart</div>
+        <div class="mode-btn" id="modeWebLLM" onclick="setMode('webllm')">⚡ ENRIQUE</div>
       </div>
-      <div id="apiSettings" style="display:none;margin-top:8px">
-        <input class="apikey" id="apiKey" type="password" placeholder="OpenRouter API Key" spellcheck="false">
-        <div class="api-hint">Get key: <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></div>
-        <select class="apimodel" id="apiModel">
-          <option value="google/gemini-2.0-flash-001">Gemini Flash (Free)</option>
-          <option value="mistralai/mistral-7b-instruct">Mistral 7B (Free)</option>
-          <option value="meta-llama/llama-3.2-3b-instruct">Llama 3.2 3B (Free)</option>
-          <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
-          <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku</option>
-        </select>
+      <div id="webllmSettings" style="display:none;margin-top:8px">
+        <div class="model-info" id="modelInfo">🔮 ENRIQUE Brain v1.0</div>
+        <div class="model-status" id="modelStatus">⚪ Not loaded</div>
+        <button class="model-btn" id="modelBtn" onclick="loadENRIQUE()">📥 Load ENRIQUE Brain</button>
+        <div class="model-progress" id="modelProgress" style="display:none">
+          <div class="mp-bar"><div class="mp-fill" id="mpFill"></div></div>
+          <div class="mp-text" id="mpText">Downloading ENRIQUE Brain... (~2GB)</div>
+        </div>
+        <div class="api-hint">100% local · Free · WebGPU required (Chrome/Edge)</div>
       </div>
     </div>
 
@@ -243,7 +253,7 @@ var CUR = 'med';
 var DATA = [];
 var TOKENS = 0;
 var BUSY = false;
-var MODE = 'local'; // 'local' or 'api'
+var MODE = 'local'; // 'local' or 'webllm'
 var API_KEY = localStorage.getItem('ea_apikey') || '';
 var API_MODEL = localStorage.getItem('ea_apimodel') || 'google/gemini-2.0-flash-001';
 var API_CONVO = JSON.parse(localStorage.getItem('ea_aconvo')||'[]');
@@ -346,108 +356,20 @@ function clearChat(){
 function setMode(m){
   MODE = m;
   document.getElementById('modeLocal').classList.toggle('on', m==='local');
-  document.getElementById('modeAPI').classList.toggle('on', m==='api');
-  document.getElementById('apiSettings').style.display = m==='api' ? 'block' : 'none';
-  document.getElementById('sbFoot').textContent = 'ENRIQUE AI v7.0 · ' + (m==='api' ? '☁️ Smart mode' : '🧠 Local mode');
+  document.getElementById('modeWebLLM').classList.toggle('on', m==='webllm');
+  document.getElementById('webllmSettings').style.display = m==='webllm' ? 'block' : 'none';
+  var labels = {local:'🧠 Local mode', webllm:'⚡ ENRIQUE Brain'};
+  document.getElementById('sbFoot').textContent = 'ENRIQUE AI v7.0 · ' + (labels[m]||'🧠 Local mode');
   localStorage.setItem('ea_mode', m);
-  if(m==='api' && !API_KEY){
-    var k = document.getElementById('apiKey').value.trim();
-    if(k){ API_KEY = k; localStorage.setItem('ea_apikey', k); }
-  }
-  toast('Switched to ' + (m==='api' ? '☁️ Smart AI' : '🧠 Local mode'));
-}
-
-function saveAPIKey(){
-  var k = document.getElementById('apiKey').value.trim();
-  if(k){
-    API_KEY = k;
-    localStorage.setItem('ea_apikey', k);
-    toast('✅ API Key saved!');
+  toast('Switched to ' + (labels[m]||m));
+  if(m==='webllm' && window.ENRIQUE && !ENRIQUE.loaded && !ENRIQUE.loading){
+    setTimeout(function(){ loadENRIQUE(); }, 500);
   }
 }
 
-function saveAPIModel(){
-  var m = document.getElementById('apiModel').value;
-  API_MODEL = m;
-  localStorage.setItem('ea_apimodel', m);
-}
 
-// OpenRouter API call with streaming
-async function callAI(messages, onChunk){
-  if(!API_KEY){
-    toast('⚠️ Set API Key in sidebar first','bad');
-    return null;
-  }
-  
-  try {
-    var body = {
-      model: API_MODEL,
-      messages: [
-        {role: 'system', content: 'You are ENRIQUE AI — a powerful coding assistant like OpenAI Codex. You can create websites, write code in any language, build apps, and help with anything. Always respond in Chinese (中文) unless asked otherwise. Be concise but thorough. When creating code, always output COMPLETE working code inside code blocks with proper syntax highlighting.'},
-        ...messages
-      ],
-      max_tokens: POWER[CUR] || 1500,
-      temperature: 0.7,
-      stream: STREAMING
-    };
-    
-    var res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + API_KEY,
-        'HTTP-Referer': location.href,
-        'X-Title': 'ENRIQUE AI'
-      },
-      body: JSON.stringify(body)
-    });
-    
-    if(!res.ok){
-      var err = await res.text();
-      toast('API Error: ' + err.substring(0,60), 'bad');
-      return null;
-    }
-    
-    if(STREAMING && onChunk && res.body){
-      try {
-        var reader = res.body.getReader();
-        var decoder = new TextDecoder();
-        var fullText = '';
-        
-        while(true){
-          var {done, value} = await reader.read();
-          if(done) break;
-          
-          var chunk = decoder.decode(value, {stream: true});
-          var lines = chunk.split('\\n');
-          for(var l of lines){
-            if(l.startsWith('data: ')){
-              var d = l.substring(6);
-              if(d === '[DONE]') continue;
-              try {
-                var j = JSON.parse(d);
-                var content = j.choices?.[0]?.delta?.content || '';
-                if(content){
-                  fullText += content;
-                  onChunk(content);
-                }
-              } catch(e){}
-            }
-          }
-        }
-        return fullText;
-      } catch(e){
-        // Streaming failed, fall back to non-streaming
-      }
-    }
-    // Non-streaming fallback
-    var data = await res.json();
-    return data.choices?.[0]?.message?.content || '';
-  } catch(e){
-    toast('Network error: ' + e.message, 'bad');
-    return null;
-  }
-}
+// AI calls handled by WebLLM module
+
 var BRAIN = {
   facts: JSON.parse(localStorage.getItem('ea_facts')||'{}'),
   convos: JSON.parse(localStorage.getItem('ea_convos')||'[]'),
@@ -626,7 +548,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><h1>Built with ENRIQUE AI</h1><p>Full responsive website generated in seconds. 100% free, local, private.</p><a class="btn" href="#">Get Started →</a><div class="features"><div class="f"><h3>⚡ Fast</h3><p>Generated instantly</p></div><div class="f"><h3>🎨 Modern</h3><p>Clean dark design</p></div><div class="f"><h3>📱 Responsive</h3><p>Works everywhere</p></div></div></body></html>`,
+\u003C/style></head><body><h1>Built with ENRIQUE AI</h1><p>Full responsive website generated in seconds. 100% free, local, private.</p><a class="btn" href="#">Get Started →</a><div class="features"><div class="f"><h3>⚡ Fast</h3><p>Generated instantly</p></div><div class="f"><h3>🎨 Modern</h3><p>Clean dark design</p></div><div class="f"><h3>📱 Responsive</h3><p>Works everywhere</p></div></div></body></html>`,
   calculator: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Calc</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.calc{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:20px;width:300px}.disp{background:#0a0a0f;border:1px solid #2a2a3a;border-radius:10px;padding:16px;text-align:right;font-size:28px;font-family:monospace;min-height:56px;display:flex;align-items:center;justify-content:flex-end;color:#e4e4ec;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}button{padding:16px;border:none;border-radius:8px;font-size:18px;font-weight:600;cursor:pointer;background:#20202e;color:#e4e4ec;transition:all .1s}button:active{transform:scale(.93)}.op{background:#10a37f;color:#fff}.eq{background:#10b981;color:#fff;grid-column:span 2}.clr{background:#f85149;color:#fff}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -636,7 +558,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="calc"><div class="disp" id="d">0</div><div class="grid"><button class="clr" onclick="c()">C</button><button onclick="c(\'('\')">(</button><button onclick="c(\')\'\')">)</button><button class="op" onclick="c(\'/\'\')">÷</button><button onclick="c(\'7\'\')">7</button><button onclick="c(\'8\'\')">8</button><button onclick="c(\'9\'\')">9</button><button class="op" onclick="c(\'*\'\')">×</button><button onclick="c(\'4\'\')">4</button><button onclick="c(\'5\'\')">5</button><button onclick="c(\'6\'\')">6</button><button class="op" onclick="c(\'-\'\')">−</button><button onclick="c(\'1\'\')">1</button><button onclick="c(\'2\'\')">2</button><button onclick="c(\'3\'\')">3</button><button class="op" onclick="c(\'+\'\')">+</button><button onclick="c(\'0\'\')">0</button><button onclick="c(\'.\'\')">.</button><button class="eq" onclick="c(\'=\'\')">=</button></div></div><script>var e="",d=document.getElementById("d");function c(v){if(v==="C"||!v){e="";d.textContent="0"}else if(v==="="){try{e=String(eval(e));d.textContent=e}catch(er){d.textContent="Error"}}else{e+=v;d.textContent=e}}<\/script></body></html>`,
+\u003C/style></head><body><div class="calc"><div class="disp" id="d">0</div><div class="grid"><button class="clr" onclick="c()">C</button><button onclick="c(\'('\')">(</button><button onclick="c(\')\'\')">)</button><button class="op" onclick="c(\'/\'\')">÷</button><button onclick="c(\'7\'\')">7</button><button onclick="c(\'8\'\')">8</button><button onclick="c(\'9\'\')">9</button><button class="op" onclick="c(\'*\'\')">×</button><button onclick="c(\'4\'\')">4</button><button onclick="c(\'5\'\')">5</button><button onclick="c(\'6\'\')">6</button><button class="op" onclick="c(\'-\'\')">−</button><button onclick="c(\'1\'\')">1</button><button onclick="c(\'2\'\')">2</button><button onclick="c(\'3\'\')">3</button><button class="op" onclick="c(\'+\'\')">+</button><button onclick="c(\'0\'\')">0</button><button onclick="c(\'.\'\')">.</button><button class="eq" onclick="c(\'=\'\')">=</button></div></div>\u003Cscript>var e="",d=document.getElementById("d");function c(v){if(v==="C"||!v){e="";d.textContent="0"}else if(v==="="){try{e=String(eval(e));d.textContent=e}catch(er){d.textContent="Error"}}else{e+=v;d.textContent=e}}<\/script></body></html>`,
   login: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.card{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:32px;width:100%;max-width:360px}h2{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}.sub{color:#7d7d90;font-size:13px;text-align:center;margin-bottom:24px}.f{margin-bottom:14px}label{font-size:12px;font-weight:600;color:#7d7d90;display:block;margin-bottom:4px}input{width:100%;padding:11px 14px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:14px;outline:none}input:focus{border-color:#10a37f}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:#10a37f;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.btn:hover{background:#0d8a6a}.foot{text-align:center;margin-top:14px;font-size:13px;color:#7d7d90}.foot a{color:#10a37f;text-decoration:none}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -646,7 +568,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="card"><h2>Welcome Back</h2><p class="sub">Sign in to continue</p><div class="f"><label>Email</label><input placeholder="you@email.com"></div><div class="f"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn">Sign In</button><p class="foot">No account? <a href="#">Sign up</a></p></div></body></html>`,
+\u003C/style></head><body><div class="card"><h2>Welcome Back</h2><p class="sub">Sign in to continue</p><div class="f"><label>Email</label><input placeholder="you@email.com"></div><div class="f"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn">Sign In</button><p class="foot">No account? <a href="#">Sign up</a></p></div></body></html>`,
   todo: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.todo{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:24px;width:100%;max-width:360px}h2{margin-bottom:16px}.row{display:flex;gap:8px;margin-bottom:16px}.row input{flex:1;padding:10px;background:#0a0a0f;border:1.5px solid #2a2a3a;border-radius:8px;color:#e4e4ec;font-size:14px;outline:none}.row input:focus{border-color:#10a37f}.row button{padding:10px 16px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer}.item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #2a2a3a;border-radius:8px;margin-bottom:6px;cursor:pointer}.item.done{text-decoration:line-through;color:#4a4a5e}.chk{width:20px;height:20px;border:2px solid #4a4a5e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}.item.done .chk{background:#10a37f;border-color:#10a37f;color:#fff}.del{color:#f85149;cursor:pointer;font-size:14px;margin-left:auto}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -656,7 +578,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="todo"><h2>📝 Todo</h2><div class="row"><textarea class="ifield" id="inp" rows="1" placeholder="Type anything..." style="resize:none;overflow:hidden;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea><button onclick="add()">Add</button></div><ul id="list"></ul></div><script>var items=[];function add(){var v=document.getElementById("inp").value.trim();if(!v)return;items.push({t:v,d:0});document.getElementById("inp").value="";render()}function tog(i){items[i].d=+!items[i].d;render()}function del(i){items.splice(i,1);render()}function render(){var l=document.getElementById("list"),h="";items.forEach(function(it,i){h+=\'<li class="item\'+(it.d?\' done\':\'\')+\'" onclick="tog(\'+i+\')"><div class="chk">\'+(it.d?\'✓\':\'\')+\'</div><span>\'+it.t+\'</span><span class="del" onclick="event.stopPropagation();del(\'+i+\')">✕</span></li>\'});l.innerHTML=h}<\\/script></body></html>`,
+\u003C/style></head><body><div class="todo"><h2>📝 Todo</h2><div class="row"><textarea class="ifield" id="inp" rows="1" placeholder="Type anything..." style="resize:none;overflow:hidden;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea><button onclick="add()">Add</button></div><ul id="list"></ul></div>\u003Cscript>var items=[];function add(){var v=document.getElementById("inp").value.trim();if(!v)return;items.push({t:v,d:0});document.getElementById("inp").value="";render()}function tog(i){items[i].d=+!items[i].d;render()}function del(i){items.splice(i,1);render()}function render(){var l=document.getElementById("list"),h="";items.forEach(function(it,i){h+=\'<li class="item\'+(it.d?\' done\':\'\')+\'" onclick="tog(\'+i+\')"><div class="chk">\'+(it.d?\'✓\':\'\')+\'</div><span>\'+it.t+\'</span><span class="del" onclick="event.stopPropagation();del(\'+i+\')">✕</span></li>\'});l.innerHTML=h}<\\/script></body></html>`,
   shop: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec}nav{padding:14px 20px;border-bottom:1px solid #2a2a3a;display:flex;align-items:center;justify-content:space-between}.brand{font-size:18px;font-weight:800;color:#10a37f}.hero{padding:50px 20px;text-align:center}.hero h1{font-size:32px;font-weight:900;margin-bottom:10px}.hero p{color:#7d7d90;font-size:15px}.btn{display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:20px}.products{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:800px;margin:0 auto}.product{background:#181825;border:1px solid #2a2a3a;border-radius:12px;padding:20px;text-align:center}.product h3{font-size:16px;margin-bottom:4px}.price{font-size:20px;font-weight:700;color:#10a37f;margin-bottom:8px}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -666,7 +588,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><nav><div class="brand">ENRIQUE Shop</div><span style="color:#7d7d90">Cart (0)</span></nav><div class="hero"><h1>AI Store</h1><p>Premium AI-powered products</p><a class="btn">Browse All →</a></div><div class="products"><div class="product"><h3>AI Widget</h3><div class="price">$29</div></div><div class="product"><h3>Neural Chip</h3><div class="price">$199</div></div><div class="product"><h3>Cloud Kit</h3><div class="price">$89</div></div></div></body></html>`,
+\u003C/style></head><body><nav><div class="brand">ENRIQUE Shop</div><span style="color:#7d7d90">Cart (0)</span></nav><div class="hero"><h1>AI Store</h1><p>Premium AI-powered products</p><a class="btn">Browse All →</a></div><div class="products"><div class="product"><h3>AI Widget</h3><div class="price">$29</div></div><div class="product"><h3>Neural Chip</h3><div class="price">$199</div></div><div class="product"><h3>Cloud Kit</h3><div class="price">$89</div></div></div></body></html>`,
   dashboard: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;padding:20px}.dash h1{font-size:26px;font-weight:900;margin-bottom:4px}.dash p{color:#7d7d90;font-size:13px;margin-bottom:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}.card{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.card .num{font-size:28px;font-weight:900;color:#10a37f}.card .lbl{font-size:12px;color:#7d7d90;margin-top:2px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.panel{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.panel h3{font-size:14px;font-weight:700;margin-bottom:12px}table{width:100%;font-size:12px}table th,table td{padding:8px 0;text-align:left;border-bottom:1px solid #20202e}table th{color:#7d7d90;font-weight:600;font-size:10px;text-transform:uppercase}.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}.badge.g{background:rgba(16,185,129,.15);color:#10b981}.badge.r{background:rgba(248,81,73,.15);color:#f85149}@media(max-width:480px){.grid2{grid-template-columns:1fr}}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -676,7 +598,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="dash"><h1>📊 Analytics</h1><p>Real-time metrics</p><div class="cards"><div class="card"><div class="num">24K</div><div class="lbl">Users</div></div><div class="card"><div class="num">$48K</div><div class="lbl">Revenue</div></div><div class="card"><div class="num">94%</div><div class="lbl">Uptime</div></div><div class="card"><div class="num">1.8K</div><div class="lbl">Active</div></div></div><div class="grid2"><div class="panel"><h3>Activity</h3><table><tr><th>User</th><th>Status</th></tr><tr><td>@enrique</td><td><span class="badge g">Done</span></td></tr><tr><td>@dev</td><td><span class="badge r">Error</span></td></tr><tr><td>@coder</td><td><span class="badge g">Done</span></td></tr></table></div></div></div></body></html>`,
+\u003C/style></head><body><div class="dash"><h1>📊 Analytics</h1><p>Real-time metrics</p><div class="cards"><div class="card"><div class="num">24K</div><div class="lbl">Users</div></div><div class="card"><div class="num">$48K</div><div class="lbl">Revenue</div></div><div class="card"><div class="num">94%</div><div class="lbl">Uptime</div></div><div class="card"><div class="num">1.8K</div><div class="lbl">Active</div></div></div><div class="grid2"><div class="panel"><h3>Activity</h3><table><tr><th>User</th><th>Status</th></tr><tr><td>@enrique</td><td><span class="badge g">Done</span></td></tr><tr><td>@dev</td><td><span class="badge r">Error</span></td></tr><tr><td>@coder</td><td><span class="badge g">Done</span></td></tr></table></div></div></div></body></html>`,
   music: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;align-items:center;justify-content:center}.player{text-align:center;width:320px}.art{width:160px;height:160px;border-radius:20px;background:linear-gradient(135deg,#10a37f,#34d399);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 12px 36px rgba(16,163,127,.25)}h3{font-size:20px;font-weight:800} p{color:#7d7d90;font-size:13px;margin-bottom:20px}.bar{width:100%;height:4px;background:#20202e;border-radius:4px;margin-bottom:6px}.bar-in{width:40%;height:100%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:4px}.time{display:flex;justify-content:space-between;font-size:11px;color:#4a4a5e;margin-bottom:20px}.ctrls{display:flex;align-items:center;justify-content:center;gap:20px}.cbtn{width:48px;height:48px;border:2px solid #2a2a3a;border-radius:50%;background:#181825;color:#e4e4ec;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}.cbtn.p{width:56px;height:56px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;font-size:24px;box-shadow:0 6px 20px rgba(16,163,127,.25)}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -686,7 +608,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="player"><div class="art">🎵</div><h3>Neural Dreams</h3><p>ENRIQUE AI</p><div class="bar"><div class="bar-in"></div></div><div class="time"><span>1:48</span><span>4:02</span></div><div class="ctrls"><button class="cbtn">⏮</button><button class="cbtn p">▶</button><button class="cbtn">⏭</button></div></div></body></html>`,
+\u003C/style></head><body><div class="player"><div class="art">🎵</div><h3>Neural Dreams</h3><p>ENRIQUE AI</p><div class="bar"><div class="bar-in"></div></div><div class="time"><span>1:48</span><span>4:02</span></div><div class="ctrls"><button class="cbtn">⏮</button><button class="cbtn p">▶</button><button class="cbtn">⏭</button></div></div></body></html>`,
   game: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}h2{font-size:24px;font-weight:900}.score{font-size:18px;color:#7d7d90}.btn{padding:14px 28px;border:none;border-radius:10px;background:#10a37f;color:#fff;font-size:16px;font-weight:700;cursor:pointer}.btn:hover{background:#0d8a6a}#target{width:60px;height:60px;background:#f85149;border-radius:12px;position:fixed;cursor:pointer;display:none;animation:pop .15s ease}@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -696,7 +618,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><h2>🎮 Click Game</h2><div class="score" id="sc">Score: 0</div><button class="btn" onclick="start()">Start</button><div id="target" onclick="hit()"></div><script>var sc=0,t;function start(){sc=0;document.getElementById("sc").textContent="Score: 0";move();t=setInterval(move,700);setTimeout(function(){clearInterval(t);document.getElementById("target").style.display="none";alert("Score: "+sc)}),15000}function move(){var e=document.getElementById("target");e.style.display="block";e.style.left=Math.random()*(innerWidth-80)+"px";e.style.top=Math.random()*(innerHeight-80)+"px"}function hit(){sc++;document.getElementById("sc").textContent="Score: "+sc;move()}\u003C/script></body></html>`,
+\u003C/style></head><body><h2>🎮 Click Game</h2><div class="score" id="sc">Score: 0</div><button class="btn" onclick="start()">Start</button><div id="target" onclick="hit()"></div>\u003Cscript>var sc=0,t;function start(){sc=0;document.getElementById("sc").textContent="Score: 0";move();t=setInterval(move,700);setTimeout(function(){clearInterval(t);document.getElementById("target").style.display="none";alert("Score: "+sc)}),15000}function move(){var e=document.getElementById("target");e.style.display="block";e.style.left=Math.random()*(innerWidth-80)+"px";e.style.top=Math.random()*(innerHeight-80)+"px"}function hit(){sc++;document.getElementById("sc").textContent="Score: "+sc;move()}\u003C/script></body></html>`,
   form: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.wrap{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:28px;width:100%;max-width:400px}h2{font-size:20px;font-weight:800;margin-bottom:4px}.sub{color:#7d7d90;font-size:13px;margin-bottom:20px}.f{margin-bottom:14px}label{font-size:12px;font-weight:600;color:#7d7d90;display:block;margin-bottom:4px}input,textarea,select{width:100%;padding:10px 12px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:13px;outline:none;font-family:inherit}input:focus,textarea:focus{border-color:#10a37f}textarea{min-height:80px;resize:vertical}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,#10a37f,#34d399);color:#fff;font-size:15px;font-weight:700;cursor:pointer}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -706,7 +628,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="wrap"><h2>📧 Contact</h2><p class="sub">Send us a message</p><div class="f"><label>Name</label><input placeholder="Your name"></div><div class="f"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="f"><label>Message</label><textarea placeholder="Tell us..."></textarea></div><button class="btn">Send →</button></div></body></html>`,
+\u003C/style></head><body><div class="wrap"><h2>📧 Contact</h2><p class="sub">Send us a message</p><div class="f"><label>Name</label><input placeholder="Your name"></div><div class="f"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="f"><label>Message</label><textarea placeholder="Tell us..."></textarea></div><button class="btn">Send →</button></div></body></html>`,
   chat: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;flex-direction:column}.ch{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #2a2a3a}.ch .a{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}.ch h3{font-size:15px;font-weight:700}.ch .s{width:6px;height:6px;border-radius:50%;background:#10b981}.ms{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}.m{max-width:75%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5}.mine{background:#10a37f;color:#fff;align-self:flex-end;border-radius:14px 14px 4px}.their{background:#181825;color:#e4e4ec;align-self:flex-start;border-radius:14px 14px 14px 4px}.inp{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #2a2a3a}.inp input{flex:1;padding:10px 14px;border:1.5px solid #2a2a3a;border-radius:20px;background:#111118;color:#e4e4ec;font-size:14px;outline:none}.inp input:focus{border-color:#10a37f}.inp button{padding:10px 18px;border:none;border-radius:20px;background:#10a37f;color:#fff;font-weight:600;cursor:pointer}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -716,7 +638,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="ch"><div class="a">E</div><h3>ENRIQUE AI</h3><div class="s"></div></div><div class="ms" id="msgs"><div class="m their">Hello! 👋</div></div><div class="inp"><input id="iinp" placeholder="Type..." onkeydown="if(event.key===\'Enter\')snd()"><button onclick="snd()">Send</button></div><script>function snd(){var i=document.getElementById("iinp");var v=i.value.trim();if(!v)return;var m=document.getElementById("msgs");var d=document.createElement("div");d.className="m mine";d.textContent=v;m.appendChild(d);i.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=["Interesting!","Tell me more!","Cool!","I see!","Nice!"][Math.floor(Math.random()*5)];var e=document.createElement("div");e.className="m their";e.textContent=r;m.appendChild(e);m.scrollTop=m.scrollHeight},800)}\u003C/script></body></html>`,
+\u003C/style></head><body><div class="ch"><div class="a">E</div><h3>ENRIQUE AI</h3><div class="s"></div></div><div class="ms" id="msgs"><div class="m their">Hello! 👋</div></div><div class="inp"><input id="iinp" placeholder="Type..." onkeydown="if(event.key===\'Enter\')snd()"><button onclick="snd()">Send</button></div>\u003Cscript>function snd(){var i=document.getElementById("iinp");var v=i.value.trim();if(!v)return;var m=document.getElementById("msgs");var d=document.createElement("div");d.className="m mine";d.textContent=v;m.appendChild(d);i.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=["Interesting!","Tell me more!","Cool!","I see!","Nice!"][Math.floor(Math.random()*5)];var e=document.createElement("div");e.className="m their";e.textContent=r;m.appendChild(e);m.scrollTop=m.scrollHeight},800)}\u003C/script></body></html>`,
   weather: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weather</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center}.w{padding:28px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:300px;text-align:center}.w .icon{font-size:48px;margin-bottom:8px}.w .temp{font-size:42px;font-weight:900;color:#10a37f}.w .desc{color:#7d7d90;font-size:14px;margin-top:4px}.w .detail{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #2a2a3a;font-size:13px;color:#7d7d90}.w .detail span{display:flex;flex-direction:column;align-items:center;gap:2px}.w .detail .v{color:#e4e4ec;font-weight:600}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -726,7 +648,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="w"><div class="icon">☀️</div><div class="temp">26°C</div><div class="desc">Sunny</div><div class="detail"><span>💧 <span class="v">45%</span>Humidity</span><span>💨 <span class="v">12</span>Wind</span><span>🌡️ <span class="v">1012</span>Pressure</span></div></div></body></html>`,
+\u003C/style></head><body><div class="w"><div class="icon">☀️</div><div class="temp">26°C</div><div class="desc">Sunny</div><div class="detail"><span>💧 <span class="v">45%</span>Humidity</span><span>💨 <span class="v">12</span>Wind</span><span>🌡️ <span class="v">1012</span>Pressure</span></div></div></body></html>`,
   timer: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Timer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.t{text-align:center;padding:32px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:280px}.time{font-size:56px;font-weight:800;font-family:monospace;color:#e4e4ec;margin:16px 0}.ctrls{display:flex;gap:10px;justify-content:center}button{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}.s{background:#10a37f;color:#fff}.r{background:#f85149;color:#fff}.l{background:#20202e;color:#e4e4ec}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -736,7 +658,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="t"><h2>⏱️ Timer</h2><div class="time" id="t">00:00</div><div class="ctrls"><button class="s" id="b" onclick="to()">Start</button><button class="r" onclick="re()">Reset</button></div></div><script>var s=0,run=0;function f(n){return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}function to(){if(run){clearInterval(run);document.getElementById("b").textContent="Resume"}else{run=setInterval(function(){s++;document.getElementById("t").textContent=f(s)},1000);document.getElementById("b").textContent="Pause"}run=!run}function re(){clearInterval(run);s=0;run=0;document.getElementById("t").textContent=f(0);document.getElementById("b").textContent="Start"}\u003C/script></body></html>`,
+\u003C/style></head><body><div class="t"><h2>⏱️ Timer</h2><div class="time" id="t">00:00</div><div class="ctrls"><button class="s" id="b" onclick="to()">Start</button><button class="r" onclick="re()">Reset</button></div></div>\u003Cscript>var s=0,run=0;function f(n){return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}function to(){if(run){clearInterval(run);document.getElementById("b").textContent="Resume"}else{run=setInterval(function(){s++;document.getElementById("t").textContent=f(s)},1000);document.getElementById("b").textContent="Pause"}run=!run}function re(){clearInterval(run);s=0;run=0;document.getElementById("t").textContent=f(0);document.getElementById("b").textContent="Start"}\u003C/script></body></html>`,
   wifi: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>WiFi Analyzer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;padding:20px}.h{font-size:18px;font-weight:900;margin-bottom:4px}.s{color:#7d7d90;font-size:12px;margin-bottom:14px}.net{background:#181825;border:1px solid #2a2a3a;border-radius:10px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}.net .sig{font-size:18px;width:30px;text-align:center}.net .info{flex:1}.net .name{font-size:13px;font-weight:600}.net .detail{font-size:10px;color:#7d7d90}.net .bar{width:40px;height:30px;display:flex;align-items:flex-end;gap:2px}.net .bar span{flex:1;background:linear-gradient(180deg,#10a37f,#34d399);border-radius:2px;min-height:3px}.refresh{width:100%;padding:8px;border:none;border-radius:8px;background:#10a37f;color:#fff;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;text-align:center}.lock{font-size:11px}
 .mode-grid{display:flex;gap:4px}
 .mode-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;text-align:center;font-size:10px;font-weight:700;color:var(--muted);transition:all .15s}
@@ -746,7 +668,7 @@ var CODE = {
 .apimodel{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;margin-top:6px;cursor:pointer}
 .api-hint{font-size:8px;color:var(--muted2);margin-top:4px}
 .api-hint a{color:var(--blue);text-decoration:none}
-</style></head><body><div class="h">📡 WiFi Scanner</div><div class="s">Networks found: <span id="cnt">8</span></div><div id="list"></div><button class="refresh" onclick="scan()">🔄 Scan Again</button><script>var names=["ENRIQUE_5G","Home_Net","Neighbor","Cafe_Guest","IoT_Net","Office","Starbucks","Library"],sigs=["🔒","🔒","🔓","🔓","🔒","🔒","🔓","🔒"];function scan(){var l=document.getElementById("list");l.innerHTML="";var order=[0,1,2,3,4,5,6,7];for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}order.forEach(function(idx){var s=Math.floor(Math.random()*40+50);var bars=Math.floor(s/18)+1;var d=document.createElement("div");d.className="net";var h="";for(var b=0;b<4;b++)h+="<span style=\\"height:"+(b<bars?Math.random()*60+40+"%":"3px")+"\\"></span>";d.innerHTML=\'<div class="sig">\'+(bars>2?"🟢":"🟡")+\'</div><div class="info"><div class="name">\'+names[idx]+\'</div><div class="detail">CH\'+[1,6,11,36,40,44,149][Math.floor(Math.random()*7)]+\' · \'+s+\' dBm</div></div><div class="bar">\'+h+\'</div><div class="lock">\'+sigs[idx]+\'</div>\';l.appendChild(d)})}document.getElementById("cnt").textContent="8";scan()}\u003C/script></body></html>`,
+\u003C/style></head><body><div class="h">📡 WiFi Scanner</div><div class="s">Networks found: <span id="cnt">8</span></div><div id="list"></div><button class="refresh" onclick="scan()">🔄 Scan Again</button>\u003Cscript>var names=["ENRIQUE_5G","Home_Net","Neighbor","Cafe_Guest","IoT_Net","Office","Starbucks","Library"],sigs=["🔒","🔒","🔓","🔓","🔒","🔒","🔓","🔒"];function scan(){var l=document.getElementById("list");l.innerHTML="";var order=[0,1,2,3,4,5,6,7];for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}order.forEach(function(idx){var s=Math.floor(Math.random()*40+50);var bars=Math.floor(s/18)+1;var d=document.createElement("div");d.className="net";var h="";for(var b=0;b<4;b++)h+="<span style=\\"height:"+(b<bars?Math.random()*60+40+"%":"3px")+"\\"></span>";d.innerHTML=\'<div class="sig">\'+(bars>2?"🟢":"🟡")+\'</div><div class="info"><div class="name">\'+names[idx]+\'</div><div class="detail">CH\'+[1,6,11,36,40,44,149][Math.floor(Math.random()*7)]+\' · \'+s+\' dBm</div></div><div class="bar">\'+h+\'</div><div class="lock">\'+sigs[idx]+\'</div>\';l.appendChild(d)})}document.getElementById("cnt").textContent="8";scan()}\u003C/script></body></html>`,
 };
 
 // ===== SEND FUNCTION =====
@@ -783,15 +705,16 @@ function send(){
 
   // Process
   setTimeout(function(){
-    if(MODE === 'api' && API_KEY){
-      // Use REAL AI via OpenRouter
-      var msgs = API_CONVO.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
+    if(MODE === 'webllm' && window.ENRIQUE && ENRIQUE.loaded){
+      // Use ENRIQUE Brain (WebLLM local AI)
+      var convos = ENRIQUE.convos || [];
+      var msgs = convos.slice(-10).map(function(m){ return {role:m.r==='u'?'user':'assistant', content:m.c}; });
       msgs.push({role:'user', content:msg});
       
       bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
       var fullReply = '';
       
-      callAI(msgs, function(chunk){
+      chatENRIQUE(msgs, function(chunk){
         fullReply += chunk;
         // Format the response with markdown-style rendering
         var html = esc(fullReply)
@@ -821,10 +744,10 @@ function send(){
       }).then(function(reply){
         if(reply){
           DATA.push({r:'a',c:reply,t:Date.now()});
-          API_CONVO.push({r:'u',c:msg,t:Date.now()});
-          API_CONVO.push({r:'a',c:reply,t:Date.now()});
-          if(API_CONVO.length > 30) API_CONVO = API_CONVO.slice(-30);
-          localStorage.setItem('ea_aconvo', JSON.stringify(API_CONVO));
+          ENRIQUE.convos.push({r:'u',c:msg,t:Date.now()});
+          ENRIQUE.convos.push({r:'a',c:reply,t:Date.now()});
+          if(ENRIQUE.convos.length > 30) ENRIQUE.convos = ENRIQUE.convos.slice(-30);
+          localStorage.setItem('ea_webllm_convos', JSON.stringify(ENRIQUE.convos));
           TOKENS += msg.length + reply.length;
           save();
         }
@@ -906,32 +829,109 @@ function render(){
 // ===== INIT =====
 // Restore mode
 var savedMode = localStorage.getItem('ea_mode');
-if(savedMode === 'api'){
-  setMode('api');
-  if(API_KEY) document.getElementById('apiKey').value = API_KEY;
-  var savedModel = localStorage.getItem('ea_apimodel');
-  if(savedModel){ API_MODEL = savedModel; document.getElementById('apiModel').value = savedModel; }
+if(savedMode === 'webllm'){
+  setMode('webllm');
 }
 
 updateUI();
 render();
 
-// Load API key into field if exists
-if(API_KEY) document.getElementById('apiKey').value = API_KEY;
-var savedModel2 = localStorage.getItem('ea_apimodel');
-if(savedModel2) document.getElementById('apiModel').value = savedModel2;
+// If WebLLM was previously loaded, check status
+if(localStorage.getItem('ea_brain_loaded') === 'true' && savedMode === 'webllm'){
+  setTimeout(function(){
+    var btn = document.getElementById('modelBtn');
+    if(btn) btn.textContent = '⏳ Reloading...';
+  }, 100);
+}
+</script>
 
-// API key input: save on enter/blur
-document.addEventListener('DOMContentLoaded', function(){
-  var ak = document.getElementById('apiKey');
-  if(ak){
-    ak.addEventListener('change', saveAPIKey);
-    ak.addEventListener('blur', saveAPIKey);
+<script type="module">
+import { CreateMLCEngine } from "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.73/+esm";
+
+window.ENRIQUE = {
+  engine: null, loading: false, loaded: false,
+  modelId: "Phi-3.5-mini-instruct-q4f16_1-MLC",
+  convos: JSON.parse(localStorage.getItem('ea_webllm_convos')||'[]'),
+  
+  load: async function() {
+    if(this.engine) { this.setStatus('loaded'); return true; }
+    if(this.loading) return false;
+    this.loading = true;
+    this.setStatus('loading');
+    var btn = document.getElementById('modelBtn');
+    var prog = document.getElementById('modelProgress');
+    var fill = document.getElementById('mpFill');
+    var txt = document.getElementById('mpText');
+    if(btn) btn.disabled = true;
+    if(prog) prog.style.display = 'block';
+    if(txt) txt.textContent = 'Downloading ENRIQUE Brain... (~2GB)';
+    
+    try {
+      this.engine = await CreateMLCEngine(this.modelId, {
+        initProgressCallback: function(p) {
+          var pct = Math.round((p.loaded / p.total) * 100);
+          if(isNaN(pct)) pct = 0;
+          if(fill) fill.style.width = pct + '%';
+          if(txt) txt.textContent = (p.text||'Downloading...') + ' (' + pct + '%)';
+        }
+      });
+      this.loaded = true; this.loading = false;
+      this.setStatus('loaded');
+      if(btn) { btn.textContent = '✅ Brain Loaded'; btn.disabled = true; }
+      if(txt) txt.textContent = 'ENRIQUE Brain ready!';
+      if(fill) fill.style.width = '100%';
+      localStorage.setItem('ea_brain_loaded', 'true');
+      toast('🧠 ENRIQUE Brain loaded!');
+      return true;
+    } catch(e) {
+      this.loading = false;
+      this.setStatus('error');
+      if(btn) { btn.textContent = '⚠️ Retry'; btn.disabled = false; }
+      if(txt) txt.textContent = 'Error: ' + (e.message||'').substring(0,50);
+      return false;
+    }
+  },
+  
+  chat: async function(messages, onChunk) {
+    if(!this.engine) { toast('Brain not loaded','bad'); return null; }
+    try {
+      var reply = await this.engine.chat.completions.create({
+        messages: [
+          {role:'system',content:'You are ENRIQUE AI — a powerful coding assistant like OpenAI Codex. Create websites, write code, build apps. Respond in Chinese (中文) unless asked otherwise. Always output COMPLETE working code in code blocks.'},
+          ...messages
+        ],
+        max_tokens: (window.POWER && window.CUR) ? (POWER[CUR]||1500) : 1500,
+        temperature: 0.7,
+        stream: true
+      });
+      var fullText = '';
+      for await (var chunk of reply) {
+        var c = chunk.choices?.[0]?.delta?.content || '';
+        if(c) { fullText += c; if(onChunk) onChunk(c); }
+      }
+      return fullText;
+    } catch(e) {
+      toast('Brain error: ' + (e.message||'').substring(0,30), 'bad');
+      return null;
+    }
+  },
+  
+  setStatus: function(s) {
+    var el = document.getElementById('modelStatus');
+    if(!el) return;
+    var icons = {loading:'⏳',loaded:'✅',error:'⚠️',notloaded:'⚪'};
+    var texts = {loading:'Loading...',loaded:'Ready!',error:'Error',notloaded:'Not loaded'};
+    el.textContent = (icons[s]||'⚪') + ' ' + (texts[s]||s);
+    el.style.color = s==='loaded' ? 'var(--green)' : s==='error' ? 'var(--red)' : 'var(--muted2)';
   }
-  var am = document.getElementById('apiModel');
-  if(am) am.addEventListener('change', saveAPIModel);
-});
-</script></script>
+};
+
+window.loadENRIQUE = function() { return ENRIQUE.load(); };
+window.chatENRIQUE = function(msgs, cb) { return ENRIQUE.chat(msgs, cb); };
+
+// Auto-load if previously loaded
+if(localStorage.getItem('ea_brain_loaded')==='true') setTimeout(function(){ENRIQUE.load()},1000);
+</script>
 </body>
 </html>
 // cache bust Thu Jul 30 01:13:39 +08 2026
