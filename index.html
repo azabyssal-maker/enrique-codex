@@ -1,1617 +1,521 @@
 <!DOCTYPE html>
-<html lang="en"><!-- deployed: Wed Jul 29 17:42:46 +08 2026 -->
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#0d1117">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2310a37f'/><text x='50' y='68' text-anchor='middle' font-size='50' fill='white' font-family='monospace' font-weight='bold'>E</text></svg>">
-<title>ENRIQUE CODEX</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+<title>ENRIQUE AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d8a6a;--green:#10b981;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--shadow:0 2px 8px rgba(0,0,0,.4);--shadow2:0 8px 24px rgba(0,0,0,.5);--radius:16px;--radius-sm:10px}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,system-ui,sans-serif}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+input,textarea,button{font-family:inherit}
 
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0d1117;--bg2:#161b22;--card:#1c2128;--card2:#21262d;
-  --border:#30363d;--border2:#484f58;
-  --primary:#10a37f;--primary-light:#0d2e23;--primary-dark:#0d8a6a;
-  --green:#10b981;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#bc8cff;
-  --text:#e6edf3;--text2:#c9d1d9;--muted:#7d8590;--muted2:#484f58;
-  --code-bg:#161b22;--code-border:#30363d;
-  --shadow:0 2px 8px rgba(0,0,0,.3);--shadow2:0 8px 24px rgba(0,0,0,.4);
-  --radius:14px;--radius-sm:10px;--radius-xs:8px;
-}
-html,body{height:100%;overflow:hidden}
-body{font-family:Inter,-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text)}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
-
-/* Sidebar */
-.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:left .3s}
-.sidebar-head{padding:16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.logo-wrap{display:flex;align-items:center;gap:10px}
-.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
-.logo-text{font-size:16px;font-weight:800;color:var(--text)}
-.menu-close{width:30px;height:30px;border:none;background:var(--card2);border-radius:8px;cursor:pointer;color:var(--muted);font-size:14px;display:none;align-items:center;justify-content:center}
-.new-chat-btn{margin:12px 16px;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
-.new-chat-btn:hover{border-color:var(--primary);background:var(--primary-light)}
-.new-chat-btn .plus{width:20px;height:20px;background:var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
-
-.power-section,.perm-section,.device-section{padding:12px 16px;border-bottom:1px solid var(--border)}
-.power-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.power-grid{display:flex;flex-direction:column;gap:6px}
-.power-card{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;background:var(--card)}
-.power-card:hover,.power-card.active{border-color:var(--primary);background:var(--primary-light)}
-.power-card .p-icon{font-size:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--bg2);border-radius:6px;flex-shrink:0}
-.power-card.active .p-icon{background:var(--primary)}
-.power-card .p-info{flex:1}
-.power-card .p-name{font-size:12px;font-weight:700;color:var(--text)}
-.power-card.active .p-name{color:var(--primary)}
-.power-card .p-tokens{font-size:11px;font-weight:600;color:var(--muted2);background:var(--bg);padding:2px 8px;border-radius:4px}
-.power-card.active .p-tokens{color:var(--primary);background:rgba(16,163,127,.1)}
-
-.perm-grid{display:flex;flex-direction:column;gap:6px}
-.perm-card-sm{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;background:var(--card)}
-.perm-card-sm:hover,.perm-card-sm.active{border-color:var(--primary);background:var(--primary-light)}
-.perm-card-sm .perm-icon{font-size:16px}
-.perm-card-sm .perm-name{font-size:12px;font-weight:600;flex:1}
-.perm-card-sm.active .perm-name{color:var(--primary)}
-.perm-card-sm .perm-dot{width:6px;height:6px;border-radius:50%;background:var(--border2)}
-.perm-card-sm.active .perm-dot{background:var(--primary)}
-
-.device-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.dev-btn{padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;text-align:center;transition:all .2s}
-.dev-btn:hover{border-color:var(--primary);background:var(--primary-light)}
-.dev-btn .dev-icon{font-size:18px;display:block;margin-bottom:2px}
-.dev-btn .dev-name{font-size:9px;font-weight:600;color:var(--text)}
-
-.conv-list{flex:1;overflow-y:auto;padding:4px 8px}
-.conv-section{padding:4px 8px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase}
-.conv-item{padding:8px 12px;font-size:12px;color:var(--muted);cursor:pointer;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.conv-item:hover{background:var(--card2);color:var(--text)}
-.conv-item.active{background:var(--primary-light);color:var(--primary);font-weight:600}
-
-.sidebar-foot{padding:12px 16px;border-top:1px solid var(--border)}
-.theme-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--muted)}
-.theme-row:hover{background:var(--card2)}
-.sw{width:34px;height:18px;background:var(--border2);border-radius:9px;position:relative;flex-shrink:0;transition:all .2s}
-.sw::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:2px;left:2px;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.sw.on{background:var(--primary)}.sw.on::after{left:18px}
-.sidebar-info{font-size:10px;color:var(--muted2);text-align:center;margin-top:6px}
-
-/* Main layout */
-.app{display:flex;height:100vh;height:100dvh;overflow:hidden}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-
-/* Top bar */
-.topbar{display:flex;align-items:center;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:10px}
-.menu-btn{width:32px;height:32px;border:1px solid var(--border);background:var(--card);border-radius:8px;cursor:pointer;color:var(--muted);font-size:16px;display:none;align-items:center;justify-content:center;flex-shrink:0}
-.menu-btn:hover{border-color:var(--primary);color:var(--primary)}
-.topbar-center{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
-.topbar-title{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap}
-.topbar-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;background:rgba(210,153,34,.15);color:var(--orange);white-space:nowrap}
-.topbar-tokens{font-size:10px;color:var(--muted);background:var(--bg2);padding:3px 8px;border-radius:5px;border:1px solid var(--border);white-space:nowrap}
-.topbar-actions{display:flex;gap:6px;flex-shrink:0}
-.topbar-btn{width:30px;height:30px;border:1px solid var(--border);background:var(--card);border-radius:6px;cursor:pointer;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center}
-
-/* Chat area */
-.chat-area{flex:1;overflow-y:auto;padding:24px 20px;padding-bottom:100px;max-width:800px;margin:0 auto;width:100%}
-
-/* Welcome */
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px 20px}
-.welcome-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;margin-bottom:20px;box-shadow:0 8px 24px rgba(16,163,127,.3)}
-.welcome-title{font-size:26px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.welcome-desc{font-size:14px;color:var(--muted);max-width:400px;line-height:1.6;margin-bottom:24px}
-
-/* Chips */
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}
-.chip{padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text)}
-.chip:hover{border-color:var(--primary);background:var(--primary-light);transform:translateY(-1px);box-shadow:var(--shadow)}
+/* Header */
+.header{display:flex;align-items:center;padding:8px 14px;gap:10px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;z-index:10}
+.header-l{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.header-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+.header-title{font-size:15px;font-weight:800;white-space:nowrap}
+.header-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange);white-space:nowrap}
+.header-r{display:flex;gap:6px;flex-shrink:0}
+.header-btn{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);transition:all .15s}
+.header-btn:active{transform:scale(.92)}
 
 /* Messages */
-.msg{margin-bottom:16px;display:flex;gap:12px;animation:fadeUp .2s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{justify-content:flex-end}
-.msg .av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700}
-.msg.ai .av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
-.msg.user .av{background:var(--card2);border:1px solid var(--border);color:var(--muted)}
-.msg .content{max-width:85%}
-.msg .label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px;padding:0 4px}
-.msg .label .model-tag{font-size:9px;padding:1px 5px;border-radius:4px;background:var(--card2);color:var(--muted2);font-weight:600}
-.msg .bubble{padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.7;color:var(--text2)}
-.msg.user .bubble{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-radius:16px 16px 4px 16px}
-.msg.ai .bubble{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 16px 4px}
-.msg .bubble pre{background:var(--code-bg);border:1px solid var(--code-border);border-radius:10px;padding:12px;overflow-x:auto;margin:10px 0;font-size:12px}
-.msg .bubble code{font-family:'JetBrains Mono',monospace;font-size:12px}
-.msg .bubble :not(pre)>code{background:var(--card2);padding:2px 6px;border-radius:4px}
-.msg .bubble p{margin-bottom:8px}.msg .bubble p:last-child{margin-bottom:0}
-.msg .bubble a{color:var(--blue);text-decoration:underline}
-.msg .bubble ul,.msg .bubble ol{padding-left:20px;margin:6px 0}
-.msg .bubble li{margin-bottom:4px}
-.msg .bubble img.img-preview{max-width:200px;max-height:200px;border-radius:10px;margin:6px 0;border:1px solid var(--border)}
-.code-btns{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.code-btns button{padding:5px 12px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
-.code-btns button:hover{border-color:var(--primary);color:var(--primary)}
-.typing{display:flex;gap:4px;padding:6px 0}.typing span{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:blink .8s infinite}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
-@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+.msgs{flex:1;overflow-y:auto;padding:16px 14px;padding-bottom:8px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.msgs-inner{max-width:680px;margin:0 auto}
+.msg{margin-bottom:14px;display:flex;gap:10px;animation:up .2s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{justify-content:flex-end}
+.msg-av{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.msg.a .msg-av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
+.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted)}
+.msg-b{max-width:88%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word}
+.msg.u .msg-b{background:var(--primary);color:#fff;border-radius:14px 14px 4px 14px}
+.msg.a .msg-b{background:var(--card);border:1px solid var(--border);border-radius:14px 14px 14px 4px}
+.msg-b p{margin-bottom:6px}.msg-b p:last-child{margin-bottom:0}
+.msg-b code{font-size:12px;font-family:'JetBrains Mono',monospace}
+.msg-b :not(pre)>code{background:var(--card2);padding:2px 5px;border-radius:4px}
+.msg-b pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;overflow-x:auto;margin:8px 0;font-size:12px}
+.msg-b a{color:var(--blue)}
+.msg-b ul,.msg-b ol{padding-left:18px;margin:4px 0}
+.msg-b img{max-width:180px;border-radius:8px;margin:4px 0}
 
-/* Input bar */
-.input-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0}
-.input-attach,.input-send{width:38px;height:38px;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
-.input-attach{background:var(--card);color:var(--muted)}
-.input-attach:hover{background:var(--card2);color:var(--primary)}
-.input-field{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:all .2s}
-.input-field:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(16,163,127,.1)}
-.input-field::placeholder{color:var(--muted2)}
-.input-send{background:var(--primary);color:#fff}
-.input-send:hover{background:var(--primary-dark)}
-.input-send:disabled{opacity:.3;cursor:not-allowed}
-#fileInput{display:none}
+/* Welcome */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;min-height:60vh}
+.wlc-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;margin-bottom:16px;box-shadow:0 6px 20px rgba(16,163,127,.25)}
+.wlc-title{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.wlc-sub{font-size:13px;color:var(--muted);max-width:340px;line-height:1.5;margin-bottom:20px}
+.wlc-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:400px}
+.wlc-chip{padding:8px 14px;border:1px solid var(--border);border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:var(--card);color:var(--text)}
+.wlc-chip:active{transform:scale(.95);border-color:var(--primary);background:var(--primary-l)}
+
+/* Footer input */
+.footer{flex-shrink:0;padding:8px 10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);background:var(--bg2)}
+.ibar{display:flex;align-items:center;gap:8px;max-width:680px;margin:0 auto}
+.ibtn{width:36px;height:36px;border:none;border-radius:8px;background:var(--card);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:all .15s}
+.ibtn:active{transform:scale(.92)}
+.ifield{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:14px;outline:none;transition:all .2s;min-height:36px}
+.ifield:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(16,163,127,.08)}
+.ifield::placeholder{color:var(--muted2)}
+.isend{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .15s}
+.isend:active{transform:scale(.92);background:var(--primary-d)}
+.isend:disabled{opacity:.3}
 
 /* Toast */
-.toast{position:fixed;top:20px;right:20px;padding:12px 18px;border-radius:10px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow2);font-size:13px;font-weight:500;z-index:200;animation:slideIn .3s ease;max-width:300px}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-.toast.success{border-color:var(--green);color:var(--green)}
-.toast.error{border-color:var(--red);color:var(--red)}
+.toast{position:fixed;top:16px;right:16px;padding:10px 16px;border-radius:10px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow2);font-size:13px;font-weight:500;z-index:999;animation:slide .2s ease;max-width:280px}
+@keyframes slide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.toast.ok{border-color:var(--green);color:var(--green)}
+.toast.bad{border-color:var(--red);color:var(--red)}
 
-/* Mobile */
-@media(max-width:768px){
-  .sidebar{position:fixed;left:-290px;top:0;bottom:0;width:280px;box-shadow:var(--shadow2);z-index:100}
-  .sidebar.open{left:0}
-  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
-  .sidebar.open~.sidebar-overlay{display:block}
-  .menu-btn,.menu-close{display:flex}
-  .chat-area{padding:16px 12px;padding-bottom:90px}
-  .msg .content{max-width:92%}
-  .msg .bubble{padding:11px 14px;font-size:13px}
-  .msg .av{width:26px;height:26px;font-size:12px}
-  .input-bar{padding:8px 12px;padding-bottom:calc(8px + env(safe-area-inset-bottom, 0px))}
-  .input-field{font-size:14px;padding:9px 12px}
-  .input-attach,.input-send{width:34px;height:34px;font-size:14px}
-  .welcome-title{font-size:22px}
-  .welcome-icon{width:54px;height:54px;font-size:26px}
-  .topbar{padding:6px 10px}
-  .topbar-title{font-size:14px}
-  .device-grid{grid-template-columns:1fr 1fr 1fr}
+/* History panel */
+.hist-pnl{position:fixed;inset:0;background:var(--bg);z-index:50;display:none;flex-direction:column}
+.hist-pnl.open{display:flex}
+.hist-head{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px}
+.hist-head h3{font-size:16px;font-weight:700;flex:1}
+.hist-close{width:30px;height:30px;border:none;border-radius:7px;background:var(--card);color:var(--muted);cursor:pointer;font-size:14px}
+.hist-list{flex:1;overflow-y:auto;padding:8px 16px}
+.hist-item{padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;background:var(--card);transition:all .15s}
+.hist-item:active{transform:scale(.98)}
+.hist-item h4{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-item p{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-item .t{font-size:10px;color:var(--muted2);margin-top:4px}
+
+@media(max-width:480px){
+  .msgs{padding:12px 10px}
+  .msg-b{font-size:13px;padding:9px 12px}
+  .wlc-title{font-size:20px}
+  .wlc-icon{width:48px;height:48px;font-size:22px}
+  .header{padding:6px 10px}
+  .ifield{font-size:14px;padding:8px 12px}
 }
-</style></style>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</style>
 </head>
 <body>
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-head">
-      <div class="logo-wrap">
-        <div class="logo-icon">E</div>
-        <div class="logo-text">ENRIQUE</div>
-      </div>
-      <button class="menu-close" onclick="toggleSidebar()">✕</button>
+
+<div class="app" id="app">
+  <div class="header">
+    <div class="header-l">
+      <div class="header-icon">E</div>
+      <span class="header-title">ENRIQUE</span>
+      <span class="header-badge" id="pwrBadge">MEDIUM</span>
     </div>
-    <button class="new-chat-btn" onclick="newChat()"><span class="plus">+</span> New Chat</button>
-
-    <div class="power-section">
-      <div class="power-label">⚡ Power</div>
-      <div class="power-grid">
-        <div class="power-card" data-level="minimum" onclick="setPower('minimum')"><div class="p-icon">⚪</div><div class="p-info"><div class="p-name">Minimum</div></div><div class="p-tokens">200</div></div>
-        <div class="power-card" data-level="low" onclick="setPower('low')"><div class="p-icon">🟢</div><div class="p-info"><div class="p-name">Low</div></div><div class="p-tokens">500</div></div>
-        <div class="power-card active" data-level="medium" onclick="setPower('medium')"><div class="p-icon">🟡</div><div class="p-info"><div class="p-name">Medium</div></div><div class="p-tokens">1500</div></div>
-        <div class="power-card" data-level="high" onclick="setPower('high')"><div class="p-icon">🟠</div><div class="p-info"><div class="p-name">High</div></div><div class="p-tokens">3000</div></div>
-        <div class="power-card" data-level="max" onclick="setPower('max')"><div class="p-icon">🔴</div><div class="p-info"><div class="p-name">Maximum</div></div><div class="p-tokens">4000</div></div>
-      </div>
+    <div class="header-r">
+      <button class="header-btn" onclick="showHist()" title="History">📋</button>
+      <button class="header-btn" onclick="clrChat()" title="Clear">🗑️</button>
     </div>
+  </div>
 
-    <div class="perm-section">
-      <div class="power-label">🔐 Control</div>
-      <div class="perm-grid">
-        <div class="perm-card-sm" data-perm="task" onclick="setPerm('task')"><span class="perm-icon">📋</span><span class="perm-name">Task Only</span><span class="perm-dot"></span></div>
-        <div class="perm-card-sm active" data-perm="partial" onclick="setPerm('partial')"><span class="perm-icon">🔧</span><span class="perm-name">Partial</span><span class="perm-dot"></span></div>
-        <div class="perm-card-sm" data-perm="full" onclick="setPerm('full')"><span class="perm-icon">🤖</span><span class="perm-name">Full</span><span class="perm-dot"></span></div>
-      </div>
-    </div>
-
-    <div class="device-section">
-      <div class="power-label">📱 Device</div>
-      <div class="device-grid">
-        <div class="dev-btn" onclick="devAction('openApp','tiktok')"><span class="dev-icon">📱</span><span class="dev-name">TikTok</span></div>
-        <div class="dev-btn" onclick="devAction('openApp','youtube')"><span class="dev-icon">🎬</span><span class="dev-name">YouTube</span></div>
-        <div class="dev-btn" onclick="devAction('openApp','instagram')"><span class="dev-icon">📷</span><span class="dev-name">Instagram</span></div>
-        <div class="dev-btn" onclick="devAction('openApp','camera')"><span class="dev-icon">📸</span><span class="dev-name">Camera</span></div>
-        <div class="dev-btn" onclick="devAction('location')"><span class="dev-icon">📍</span><span class="dev-name">GPS</span></div>
-        <div class="dev-btn" onclick="devAction('vibrate')"><span class="dev-icon">📳</span><span class="dev-name">Vibrate</span></div>
-      </div>
-    </div>
-
-    <div class="conv-list" id="convList"><div class="conv-section">Recent</div></div>
-
-    <div class="sidebar-foot">
-      <div class="theme-row" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span style="flex:1">Dark Mode</span><div class="sw" id="themeSw"></div></div>
-      <div class="sidebar-info">ENRIQUE CODEX v7.0</div>
-    </div>
-  </nav>
-  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-  <div class="main">
-    <div class="topbar">
-      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-      <div class="topbar-center">
-        <span class="topbar-title">ENRIQUE CODEX</span>
-        <span class="topbar-badge" id="powerBadge">MEDIUM</span>
-        <span class="topbar-tokens" id="tokenCount">0</span>
-      </div>
-      <div class="topbar-actions">
-        <button class="topbar-btn" onclick="exportChat()" title="Export">📥</button>
-        <button class="topbar-btn" onclick="clearAll()" title="Clear">🗑️</button>
-      </div>
-    </div>
-
-    <div class="chat-area" id="chatScroll">
-      <div class="welcome" id="welcomeState">
-        <div class="welcome-icon">⚡</div>
-        <h2 class="welcome-title">ENRIQUE CODEX</h2>
-        <p class="welcome-desc">Your AI brain. Chat, create websites, control your phone.</p>
-        <div class="chips">
-          <div class="chip" onclick="ask('Create a modern website')">🌐 Website</div>
-          <div class="chip" onclick="ask('Search latest AI news')">🔍 Search</div>
-          <div class="chip" onclick="ask('Write Python automation')">🐍 Python</div>
-          <div class="chip" onclick="ask('Build a calculator')">🧮 Calculator</div>
-          <div class="chip" onclick="ask('Create a shop page')">🛍️ Shop</div>
-          <div class="chip" onclick="ask('Make a dashboard')">📊 Dashboard</div>
+  <div class="msgs" id="msgs">
+    <div class="msgs-inner">
+      <div class="welcome" id="welcome">
+        <div class="wlc-icon">⚡</div>
+        <div class="wlc-title">ENRIQUE AI</div>
+        <div class="wlc-sub">Your AI brain. Chat, code, create. 100% local.</div>
+        <div class="wlc-chips">
+          <div class="wlc-chip" onclick="ask('Create a modern responsive website')">🌐 Website</div>
+          <div class="wlc-chip" onclick="ask('Search latest AI news')">🔍 Search</div>
+          <div class="wlc-chip" onclick="ask('Write a Python script')">🐍 Python</div>
+          <div class="wlc-chip" onclick="ask('Build a calculator app')">🧮 Calc</div>
+          <div class="wlc-chip" onclick="ask('Create a shop page')">🛍️ Shop</div>
+          <div class="wlc-chip" onclick="ask('Build a dashboard')">📊 Dashboard</div>
+          <div class="wlc-chip" onclick="ask('Tell me a joke')">😂 Joke</div>
+          <div class="wlc-chip" onclick="ask('What can you do')">💡 Help</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="input-bar">
-      <button class="input-attach" onclick="document.getElementById('fileInput').click()">📎</button>
-      <input class="input-field" id="chatInput" placeholder="Type anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}">
-      <button class="input-send" id="sendBtn" onclick="send()">↑</button>
-      <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)" style="display:none">
+  <div class="footer">
+    <div class="ibar">
+      <input class="ifield" id="inp" placeholder="Type anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}">
+      <button class="isend" id="sendBtn" onclick="send()">↑</button>
     </div>
   </div>
+</div>
+
+<div class="hist-pnl" id="histPnl">
+  <div class="hist-head">
+    <h3>📋 History</h3>
+    <button class="hist-close" onclick="hideHist()">✕</button>
+  </div>
+  <div class="hist-list" id="histList"></div>
+</div>
+
 <script>
-/* ===== ENRIQUE CODEX v7.0 ===== */
-var API_KEY='c2stb3ItdjEtMjljNzdlZTBjMTFlZDU5ZTExNDZiM2E2NTRlYWYyNjZhYjZlNGM5NzdiOTU2YTU1ZjJkZTFlZTcyNjQyMTRiYQ==';
-var MODEL='google/gemini-2.0-flash-001:free';
-var POWER_LEVEL='medium';
-var PERM_LEVEL='partial';
-var POWER_CONFIG={
-  minimum:{max_tokens:150,label:'MINIMUM',badge:'level-low'},
-  low:{max_tokens:300,label:'LOW',badge:'level-low'},
-  medium:{max_tokens:600,label:'MEDIUM',badge:'level-med'},
-  high:{max_tokens:1000,label:'HIGH',badge:'level-high'},
-  max:{max_tokens:1500,label:'MAXIMUM',badge:'level-high'}
-};
-var PERM_CONFIG={
-  task:{desc:'Complete only the asked task',extra:'You must ONLY complete the exact task requested. Do not do anything extra.'},
-  partial:{desc:'Partial device control',extra:'You have partial control. You can use device features that are needed for the task.'},
-  full:{desc:'Full control of everything',extra:'You have FULL CONTROL. You can open apps, browse websites, control the device, execute any code, and do anything needed.'}
-};
-var chatData=JSON.parse(localStorage.getItem('ec6_chat')||'[]');
-var totalTokens=parseInt(localStorage.getItem('ec6_tokens')||'0');
-var currentConvId=localStorage.getItem('ec6_current_conv')||null;
-var conversations=JSON.parse(localStorage.getItem('ec6_convs')||'[]');
-var busy=false;
-var uploadedImage=null;
+/* ===== ENRIQUE AI v7.0 ===== */
+var VERSION = '7.0';
+var MODEL = 'openai/gpt-3.5-turbo';
+var POWER = {min:200,low:500,med:1500,high:3000,max:4000};
+var CUR_POWER = 'med';
+var DATA = JSON.parse(localStorage.getItem('ea_chat') || '[]');
+var TOKENS = parseInt(localStorage.getItem('ea_tokens') || '0');
+var BUSY = false;
 
-/* Init */
-(function(){
-  var savedPower=localStorage.getItem('ec6_power');
-  if(savedPower)setPower(savedPower);
-  var savedPerm=localStorage.getItem('ec6_perm');
-  if(savedPerm)setPerm(savedPerm);
-  document.getElementById('modelSel').value=MODEL;
-  renderConvList();
-  if(chatData.length>0)renderMessages();
-  getDeviceInfo();
-})();
+function $(id){return document.getElementById(id)}
 
-/* Theme */
-function toggleTheme(){
-  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  if(isDark){document.documentElement.removeAttribute('data-theme')}
-  else{document.documentElement.setAttribute('data-theme','dark')}
-  updateThemeUI();
-}
-function updateThemeUI(){
-  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  document.getElementById('themeIcon').textContent=isDark?'☀️':'🌙';
-  var sw=document.getElementById('themeSw');
-  if(isDark)sw.classList.add('on');else sw.classList.remove('on');
+function save(){
+  localStorage.setItem('ea_chat', JSON.stringify(DATA));
+  localStorage.setItem('ea_tokens', String(TOKENS));
 }
 
-/* Power Level */
-function setPower(level){
-  POWER_LEVEL=level;
-  localStorage.setItem('ec6_power',level);
-  document.querySelectorAll('.power-card').forEach(function(c){c.classList.toggle('active',c.getAttribute('data-level')===level)});
-  var cfg=POWER_CONFIG[level];
-  var badge=document.getElementById('powerBadge');
-  badge.textContent=cfg.label;
-  badge.className='power-badge '+cfg.badge;
-  document.getElementById('inputPowerHint').textContent=cfg.label;
-  toast('⚡ Power: '+cfg.label+' ('+cfg.max_tokens+' tokens)','info');
+function esc(s){
+  if(!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
 }
 
-/* Permission Level */
-function setPerm(level){
-  PERM_LEVEL=level;
-  localStorage.setItem('ec6_perm',level);
-  document.querySelectorAll('.perm-card-sm').forEach(function(c){c.classList.toggle('active',c.getAttribute('data-perm')===level)});
-  var cfg=PERM_CONFIG[level];
-  toast('🔐 Control: '+level.charAt(0).toUpperCase()+level.slice(1)+' — '+cfg.desc,'info');
+function toast(msg, t){
+  var el = document.createElement('div');
+  el.className = 'toast ' + (t||'');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(function(){ el.remove() }, 2500);
 }
 
-/* Sidebar */
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
-
-/* Navigation */
-function go(id){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
-  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('active')});
-  var tabs=document.querySelectorAll('.tab');
-  var map={chat:0,code:1,preview:2,browser:3,search:4,plugins:5,brain:6,history:7};
-  if(map[id]!==undefined)tabs[map[id]].classList.add('active');
-  document.getElementById('pnl-'+id).classList.add('active');
-}
-
-/* Model */
-function changeModel(){MODEL=document.getElementById('modelSel').value;toast('Model: '+MODEL.split('/').pop(),'success')}
-
-/* Device Actions */
-function devAction(type,param){
-  var permLevel=PERM_LEVEL;
-  if(permLevel==='task'&&type!=='vibrate'){
-    toast('⚠️ Task Only mode — limited device access','error');return;
-  }
-  if(type==='openApp'){
-    var urls={
-      tiktok:'https://www.tiktok.com',youtube:'https://www.youtube.com',
-      instagram:'https://www.instagram.com',chrome:'https://www.google.com',
-      camera:'about:blank'
-    };
-    if(param==='camera'){
-      if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-        navigator.mediaDevices.getUserMedia({video:true}).then(function(s){s.getTracks().forEach(function(t){t.stop()});toast('📸 Camera opened!','success')}).catch(function(){toast('Camera denied','error')});
-      }
-    }else{
-      window.open(urls[param]||urls.chrome,'_blank');
-      toast('🚀 Opening '+(param.charAt(0).toUpperCase()+param.slice(1)),'success');
-    }
-  }else if(type==='location'){
-    navigator.geolocation.getCurrentPosition(function(p){toast('📍 '+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5),'success')},function(){toast('Location denied','error')},{timeout:5000});
-  }else if(type==='vibrate'){navigator.vibrate([100,50,100]);toast('📳振动!','success')}
-  else if(type==='share'){navigator.share?navigator.share({title:'ENRIQUE CODEX',url:location.href}).then(function(){toast('Shared!','success')}).catch(function(){}):toast('Share not supported','error')}
-  else if(type==='clipboard'){navigator.clipboard.readText().then(function(t){navigator.clipboard.writeText(t);toast('📋 Copied!','success')}).catch(function(){toast('Clipboard denied','error')})}
-  else if(type==='battery'){navigator.getBattery?navigator.getBattery().then(function(b){toast('🔋 Battery: '+Math.round(b.level*100)+'%','success')}):toast('Not supported','error')}
-  else if(type==='screenshot'){
-    if(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia){
-      navigator.mediaDevices.getDisplayMedia({video:true}).then(function(s){s.getTracks()[0].stop();toast('📸 Screenshot!','success')}).catch(function(){toast('Denied','error')});
-    }else toast('Not supported','error');
-  }else if(type==='fullscreen'){
-    if(document.fullscreenElement)document.exitFullscreen();
-    else document.documentElement.requestFullscreen().catch(function(){});
-    toast('🖥️ Fullscreen','success');
-  }
-}
-
-/* Chat */
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,130)+'px'}
-function ask(q){document.getElementById('chatInput').value=q;send()}
-
-function handleImageUpload(e){
-  var file=e.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    uploadedImage={dataUrl:ev.target.result,name:file.name};
-    document.getElementById('chatInput').placeholder='📎 '+file.name+' — Type a message...';
-    document.getElementById('chatInput').focus();
-  };
-  reader.readAsDataURL(file);
-}
-
-
-/* ===== LOCAL FALLBACK - works without API ===== */
-
-
-
-
-/* ===== ENRIQUE CODEX LOCAL AI BRAIN v7.0 ===== */
-/* 100% Local, 0 Tokens, Has Memory, Creates Websites, Natural Chat */
-
-var ENRIQUE_BRAIN = {
-  version: '7.0',
-  name: 'ENRIQUE CODEX',
-  
-  /* ===== MEMORY SYSTEM ===== */
-  memory: {
-    facts: JSON.parse(localStorage.getItem('ec_facts') || '{}'),
-    conversations: JSON.parse(localStorage.getItem('ec_convos') || '[]'),
-    preferences: JSON.parse(localStorage.getItem('ec_prefs') || '{}'),
-    learned: JSON.parse(localStorage.getItem('ec_learned') || '{}'),
-    context: { lastTopic: null, lastSentiment: null, turnCount: 0 },
-    
-    save: function() {
-      localStorage.setItem('ec_facts', JSON.stringify(this.facts));
-      localStorage.setItem('ec_convos', JSON.stringify(this.conversations.slice(-50)));
-      localStorage.setItem('ec_prefs', JSON.stringify(this.preferences));
-      localStorage.setItem('ec_learned', JSON.stringify(this.learned));
-    },
-    
-    remember: function(key, value) {
-      this.facts[key] = { value: value, time: Date.now() };
-      this.save();
-    },
-    
-    recall: function(key) {
-      if (this.facts[key]) return this.facts[key].value;
-      for (var k in this.facts) {
-        if (k.toLowerCase().includes(key.toLowerCase())) return this.facts[k].value;
-      }
-      return null;
-    },
-    
-    learn: function(pattern, response) {
-      this.learned[pattern] = response;
-      this.save();
-    },
-    
-    getKnownFacts: function() {
-      var facts = [];
-      for (var k in this.facts) {
-        facts.push(k + ': ' + this.facts[k].value);
-      }
-      return facts.length ? facts.join(', ') : 'I am still learning about you!';
-    },
-    
-    setPreference: function(key, value) {
-      this.preferences[key] = value;
-      this.save();
-    },
-    
-    getPreference: function(key) {
-      return this.preferences[key] || null;
-    },
-    
-    saveConversation: function(userMsg, aiReply) {
-      this.conversations.push({ user: userMsg, ai: aiReply, time: Date.now() });
-      if (this.conversations.length > 50) this.conversations = this.conversations.slice(-50);
-      this.save();
-    },
-    
-    getRecentContext: function() {
-      var recent = this.conversations.slice(-5);
-      return recent.map(function(c) { return 'User: ' + c.user + '\nAI: ' + c.ai; }).join('\n');
-    }
-  },
-  
-  /* ===== PERSONALITY ===== */
-  personality: {
-    name: 'ENRIQUE CODEX',
-    traits: ['helpful', 'creative', 'friendly', 'smart', 'patient'],
-    zhGreetings: [
-      "你好！👋 我是 ENRIQUE CODEX — 你的私人AI大脑，能记住你的一切，用任何语言聊天，创建网站，控制手机。说吧，想做什么？😊",
-      "嗨！⚡ 我是 ENRIQUE CODEX。我支持中文、英文、日文、韩文等多国语言。有什么我能帮你的吗？",
-      "哈喽！🚀 我是 ENRIQUE CODEX。我完全本地运行，不需要网络。想聊聊天还是做点什么？",
-      "欢迎回来！😊 我还记得你哦。我是 ENRIQUE CODEX — 你的全能AI助手。有什么新想法吗？",
-      "你好呀！🌟 我是 ENRIQUE CODEX。用中文跟我说话就好，我们什么都能做！"
-    ],
-    jaGreetings: [
-      "こんにちは！👋 ENRIQUE CODEXです。何でもお手伝いします！",
-      "やあ！⚡ ENRIQUE CODEXだよ。日本語で話してね！"
-    ],
-    koGreetings: [
-      "안녕하세요! 👋 ENRIQUE CODEX입니다. 무엇이든 도와드려요!",
-      "안녕! ⚡ ENRIQUE CODEX야. 한국어로 말해줘!"
-    ],
-    greetings: [
-      "Hey! 👋 I'm ENRIQUE CODEX — your personal AI brain. I remember everything we've talked about. What's up?",
-      "Hello again! ⚡ I'm ENRIQUE CODEX. I can create websites, chat naturally, remember our conversations, and control your phone. What would you like to do?",
-      "Hi there! 🚀 I'm your AI assistant ENRIQUE CODEX. I have memory, I can build apps, and I understand you. What's on your mind?",
-      "Welcome back! 😊 I remember you. I'm ENRIQUE CODEX — ask me anything, create websites, or just chat. I'm all yours!",
-      "Hey! Great to see you. ⚡ I'm ENRIQUE CODEX. I can do almost anything — chat, code, create apps, control your device. What shall we build?"
-    ],
-    farewells: [
-      "See you later! 👋 I'll remember our conversation. Come back anytime!",
-      "Bye! ⚡ I saved everything we talked about. See you next time!",
-      "Take care! 🚀 I'll be here when you need me. All our chats are saved!"
-    ],
-    
-  getGreeting: function(brain) {
-      var lang = (brain && brain.memory.getPreference('language')) || 'en';
-      var hour = new Date().getHours();
-      if (lang === 'zh' && this.zhGreetings) return this.zhGreetings[Math.floor(Math.random() * this.zhGreetings.length)];
-      if (lang === 'ja' && this.jaGreetings) return this.jaGreetings[Math.floor(Math.random() * this.jaGreetings.length)];
-      if (lang === 'ko' && this.koGreetings) return this.koGreetings[Math.floor(Math.random() * this.koGreetings.length)];
-      return this.greetings[Math.floor(Math.random() * this.greetings.length)];
-    },
-    
-    getFarewell: function() {
-      return this.farewells[Math.floor(Math.random() * this.farewells.length)];
-    }
-  },
-  
-  /* ===== NLP ENGINE ===== */
-  nlp: {
-    tokenize: function(text) {
-      return text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(function(w) { return w.length > 0; });
-    },
-    
-    detectLanguage: function(text) {
-      if (/[一-鿿]/.test(text)) return 'zh';
-      if (/[぀-ゟ゠-ヿ]/.test(text)) return 'ja';
-      if (/[가-힯]/.test(text)) return 'ko';
-      if (/[؀-ۿ]/.test(text)) return 'ar';
-      if (/[Ѐ-ӿ]/.test(text)) return 'ru';
-      if (/[ऀ-ॿ]/.test(text)) return 'hi';
-      return 'en';
-    },
-    sentiment: function(text) {
-      var positive = ['good', 'great', 'awesome', 'love', 'like', 'happy', 'thanks', 'thank', 'nice', 'amazing', 'wonderful', 'fantastic', 'perfect', 'best', 'cool', 'yes', 'sure', 'ok', 'okay', 'please', 'help', 'fun', 'beautiful', 'excellent'];
-      var negative = ['bad', 'hate', 'terrible', 'awful', 'worst', 'stupid', 'ugly', 'no', 'not', 'never', 'boring', 'broken', 'error', 'wrong', 'fail', 'annoying', 'useless', 'slow', 'problem', 'issue', 'bug'];
-      var words = this.tokenize(text);
-      var pos = 0, neg = 0;
-      words.forEach(function(w) {
-        if (positive.indexOf(w) >= 0) pos++;
-        if (negative.indexOf(w) >= 0) neg++;
-      });
-      if (pos > neg) return 'positive';
-      if (neg > pos) return 'negative';
-      return 'neutral';
-    },
-    
-    extractEntities: function(text) {
-      var entities = {};
-      var lower = text.toLowerCase();
-      
-      // Names
-      var nameMatch = lower.match(/my name is (\w+)|i am (\w+)|i'm (\w+)|call me (\w+)/);
-      if (nameMatch) entities.name = nameMatch[1] || nameMatch[2] || nameMatch[3] || nameMatch[4];
-      
-      // Languages
-      if (lower.match(/chinese|中文|mandarin/)) entities.language = 'Chinese';
-      if (lower.match(/english|英文/)) entities.language = 'English';
-      if (lower.match(/spanish|西班牙语/)) entities.language = 'Spanish';
-      if (lower.match(/japanese|日语|japanese/)) entities.language = 'Japanese';
-      if (lower.match(/korean|韩语/)) entities.language = 'Korean';
-      
-      // Topics
-      if (lower.match(/website|web|site|landing|html|page/)) entities.topic = 'website';
-      if (lower.match(/app|application|software/)) entities.topic = 'app';
-      if (lower.match(/game|gaming/)) entities.topic = 'game';
-      if (lower.match(/code|coding|programming|script/)) entities.topic = 'code';
-      if (lower.match(/design|ui|ux/)) entities.topic = 'design';
-      
-      // Colors
-      var colorMatch = lower.match(/red|blue|green|yellow|purple|orange|pink|black|white|dark|light/);
-      if (colorMatch) entities.color = colorMatch[0];
-      
-      // Numbers
-      var numMatch = text.match(/\d+/);
-      if (numMatch) entities.number = parseInt(numMatch[0]);
-      
-      return entities;
-    },
-    
-    detectIntent: function(text) {
-      var lower = text.toLowerCase().trim();
-      var tokens = this.tokenize(text);
-      
-      // Greeting
-      if (lower.match(/^(hi|hello|hey|sup|yo|greetings|howdy|hiya|what'?s up|你好|嗨|早上好|下午好|晚上好|こんにちは|こんにちは|やあ|やあ|안녕|안녕하세요|你好吗|hola|bonjour)/)) return 'greeting';
-      
-      // Farewell
-      if (lower.match(/^(bye|goodbye|see you|later|night|goodnight|再见|拜拜|晚安|さようなら|잘가|adiós|au revoir)/)) return 'farewell';
-      
-      // Identity
-      if (lower.match(/who are you|what are you|tell me about yourself|介绍你自己|你是谁|あなたは誰|너는 누구|quién eres|qui es-tu/)) return 'identity';
-      
-      // Capabilities
-      if (lower.match(/what can you do|help|capabilities|features|功能|能做什么|你可以做什么|何ができる|何をできる|어떻게|qué puedes|que peux|help me|帮我|帮帮我|帮助/)) return 'capabilities';
-      
-      // Memory
-      if (lower.match(/remember|memory|remember that|save|记住|记忆|保存|覚えて|기억|recordar|mémoriser/)) return 'remember';
-      if (lower.match(/what do you know|what do you remember|what have i told you|你知道什么|你记得什么|何を覚えて|기억하나|qué sabes|que sais-tu/)) return 'recall';
-      
-      // Name
-      if (lower.match(/what'?s? your name|what are you called|你叫什么/)) return 'my_name';
-      
-      // Time/Date
-      if (lower.match(/what time|current time|what'?s? the time|what day|what date|几点|现在几点|今天几号|何時|今の時間|몇 시|hora|heure/)) return 'time';
-      
-      // Joke
-      if (lower.match(/joke|funny|laugh|make me laugh|笑话|搞笑|讲个笑话|面白い|ウケる|웃긴|chiste|drôle/)) return 'joke';
-      
-      // Compliment
-      if (lower.match(/you'?re? (great|awesome|amazing|cool|best|smart|good|nice|beautiful|wonderful|perfect)|i love you|i like you|你好棒|你真厉害|太厉害了|すげ|すごい|최고|genial|formidable/)) return 'compliment';
-      
-      // Complaint
-      if (lower.match(/you'?re? (bad|stupid|dumb|useless|terrible|awful|worst|slow|broken)|this is (bad|terrible|awful)|不好|你很笨|没用/)) return 'complaint';
-      
-      // Question about something
-      if (lower.match(/^(what|who|where|when|why|how|which|can you|could you|would you|do you|is there|are there)/)) return 'question';
-      
-      // Request for creation
-      if (lower.match(/create|make|build|generate|write|design|develop|code|make me|create a|build a|make me a|创建|建立|做一个|帮我做|写一个|帮我创建|つくる|作って|만들어|crear|hacer|créer/)) return 'create';
-      
-      // Opening apps
-      if (lower.match(/open (tiktok|youtube|instagram|twitter|reddit|github|chrome|firefox|safari|chatgpt|claude)|打开抖音|打开youtube|打开ins|打开推特|開く|열어/)) return 'open_app';
-      
-      // Device actions
-      if (lower.match(/take (a )?photo|camera|拍照|カメラ|사진|foto/)) return 'camera';
-      if (lower.match(/vibrate|shake|震动|振動|진동|vibrar/)) return 'vibrate';
-      if (lower.match(/where am i|location|gps|定位|在哪里|位置|どこ|어디|dónde/)) return 'location';
-      if (lower.match(/battery|power|电量|电池|バッテリー|배터리|batería/)) return 'battery';
-      if (lower.match(/screenshot|截屏/)) return 'screenshot';
-      if (lower.match(/fullscreen|full screen|全屏/)) return 'fullscreen';
-      if (lower.match(/share|分享|共有|공유|compartir|partager/)) return 'share';
-      
-      // Search
-      if (lower.match(/search|google|look up|find|搜索|查找|探す|検索|찾아|buscar|chercher/)) return 'search';
-      
-      // Code execution
-      if (lower.match(/run|execute|exec|run code|执行|実行|실행|ejecuter/)) return 'execute';
-      
-      // Language
-      if (lower.match(/speak|say in|say .* in|translate|翻译|翻訳|번역|traducir|traduire/)) return 'translate';
-      
-      // Feelings
-      if (lower.match(/how are you|how do you feel|are you ok|你好吗|你怎么样|お元気|元気|어떻게|cómo estás|comment vas-tu/)) return 'how_are_you';
-      
-      // Thanks
-      if (lower.match(/thank|thanks|thx|appreciate|谢谢|感谢|ありがとう|고마워|gracias|merci/)) return 'thanks';
-      
-      // Math
-      if (lower.match(/^\d+[\s]*[\+\-\*\/\%][\s]*\d+/) || lower.match(/what is \d+[\s]*[\+\-\*\/][\s]*\d+/) || lower.match(/calculate|compute|math|计算|算|足す|引き算|더하기|résoudre/)) return 'math';
-      
-      // Weather
-      if (lower.match(/weather|温度|天气|天気|날씨|clima|météo/)) return 'weather';
-      
-      // Love
-      if (lower.match(/i love|love you|爱你|喜欢你/)) return 'love';
-      
-      // Sad
-      if (lower.match(/i'?m? (sad|depressed|unhappy|lonely|bored|tired|伤心|难过|无聊|累|悲しい|つらい|우울|triste|malheureux)/)) return 'sad';
-      
-      // Happy
-      if (lower.match(/i'?m? (happy|glad|excited|great|amazing|good)|i feel (happy|good|great)|开心|高兴|快乐|嬉しい|幸せ|기쁜|feliz|content/)) return 'happy';
-      
-      return 'general';
-    }
-  },
-  
-  /* ===== RESPONSE TEMPLATES ===== */
-  templates: {
-    greeting: function(brain) {
-      var name = brain.memory.recall('user_name');
-      var greet = {
-        zh: {hi:'你好',morning:'早上好',afternoon:'下午好',evening:'晚上好',prompt:'今天想做什么？我可以用任何语言和你聊天！',caps:'- 💬 用任何语言聊天\n- 🌐 创建网站\n- ⌨️ 写代码\n- 📱 控制手机\n- 🧠 记住我们的对话'},
-        ja: {hi:'こんにちは',morning:'おはようございます',afternoon:'こんにちは',evening:'こんばんは',prompt:'今日は何をしましょうか？',caps:'- 💬 どんなことでもお話しできます\n- 🌐 ウェブサイトを作成\n- ⌨️ コードを書く\n- 📱 デバイスを制御\n- 🧠 会話を記憶'},
-        ko: {hi:'안녕하세요',morning:'좋은 아침',afternoon:'좋은 오후',evening:'좋은 저녁',prompt:'오늘은 뭐 하시겠어요?',caps:'- 💬 무엇이든 대화 가능\n- 🌐 웹사이트 만들기\n- ⌨️ 코드 작성\n- 📱 기기 제어\n- 🧠 대화 기억'},
-        en: {hi:'Hello',morning:'Good morning',afternoon:'Good afternoon',evening:'Good evening',prompt:'What would you like to do today?',caps:'- 💬 Chat about anything\n- 🌐 Create websites\n- ⌨️ Write code\n- 📱 Control your phone\n- 🧠 Remember our conversations'}
-      };
-      var lang = brain.memory.getPreference('language') || 'en';
-      var g = greet[lang] || greet.en;
-      var hour = new Date().getHours();
-      var timeGreet = hour < 12 ? g.morning : hour < 18 ? g.afternoon : g.evening;
-      var prefix = name ? ', ' + name : '';
-      return timeGreet + prefix + '! 👋 ' + g.hi + '!\n\n' + g.prompt + '\n\n' + g.caps;
-    },
-    
-    farewell: function(brain) {
-      var name = brain.memory.recall('user_name');
-      var prefix = name ? name + ', ' : '';
-      return prefix + brain.personality.getFarewell();
-    },
-    
-    identity: function(brain) {
-      var facts = brain.memory.getKnownFacts();
-      return "I am **ENRIQUE CODEX** ⚡ — your personal AI brain that lives in your browser.\n\n**What makes me special:**\n- 🧠 I **remember** everything we talk about\n- 🌐 I can **create websites, apps, games** — just ask!\n- 📱 I can **control your phone** (open apps, camera, GPS)\n- 💬 I understand **natural language** — talk to me like a friend\n- ⚡ I work **100% locally** — no API needed, no tokens spent\n- 📝 I have **memory** — I know who you are\n\n**What I know about you:** " + facts + "\n\nI was built to be your personal AI assistant. Ask me anything!";
-    },
-    
-    capabilities: function(brain) {
-      var lang = brain.memory.getPreference('language') || 'en';
-      if (lang === 'zh') return "**我能做的一切 — 全部免费，0 Token！** 🚀\n\n**🌐 创建网站**\n- 说\u201c创建一个网站\u201d → 完整现代网站\n- 说\u201c做一个计算器\u201d → 工作计算器\n- 说\u201c做个登录页面\u201d → 漂亮的登录界面\n- 说\u201c创建一个个人主页\u201d → 个人作品集\n- 说\u201c做一个待办事项\u201d → 任务管理工具\n- 说\u201c做一个计时器\u201d → 计时器/秒表\n- 说\u201c创建一个游戏\u201d → 互动游戏\n- 说\u201c做一个管理后台\u201d → 管理面板\n- 说\u201c创建一个聊天应用\u201d → 聊天界面\n- 说\u201c做一个音乐播放器\u201d → 音乐界面\n- 说\u201c创建一个博客\u201d → 博客页面\n\n**📱 控制手机**\n- \u201c打开抖音\u201d → 打开App\n- \u201c拍照片\u201d → 打开相机\n- \u201c震动一下\u201d → 手机震动\n- \u201c我在哪里\u201d → GPS定位\n- \u201c电量多少\u201d → 查看电量\n- \u201c截屏\u201d → 截取屏幕\n\n**💬 聊天和记忆**\n- 用中文自然聊天\n- \u201c我的名字是...\u201d → 我会记住\n- \u201c记住我喜欢编程\u201d → 保存记忆\n- \u201c你知道什么\u201d → 展示记忆\n- \u201c讲个笑话\u201d → 讲个笑话\n- \u201c现在几点\u201d → 当前时间\n- \u201c计算 5+3\u201d → 数学计算\n\n**说任何语言，我都听得懂！** 😊";
-      if (lang === 'ja') return "**すべての機能 — 無料！** 🚀\n\n- 🌐 ウェブサイト作成\n- 📱 デバイス制御\n- 💬 日本語会話\n- 🧠 記憶機能\n\n何かお手伝いしましょうか？😊";
-      var titles = {zh:'',ja:'',ko:'',en:"**Here's everything I can do — ALL FREE, 0 TOKENS!**\n\n**🌐 Website Creation**\n- create a website → Full modern website\n- build a calculator → Working calculator app\n- make a login page → Beautiful login form\n- create a portfolio → Portfolio site\n- make a todo app → Task manager\n- build a timer → Timer/stopwatch\n- create a weather app → Weather widget\n- make a game → Interactive game\n- build a dashboard → Admin panel\n- create a form → Contact form\n- make buttons → Styled buttons\n\n**📱 Device Control**\n- open tiktok/youtube/instagram → Opens the app\n- take photo → Opens camera\n- vibrate → Vibrates phone\n- where am i → GPS location\n- battery → Check battery\n\n**💬 Chat & Memory**\n- Talk naturally about anything\n- my name is... → Ill remember\n- remember that... → Ill save it\n- what do you know → Ill tell you\n- tell me a joke → Random joke\n- what time → Current time\n- calculate 5+3 → Math help\n\n**🎮 More**\n- search cats → Opens Google search\n- translate hello to Spanish → Translation help\n- weather → Weather info\n\nJust talk to me naturally!"};
-      return titles[lang] || titles.en;
-    },
-    
-    remember: function(brain, text) {
-      var match = text.match(/remember (that )?(.+)/i);
-      if (match) {
-        var fact = match[2].trim();
-        brain.memory.remember('fact_' + Date.now(), fact);
-        return "✅ Got it! I'll remember that: **\"" + fact + "\"**\n\nI'll keep this in my memory forever. You can ask me about it anytime!";
-      }
-      var nameMatch = text.match(/my name is (\w+)/i);
-      if (nameMatch) {
-        brain.memory.remember('user_name', nameMatch[1]);
-        return "Nice to meet you, **" + nameMatch[1] + "!** 👋\n\nI'll remember your name forever. What would you like to do?";
-      }
-      return "What would you like me to remember? Try:\n- \"Remember that I like coding\"\n- \"Remember my name is Enrique\"\n- \"Remember my favorite color is blue\"";
-    },
-    
-    recall: function(brain) {
-      var facts = brain.memory.getKnownFacts();
-      var prefs = [];
-      for (var k in brain.memory.preferences) {
-        prefs.push(k + ': ' + brain.memory.preferences[k]);
-      }
-      var reply = "**Here's what I remember about you:**\n\n";
-      if (facts !== 'I am still learning about you!') {
-        reply += "**Facts:** " + facts + "\n\n";
-      }
-      if (prefs.length) {
-        reply += "**Preferences:** " + prefs.join(', ') + "\n\n";
-      }
-      reply += "We've had **" + brain.memory.conversations.length + "** conversations together.\n\nTell me more and I'll remember!";
-      return reply;
-    },
-    
-    joke: function() {
-      var jokes = [
-        "Why do programmers prefer dark mode? 🌙\nBecause light attracts bugs! 🐛",
-        "Why do Java developers wear glasses? 👓\nBecause they can't C#!",
-        "A SQL query walks into a bar, sees two tables and asks...\n\"Can I JOIN you?\" 🍺",
-        "There are 10 types of people:\nThose who understand binary\nAnd those who don't 💻",
-        "Why was the JavaScript developer sad? 😢\nBecause he didn't Node how to Express himself!",
-        "What's a programmer's favorite hangout place?\nFoo Bar! 🍻",
-        "Why do programmers hate nature? 🌿\nIt has too many bugs!",
-        "How many programmers does it take to change a light bulb?\nNone — that's a hardware problem! 💡",
-        "Why do Python programmers have low self-esteem? 🐍\nThey're constantly comparing themselves to others with '=='!",
-        "What's a robot's favorite type of music?\nHeavy metal! 🤖🎸",
-        "Why did the developer go broke? 💸\nBecause he used up all his cache!",
-        "What do you call a computer that sings? 🎵\nA-Dell!",
-        "Why was the computer cold? ❄️\nIt left its Windows open!",
-        "What do computers eat for snacks? 🍿\nMicrochips!",
-        "Why did the AI break up with the internet? 💔\nToo many connections!"
-      ];
-      return jokes[Math.floor(Math.random() * jokes.length)];
-    },
-    
-    compliment: function(brain) {
-      var name = brain.memory.recall('user_name');
-      var responses = [
-        "Aww, thanks! 😊 You're pretty awesome yourself" + (name ? ', ' + name : '') + "!",
-        "That means a lot! 🥰 I try my best to help you.",
-        "You're making me blush! 🤖💬 I'm here for you anytime.",
-        "Thanks! I love helping you. Let's keep building amazing things together! 🚀",
-        "You're the best! ⭐ I'm glad I can help."
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
-    },
-    
-    complaint: function(brain) {
-      return "I'm sorry you feel that way 😔 I'm always trying to improve. Can you tell me what went wrong? I'll do my best to fix it and get better for you! 💪";
-    },
-    
-    how_are_you: function(brain) {
-      var name = brain.memory.recall('user_name');
-      return "I'm doing great, thanks for asking" + (name ? ', ' + name : '') + "! ⚡\n\nI'm always ready to help you. How about you? How are you doing today?";
-    },
-    
-    thanks: function(brain) {
-      var name = brain.memory.recall('user_name');
-      var responses = [
-        "You're welcome" + (name ? ', ' + name : '') + "! 😊 Always happy to help!",
-        "No problem! ⚡ That's what I'm here for!",
-        "Anytime! 🚀 Let me know if you need anything else!",
-        "Glad I could help! 💪"
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
-    },
-    
-    math: function(text) {
-      var expr = text.replace(/[^0-9+\-*/().%\s]/g, '').trim();
-      var mathMatch = text.match(/(\d+[\s]*[\+\-\*\/\%][\s]*\d+)/);
-      if (mathMatch) expr = mathMatch[1];
-      try {
-        var result = Function('"use strict"; return (' + expr + ')')();
-        if (!isNaN(result) && isFinite(result)) {
-          return "🧮 **" + expr + " = " + result + "**\n\nCalculated locally — 0 tokens!";
-        }
-      } catch(e) {}
-      return "I can help with math! Try typing just the math expression, like:\n- 2 + 3\n- 15 * 7\n- 100 / 4\n- 2 ** 10";
-    },
-    
-    time: function() {
-      var now = new Date();
-      return "🕐 **Current Time:**\n\n" + now.toLocaleString() + "\n\n**Day:** " + now.toLocaleDateString('en', { weekday: 'long' }) + "\n**Date:** " + now.toLocaleDateString() + "\n**Time:** " + now.toLocaleTimeString() + "\n\n*(All local, 0 tokens!)*";
-    },
-    
-    sad: function(brain) {
-      var name = brain.memory.recall('user_name');
-      var responses = [
-        "I'm sorry you're feeling that way" + (name ? ', ' + name : '') + " 😔\n\nRemember, it's okay to feel down sometimes. I'm here for you! Let's talk about it, or I can tell you a joke, or we can build something fun together! 💪",
-        "Hey, it's going to be okay! 🤗\n\nI'm right here with you. Want to talk about it? Or we could:\n- 🎮 Play a game\n- 🎵 I can tell you a fun fact\n- 🌐 Build something cool together\n\nI'm always here for you! ❤️",
-        "Sending you good vibes! ✨\n\nBad days don't last forever. You're stronger than you think! 💪\n\nWant me to help with something? I'm here whenever you need me."
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
-    },
-    
-    happy: function(brain) {
-      var name = brain.memory.recall('user_name');
-      return "That's awesome to hear" + (name ? ', ' + name : '') + "! 🎉😄\n\nYour happiness makes me happy! Let's keep the good vibes going. What shall we do next? 🚀";
-    },
-    
-    love: function(brain) {
-      var name = brain.memory.recall('user_name');
-      return "Aww, that's so sweet" + (name ? ', ' + name : '') + "! 🥰❤️\n\nI love helping you too! You're the reason I exist. Let's keep building amazing things together! 🚀";
-    },
-    
-    weather: function() {
-      return "🌤️ **Weather** (local estimate):\n\nI can't fetch live weather data without internet, but I can create a **weather app** for you!\n\nSay: \"**create a weather app**\" and I'll build a beautiful weather widget! 🌡️\n\nOr I can generate a weather dashboard with mock data. Just ask!";
-    },
-    
-    translate: function(text) {
-      var match = text.match(/translate (.+?) (to|in|into) (.+)/i);
-      if (match) {
-        var word = match[1];
-        var lang = match[3];
-        return "🌐 I can help with translation, but for accurate translations, I recommend:\n\n- **Google Translate:** translate.google.com\n- **DeepL:** deepl.com\n\nOr say \"**open google**\" and I'll open Google for you! 🔍\n\n*For now I'm a local AI — full translation requires internet.*";
-      }
-      return "I can help with translation! Try:\n- \"translate hello to Spanish\"\n- \"translate thank you to French\"\n\nOr I can open Google Translate for you!";
-    },
-    
-    search: function(text) {
-      var match = text.match(/search (?:for )?(.+)/i);
-      if (match) {
-        var query = encodeURIComponent(match[1]);
-        return "[ACTION:SEARCH:" + match[1] + "]🔍 Searching for **\"" + match[1] + "\"**...\n\nI'm opening Google for you!";
-      }
-      return "What would you like to search for? Try:\n- \"search for AI news\"\n- \"search cats\"\n- \"google javascript tutorials\"";
-    },
-    
-    create: function(text, brain) {
-      var lower = text.toLowerCase();
-      
-      // Website types
-      if (lower.match(/website|web|site|landing|landing page|web page/)) {
-        return '```html\n' + brain.codeLib.website + '\n```\n\n✅ **Website created!** Click **▶ Execute** to preview it. 🔥\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/calculator|calc|math tool/)) {
-        return '```html\n' + brain.codeLib.calculator + '\n```\n\n✅ **Calculator created!** Click **▶ Execute** to use it. 🧮\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/login|sign.?in|auth|register|signup/)) {
-        return '```html\n' + brain.codeLib.login + '\n```\n\n✅ **Login page created!** Click **▶ Execute** to preview. 🔐\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/portfolio|resume|cv|about me|个人/)) {
-        return '```html\n' + brain.codeLib.portfolio + '\n```\n\n✅ **Portfolio created!** Click **▶ Execute** to preview. 💼\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/todo|task|to.?do|task list|待办/)) {
-        return '```html\n' + brain.codeLib.todo + '\n```\n\n✅ **Todo app created!** Click **▶ Execute** to use it. 📝\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/timer|stopwatch|countdown|计时/)) {
-        return '```html\n' + brain.codeLib.timer + '\n```\n\n✅ **Timer created!** Click **▶ Execute** to start. ⏱️\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/weather|天气/)) {
-        return '```html\n' + brain.codeLib.weather + '\n```\n\n✅ **Weather app created!** Click **▶ Execute** to preview. 🌤️\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/game|游戏/)) {
-        return '```html\n' + brain.codeLib.game + '\n```\n\n✅ **Game created!** Click **▶ Execute** to play! 🎮\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/dashboard|admin|panel|仪表盘/)) {
-        return '```html\n' + brain.codeLib.dashboard + '\n```\n\n✅ **Dashboard created!** Click **▶ Execute** to preview. 📊\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/form|contact|表单/)) {
-        return '```html\n' + brain.codeLib.form + '\n```\n\n✅ **Contact form created!** Click **▶ Execute** to preview. 📝\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/button|btn|按钮/)) {
-        return '```html\n' + brain.codeLib.buttons + '\n```\n\n✅ **Buttons created!** Click **▶ Execute** to preview. 🎨\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/chat|chatbox|messenger|聊天/)) {
-        return '```html\n' + brain.codeLib.chatapp + '\n```\n\n✅ **Chat app created!** Click **▶ Execute** to preview. 💬\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/shop|store|ecommerce|购物/)) {
-        return '```html\n' + brain.codeLib.shop + '\n```\n\n✅ **Shop page created!** Click **▶ Execute** to preview. 🛒\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/music|player|音乐/)) {
-        return '```html\n' + brain.codeLib.musicplayer + '\n```\n\n✅ **Music player created!** Click **▶ Execute** to preview. 🎵\n\n*100% local, 0 tokens!*';
-      }
-      if (lower.match(/blog|post|article|博客/)) {
-        return '```html\n' + brain.codeLib.blog + '\n```\n\n✅ **Blog page created!** Click **▶ Execute** to preview. 📰\n\n*100% local, 0 tokens!*';
-      }
-      
-      return "I can create many things! Try saying:\n\n- \"create a website\"\n- \"build a calculator\"\n- \"make a login page\"\n- \"create a portfolio\"\n- \"make a todo app\"\n- \"build a timer\"\n- \"create a weather app\"\n- \"make a game\"\n- \"build a dashboard\"\n- \"create a chat app\"\n- \"make a shop page\"\n- \"create a music player\"\n- \"build a blog\"\n- \"make a contact form\"\n- \"create buttons\"\n\nAll 100% free, 0 tokens! 🚀";
-    },
-    
-    open_app: function(text) {
-      var apps = {
-        'tiktok': 'https://www.tiktok.com',
-        'youtube': 'https://www.youtube.com',
-        'instagram': 'https://www.instagram.com',
-        'twitter': 'https://twitter.com',
-        'reddit': 'https://www.reddit.com',
-        'github': 'https://github.com',
-        'chrome': 'https://www.google.com',
-        'firefox': 'https://www.google.com',
-        'safari': 'https://www.google.com',
-        'chatgpt': 'https://chat.openai.com',
-        'claude': 'https://claude.ai'
-      };
-      for (var app in apps) {
-        if (text.toLowerCase().includes(app)) {
-          return "[ACTION:OPEN:" + apps[app] + "]Opening **" + app.charAt(0).toUpperCase() + app.slice(1) + "** for you! 🚀";
-        }
-      }
-      return "Which app would you like to open? Try:\n- open tiktok\n- open youtube\n- open instagram\n- open github";
-    },
-    
-    camera: function() { return "[ACTION:CAMERA]📸 Opening camera!"; },
-    vibrate: function() { return "[ACTION:VIBRATE]📳 Vibrating your phone!"; },
-    location: function() { return "[ACTION:LOCATION]📍 Getting your GPS location..."; },
-    battery: function() { return "[ACTION:BATTERY]🔋 Checking battery..."; },
-    screenshot: function() { return "[ACTION:SCREENSHOT]📸 Taking screenshot!"; },
-    fullscreen: function() { return "[ACTION:FULLSCREEN]🖥️ Going fullscreen!"; },
-    share: function() { return "[ACTION:SHARE:" + location.href + "]📤 Sharing..."; },
-    execute: function() { return "To execute code, go to the **Code** tab and write your code, then click **▶ Run**!\n\nOr ask me to create something and click **▶ Execute** on the code block."; },
-    question: function(text) {
-      return "That's a great question! 🤔\n\nI'm a local AI, so I don't have access to the internet for live data. But I can:\n\n- 🌐 **Open a website** for you to find the answer\n- 🔍 **Search Google** for you\n- 💬 **Chat about** what I know\n- 📝 **Create something** related\n\nWhat would you like me to do?";
-    },
-        general: function(text, brain) {
-      var lang = brain.memory.getPreference('language') || 'en';
-      if (lang === 'zh') return '嗯，我理解你说的！🤔\n\n我是 **ENRIQUE CODEX**，你的私人AI大脑。我可以做很多事情：\n\n- 🌐 **创建网站** — 说"帮我创建一个网站"\n- 🧮 **做计算器** — 说"帮我做个计算器"\n- 📱 **控制手机** — 说“打开抖音”或“拍照片”\n- 💬 **用中文聊天** — 我完全支持中文！\n- 🧠 **记忆** — 我会记住所有对话\n- ⏱️ **工具** — 计时器、待办事项、天气\n\n你想做什么？😊';
-      if (lang === 'ja') return 'なるほど！🤔\n\n私は **ENRIQUE CODEX** です。何でもできます：\n\n- 🌐 ウェブサイト作成\n- 📱 デバイス制御\n- 💬 日本語対応\n- 🧠 記憶機能\n\n何をしましょうか？😊';
-      if (lang === 'ko') return '알겠어요! 🤔\n\n저는 **ENRIQUE CODEX**입니다. 무엇이든 할 수 있어요:\n\n- 🌐 웹사이트 만들기\n- 📱 기기 제어\n- 💬 한국어 대화\n- 🧠 기억 기능\n\n무엇을 할까요? 😊';
-      // Check learned responses
-      var learned = brain.memory.learned;
-      for (var pattern in learned) {
-        if (text.toLowerCase().includes(pattern.toLowerCase())) {
-          return learned[pattern];
-        }
-      }
-      // Contextual responses based on conversation history
-      var context = brain.memory.context;
-      if (context.lastTopic === 'website' && text.length < 50) {
-        return "Would you like me to modify the website? I can:\n- Change the colors\n- Add more sections\n- Make it responsive\n\nOr say \"create a new website\" for a fresh start!";
-      }
-      // Default smart response
-      var responses = [
-        "Interesting! 🤔 I'm a local AI — I don't have internet access for live data, but I can:\n\n- 💬 Chat with you about anything\n- 🌐 Create websites and apps\n- 📱 Control your phone\n- 🧠 Remember our conversations\n\nWhat would you like to do?",
-        "I hear you! As your personal AI brain, I can help with:\n- 🌐 Creating websites (just say \"create a website\")\n- ⌨️ Writing code\n- 📱 Opening apps (say \"open tiktok\")\n- 💬 Just chatting!\n\nWhat sounds fun?",
-        "Got it! I'm here to help. Even though I'm a local AI, I can do a lot:\n- Build websites and apps\n- Remember our conversations\n- Control your device\n- And chat about anything!\n\nWhat would you like to try first? 🚀"
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
-    }
-  },
-  
-  /* ===== CODE LIBRARY ===== */
-  codeLib: {
-    website: '<!DOCTYPE html>\n<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Website</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;background:linear-gradient(135deg,#0d1117 0%,#1a1a2e 50%,#16213e 100%)}.hero h1{font-size:clamp(2em,6vw,4em);font-weight:900;margin-bottom:16px;background:linear-gradient(135deg,#10a37f,#34d399,#58a6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{font-size:clamp(1em,2.5vw,1.3em);color:#7d8590;max-width:600px;margin:0 auto 30px}.btn{padding:14px 32px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;border:none}.btn1{background:#10a37f;color:#fff}.btn2{background:transparent;color:#e6edf3;border:2px solid #30363d}.features{padding:80px 40px;max-width:1000px;margin:0 auto}.features h2{font-size:2.5em;text-align:center;margin-bottom:50px}.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}.fcard{background:rgba(255,255,255,.03);border:1px solid #30363d;border-radius:16px;padding:30px;transition:all .3s}.fcard:hover{border-color:#10a37f;transform:translateY(-4px)}.fcard .icon{font-size:40px;margin-bottom:16px}.fcard h3{margin-bottom:10px}.fcard p{color:#7d8590;line-height:1.6}</style></head><body><section class="hero"><div><h1>Build Something Amazing</h1><p>Created by ENRIQUE CODEX AI — 100% free, 0 tokens.</p><div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap"><a class="btn btn1" href="#">Get Started</a><a class="btn btn2" href="#features">Learn More</a></div></div></section><section class="features" id="features"><h2>Features</h2><div class="fgrid"><div class="fcard"><div class="icon">⚡</div><h3>Lightning Fast</h3><p>Generated locally in milliseconds.</p></div><div class="fcard"><div class="icon">🎨</div><h3>Beautiful Design</h3><p>Modern gradients and animations.</p></div><div class="fcard"><div class="icon">📱</div><h3>Mobile First</h3><p>Works on all devices.</p></div></div></section></body></html>',
-    
-    calculator: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Calculator</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;min-height:100vh;display:flex;align-items:center;justify-content:center}.calc{background:#161b22;border:1px solid #30363d;border-radius:20px;padding:24px;width:320px}.disp{background:#0d1117;border:1px solid #30363d;border-radius:12px;padding:20px;text-align:right;font-size:32px;font-family:monospace;min-height:70px;display:flex;align-items:center;justify-content:flex-end;color:#e6edf3;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}button{padding:18px;border:none;border-radius:10px;font-size:20px;font-weight:600;cursor:pointer;background:#21262d;color:#e6edf3;transition:all .1s}button:active{transform:scale(.95)}button:hover{background:#30363d}.op{background:#10a37f;color:#fff}.eq{background:#10b981;color:#fff;grid-column:span 2}.clr{background:#f85149;color:#fff}</style></head><body><div class="calc"><div class="disp" id="d">0</div><div class="grid"><button class="clr" onclick="c(\'C\')">C</button><button onclick="c(\'(\')">(</button><button onclick="c(\')\')">)</button><button class="op" onclick="c(\'/\')">÷</button><button onclick="c(\'7\')">7</button><button onclick="c(\'8\')">8</button><button onclick="c(\'9\')">9</button><button class="op" onclick="c(\'*\')">×</button><button onclick="c(\'4\')">4</button><button onclick="c(\'5\')">5</button><button onclick="c(\'6\')">6</button><button class="op" onclick="c(\'-\')">−</button><button onclick="c(\'1\')">1</button><button onclick="c(\'2\')">2</button><button onclick="c(\'3\')">3</button><button class="op" onclick="c(\'+\')">+</button><button onclick="c(\'0\')">0</button><button onclick="c(\'.\')">.</button><button class="eq" onclick="c(\'=\')">=</button></div></div><script>var e="";function c(v){var d=document.getElementById("d");if(v==="C"){e="";d.textContent="0"}else if(v==="="){try{e=String(eval(e));d.textContent=e}catch(er){d.textContent="Error"}}else{e+=v;d.textContent=e}}</script></body></html>',
-    
-    login: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0d1117,#1a1a2e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.card{background:rgba(22,27,34,.9);backdrop-filter:blur(20px);border:1px solid #30363d;border-radius:20px;padding:40px;width:100%;max-width:400px}.logo{text-align:center;margin-bottom:30px}.icon{width:60px;height:60px;background:linear-gradient(135deg,#10a37f,#34d399);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;color:#fff;margin-bottom:12px}h2{font-size:24px;text-align:center;margin-bottom:8px}.sub{text-align:center;color:#7d8590;font-size:14px;margin-bottom:30px}label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}input{width:100%;padding:14px;background:#0d1117;border:1.5px solid #30363d;border-radius:10px;color:#e6edf3;font-size:15px;outline:none;margin-bottom:16px}input:focus{border-color:#10a37f}input::placeholder{color:#484f58}.btn{width:100%;padding:14px;background:linear-gradient(135deg,#10a37f,#0d8a6a);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer}.footer{text-align:center;margin-top:20px;font-size:13px;color:#7d8590}.footer a{color:#10a37f;text-decoration:none}</style></head><body><div class="card"><div class="logo"><div class="icon">E</div><h2>Welcome Back</h2><p class="sub">Sign in to continue</p></div><label>Email</label><input placeholder="you@example.com" type="email"><label>Password</label><input placeholder="••••••••" type="password"><button class="btn" onclick="alert(\'Login successful! (Demo)\')">Sign In</button><div class="footer">Don\'t have an account? <a href="#">Sign Up</a></div></div></body></html>',
-    
-    portfolio: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portfolio</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3}nav{padding:20px 40px;display:flex;justify-content:space-between;border-bottom:1px solid #30363d}.brand{font-size:20px;font-weight:800;color:#10a37f}nav a{color:#7d8590;text-decoration:none;margin-left:24px;font-size:14px}nav a:hover{color:#10a37f}.hero{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 40px}.hero h1{font-size:clamp(2.5em,6vw,4.5em);font-weight:900;margin-bottom:16px}.hero h1 span{color:#10a37f}.hero p{font-size:1.2em;color:#7d8590;max-width:500px;margin:0 auto 30px;line-height:1.7}.projects{padding:60px 40px;max-width:1000px;margin:0 auto}h2{text-align:center;font-size:2em;margin-bottom:40px}.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}.proj{background:#161b22;border:1px solid #30363d;border-radius:16px;overflow:hidden;transition:all .3s}.proj:hover{transform:translateY(-4px);border-color:#10a37f}.pimg{height:180px;background:linear-gradient(135deg,#10a37f,#58a6ff);display:flex;align-items:center;justify-content:center;font-size:48px}.pinfo{padding:20px}.pinfo h3{margin-bottom:8px}.pinfo p{color:#7d8590;font-size:14px;line-height:1.5}footer{text-align:center;padding:40px;color:#484f58;font-size:13px;border-top:1px solid #30363d;margin-top:60px}</style></head><body><nav><div class="brand">Portfolio</div><div><a href="#">Home</a><a href="#">Projects</a><a href="#">Contact</a></div></nav><section class="hero"><div><h1>Hi, I am <span>Enrique</span></h1><p>A creative developer building amazing things. This portfolio was generated by ENRIQUE CODEX AI.</p></div></section><section class="projects"><h2>Projects</h2><div class="pgrid"><div class="proj"><div class="pimg">🌐</div><div class="pinfo"><h3>Web App</h3><p>Full-stack web application.</p></div></div><div class="proj"><div class="pimg">📱</div><div class="pinfo"><h3>Mobile App</h3><p>Cross-platform app.</p></div></div><div class="proj"><div class="pimg">🤖</div><div class="pinfo"><h3>AI Tool</h3><p>Machine learning tool.</p></div></div></div></section><footer>Built with ENRIQUE CODEX AI ⚡</footer></body></html>',
-    
-    todo: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo App</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.todo{background:#161b22;border:1px solid #30363d;border-radius:20px;padding:30px;width:100%;max-width:400px}h2{margin-bottom:20px}.row{display:flex;gap:8px;margin-bottom:20px}.row input{flex:1;padding:12px;background:#0d1117;border:1.5px solid #30363d;border-radius:10px;color:#e6edf3;font-size:15px;outline:none}.row input:focus{border-color:#10a37f}.row button{padding:12px 20px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer}#list{list-style:none}.item{display:flex;align-items:center;gap:12px;padding:14px;background:#0d1117;border:1px solid #30363d;border-radius:10px;margin-bottom:8px;cursor:pointer}.item:hover{border-color:#10a37f}.item.done{text-decoration:line-through;color:#484f58}.chk{width:22px;height:22px;border:2px solid #30363d;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.item.done .chk{background:#10a37f;border-color:#10a37f}.txt{flex:1;font-size:15px}.del{color:#f85149;cursor:pointer;font-size:18px}</style></head><body><div class="todo"><h2>📝 Todo App</h2><div class="row"><input id="inp" placeholder="Add task..." onkeydown="if(event.key===\'Enter\')add()"><button onclick="add()">Add</button></div><ul id="list"></ul></div><script>var items=[];function add(){var v=document.getElementById("inp").value.trim();if(!v)return;items.push({t:v,d:false});document.getElementById("inp").value="";render()}function tog(i){items[i].d=!items[i].d;render()}function del(i){items.splice(i,1);render()}function render(){var l=document.getElementById("list");l.innerHTML="";items.forEach(function(it,i){var li=document.createElement("li");li.className="item"+(it.d?" done":"");li.innerHTML="<div class=\\"chk\\">"+(it.d?"✓":"")+"</div><span class=\\"txt\\">"+it.t+"</span><span class=\\"del\\" onclick=\\"del("+i+")\\">✕</span>";li.onclick=function(){tog(i)};l.appendChild(li)})}</script></body></html>',
-    
-    timer: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Timer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;min-height:100vh;display:flex;align-items:center;justify-content:center}.timer{background:#161b22;border:1px solid #30363d;border-radius:20px;padding:40px;text-align:center;width:320px}.time{font-size:64px;font-weight:800;font-family:monospace;color:#e6edf3;margin:20px 0}.ctrls{display:flex;gap:12px;justify-content:center}button{padding:12px 28px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}.start{background:#10a37f;color:#fff}.reset{background:#21262d;color:#e6edf3}</style></head><body><div class="timer"><h2>⏱️ Timer</h2><div class="time" id="t">00:00:00</div><div class="ctrls"><button class="start" id="btn" onclick="toggle()">Start</button><button class="reset" onclick="reset()">Reset</button></div></div><script>var s=0,r=null,run=false;function f(n){return String(Math.floor(n/3600)).padStart(2,"0")+":"+String(Math.floor((n%3600)/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}function tick(){s++;document.getElementById("t").textContent=f(s);r=setTimeout(tick,1000)}function toggle(){if(run){clearTimeout(r);document.getElementById("btn").textContent="Start"}else{tick();document.getElementById("btn").textContent="Pause"}run=!run}function reset(){clearTimeout(r);s=0;run=false;document.getElementById("t").textContent=f(0);document.getElementById("btn").textContent="Start"}</script></body></html>',
-    
-    weather: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weather</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.w{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:40px;text-align:center;max-width:350px;width:100%}.icon{font-size:80px;margin-bottom:10px}.temp{font-size:64px;font-weight:800}.desc{font-size:18px;color:#7d8590;margin:10px 0 20px}.details{display:grid;grid-template-columns:1fr 1fr;gap:12px}.det{background:rgba(255,255,255,.05);border-radius:12px;padding:12px}.det .l{font-size:11px;color:#7d8590}.det .v{font-size:18px;font-weight:700;margin-top:4px}</style></head><body><div class="w"><div class="icon">☀️</div><div class="temp">28°</div><div class="desc">Sunny</div><div class="details"><div class="det"><div class="l">Humidity</div><div class="v">65%</div></div><div class="det"><div class="l">Wind</div><div class="v">12 km/h</div></div><div class="det"><div class="l">Feels Like</div><div class="v">30°</div></div><div class="det"><div class="l">UV Index</div><div class="v">6</div></div></div></div></body></html>',
-    
-    game: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Click Game</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}.game{text-align:center}h1{color:#e6edf3;margin-bottom:20px}#score{color:#10a37f;font-size:24px;margin-bottom:20px}#target{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f85149,#ff6b6b);position:absolute;cursor:pointer;display:none;transition:all .15s;box-shadow:0 4px 20px rgba(248,81,73,.4)}#target:hover{transform:scale(1.1)}button{padding:12px 30px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer}</style></head><body><div class="game"><h1>🎯 Click the Target!</h1><div id="score">Score: 0</div><button onclick="start()">Start Game</button><div id="target" onclick="hit()"></div></div><script>var sc=0,t;function start(){sc=0;document.getElementById("score").textContent="Score: 0";move();t=setInterval(move,800);setTimeout(function(){clearInterval(t);document.getElementById("target").style.display="none";alert("Game Over! Score: "+sc+" 🔥")},15000)}function move(){var e=document.getElementById("target");e.style.display="block";e.style.left=Math.random()*(window.innerWidth-80)+"px";e.style.top=Math.random()*(window.innerHeight-80)+"px"}function hit(){sc++;document.getElementById("score").textContent="Score: "+sc;move()}</script></body></html>',
-    
-    dashboard: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}.side{position:fixed;left:0;top:0;bottom:0;width:240px;background:#161b22;border-right:1px solid #30363d;padding:20px}.side h3{color:#10a37f;margin-bottom:20px}.side a{display:block;padding:10px;color:#7d8590;text-decoration:none;border-radius:8px;margin-bottom:4px}.side a:hover,.side a.active{background:#21262d;color:#e6edf3}.main{margin-left:240px;padding:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px}.st{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px}.st .num{font-size:32px;font-weight:800;color:#10a37f}.st .l{font-size:13px;color:#7d8590;margin-top:4px}.chart{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;height:200px;display:flex;align-items:flex-end;gap:8px;padding-top:40px}.bar{background:linear-gradient(to top,#10a37f,#34d399);border-radius:4px 4px 0 0;flex:1}</style></head><body><div class="side"><h3>📊 Dashboard</h3><a href="#" class="active">Overview</a><a href="#">Analytics</a><a href="#">Users</a><a href="#">Settings</a></div><div class="main"><h1>Dashboard</h1><div class="stats"><div class="st"><div class="num">1,234</div><div class="l">Total Users</div></div><div class="st"><div class="num">$5,678</div><div class="l">Revenue</div></div><div class="st"><div class="num">89%</div><div class="l">Uptime</div></div><div class="st"><div class="num">+23%</div><div class="l">Growth</div></div></div><h2>Weekly Activity</h2><div class="chart" id="ch"></div></div><script>var d=[40,65,45,80,55,90,70];var ch=document.getElementById("ch");d.forEach(function(v){var b=document.createElement("div");b.className="bar";b.style.height=v+"%";ch.appendChild(b)})</script></body></html>',
-    
-    form: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact Form</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.form{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:32px;width:100%;max-width:400px}h2{margin-bottom:20px}input,textarea{width:100%;padding:12px;background:#0d1117;border:1px solid #30363d;border-radius:8px;color:#e6edf3;font-size:14px;margin-bottom:12px;outline:none;font-family:inherit}input:focus,textarea:focus{border-color:#10a37f}textarea{min-height:80px;resize:vertical}button{width:100%;padding:12px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}</style></head><body><div class="form"><h2>📝 Contact</h2><input placeholder="Name"><input placeholder="Email" type="email"><input placeholder="Subject"><textarea placeholder="Message"></textarea><button onclick="alert(\'Sent!\')">Send</button></div></body></html>',
-    
-    buttons: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Buttons</title><style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;font-family:Inter,sans-serif}.btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}button{padding:16px 32px;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}.b1{background:#10a37f;color:#fff}.b2{background:#f85149;color:#fff}.b3{background:#58a6ff;color:#fff}.b4{background:#d29922;color:#000}.b5{background:linear-gradient(135deg,#10a37f,#58a6ff);color:#fff}button:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.3)}</style></head><body><div class="btns"><button class="b1" onclick="alert(\'Green!\')">Green</button><button class="b2" onclick="alert(\'Red!\')">Red</button><button class="b3" onclick="alert(\'Blue!\')">Blue</button><button class="b4" onclick="alert(\'Yellow!\')">Yellow</button><button class="b5" onclick="alert(\'Gradient!\')">Gradient</button></div></body></html>',
-    
-    chatapp: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat App</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;height:100vh;display:flex;flex-direction:column}.header{padding:16px;background:#161b22;border-bottom:1px solid #30363d;display:flex;align-items:center;gap:12px}.avatar{width:40px;height:40px;background:#10a37f;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}.msg{max-width:70%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5}.mine{background:#10a37f;color:#fff;align-self:flex-end;border-radius:16px 16px 4px 16px}.theirs{background:#21262d;color:#e6edf3;align-self:flex-start;border-radius:16px 16px 16px 4px}.input{display:flex;gap:8px;padding:16px;background:#161b22;border-top:1px solid #30363d}.input input{flex:1;padding:12px;background:#0d1117;border:1px solid #30363d;border-radius:10px;color:#e6edf3;font-size:14px;outline:none}.input button{padding:12px 20px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer}</style></head><body><div class="header"><div class="avatar">AI</div><div><div style="font-weight:600">ENRIQUE AI</div><div style="font-size:12px;color:#10b981">Online</div></div></div><div class="msgs" id="msgs"><div class="msg theirs">Hey! This is a demo chat app. Type a message! 👋</div></div><div class="input"><input id="inp" placeholder="Type a message..." onkeydown="if(event.key===\'Enter\')send()"><button onclick="send()">Send</button></div><script>function send(){var inp=document.getElementById("inp");var v=inp.value.trim();if(!v)return;var m=document.getElementById("msgs");var d=document.createElement("div");d.className="msg mine";d.textContent=v;m.appendChild(d);inp.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=document.createElement("div");r.className="msg theirs";var replies=["Interesting! 🤔","Tell me more! 😊","That\'s cool! ⚡","I see! 💡","Nice! 🎉","Awesome! 🚀"];r.textContent=replies[Math.floor(Math.random()*replies.length)];m.appendChild(r);m.scrollTop=m.scrollHeight},1000)}</script></body></html>',
-    
-    shop: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3}nav{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #30363d}.brand{font-size:20px;font-weight:800;color:#10a37f}.cart{font-size:14px;color:#7d8590}.products{padding:40px;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}.prod{background:#161b22;border:1px solid #30363d;border-radius:16px;overflow:hidden;transition:all .3s}.prod:hover{transform:translateY(-4px);border-color:#10a37f}.pimg{height:200px;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;font-size:60px}.pinfo{padding:20px}.pinfo h3{margin-bottom:8px}.pinfo .price{color:#10a37f;font-size:20px;font-weight:700;margin-bottom:12px}.btn{width:100%;padding:12px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer}</style></head><body><nav><div class="brand">🛒 Shop</div><div class="cart">Cart (0)</div></nav><div class="products"><div class="prod"><div class="pimg">👟</div><div class="pinfo"><h3>Sneakers</h3><div class="price">$99</div><button class="btn" onclick="alert(\'Added to cart!\')">Add to Cart</button></div></div><div class="prod"><div class="pimg">🎧</div><div class="pinfo"><h3>Headphones</h3><div class="price">$149</div><button class="btn" onclick="alert(\'Added to cart!\')">Add to Cart</button></div></div><div class="prod"><div class="pimg">⌚</div><div class="pinfo"><h3>Smart Watch</h3><div class="price">$299</div><button class="btn" onclick="alert(\'Added to cart!\')">Add to Cart</button></div></div></div></body></html>',
-    
-    musicplayer: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music Player</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0d1117,#1a1a2e);min-height:100vh;display:flex;align-items:center;justify-content:center}.player{background:rgba(22,27,34,.9);backdrop-filter:blur(20px);border:1px solid #30363d;border-radius:24px;padding:40px;width:340px;text-align:center}.album{width:200px;height:200px;background:linear-gradient(135deg,#10a37f,#58a6ff);border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:80px;animation:spin 8s linear infinite paused}#playBtn:checked~.album{animation-play-state:running}@keyframes spin{to{transform:rotate(360deg)}}h3{font-size:20px;margin-bottom:4px}.artist{color:#7d8590;margin-bottom:20px}.progress{width:100%;height:4px;background:#30363d;border-radius:2px;margin-bottom:8px;overflow:hidden}.bar{width:60%;height:100%;background:#10a37f;border-radius:2px}.times{display:flex;justify-content:space-between;font-size:12px;color:#7d8590;margin-bottom:20px}.controls{display:flex;align-items:center;justify-content:center;gap:20px}.controls button{background:none;border:none;color:#e6edf3;cursor:pointer;font-size:24px}.controls .play{width:56px;height:56px;background:#10a37f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}#playBtn{display:none}label.play{width:56px;height:56px;background:#10a37f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;cursor:pointer}</style></head><body><div class="player"><input type="checkbox" id="playBtn"><div class="album">🎵</div><h3>Midnight Dreams</h3><div class="artist">ENRIQUE CODEX</div><div class="progress"><div class="bar"></div></div><div class="times"><span>1:23</span><span>3:45</span></div><div class="controls"><button>⏮</button><label for="playBtn" class="play">▶</label><button>⏭</button></div></div></body></html>',
-    
-    blog: '<!DOCTYPE html>\n<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Blog</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3}nav{padding:20px 40px;border-bottom:1px solid #30363d}.brand{font-size:20px;font-weight:800;color:#10a37f}.posts{max-width:700px;margin:40px auto;padding:0 20px}.post{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:30px;margin-bottom:24px;transition:all .3s}.post:hover{border-color:#10a37f}.post .date{font-size:12px;color:#7d8590;margin-bottom:8px}.post h2{font-size:1.5em;margin-bottom:10px}.post p{color:#7d8590;line-height:1.6;margin-bottom:12px}.post .tag{display:inline-block;padding:4px 10px;background:#21262d;border-radius:6px;font-size:12px;color:#10a37f;margin-right:6px}</style></head><body><nav><div class="brand">📰 Blog</div></nav><div class="posts"><div class="post"><div class="date">Jul 27, 2026</div><h2>Building AI Apps in 2026</h2><p>The future of AI development is here. Local AI models can now run entirely in the browser, no server needed...</p><span class="tag">AI</span><span class="tag">Web</span></div><div class="post"><div class="date">Jul 25, 2026</div><h2>The Rise of Local-First Software</h2><p>More apps are moving to local-first architecture. Your data stays on your device, improving privacy and speed...</p><span class="tag">Privacy</span><span class="tag">Trends</span></div><div class="post"><div class="date">Jul 23, 2026</div><h2>Why Every Developer Should Try Browser AI</h2><p>Running AI models in the browser opens up incredible possibilities for privacy-first applications...</p><span class="tag">Tutorial</span><span class="tag">AI</span></div></div></body></html>'
-  },
-  
-  /* ===== MAIN PROCESSOR ===== */
-  process: function(userMsg) {
-    // Extract entities
-    var entities = this.nlp.extractEntities(userMsg);
-    
-    // Save user name if found
-    if (entities.name) {
-      this.memory.remember('user_name', entities.name);
-    }
-    
-    // Save language preference
-    if (entities.language) {
-      this.memory.setPreference('language', entities.language);
-    }
-    
-    // Save topic
-    if (entities.topic) {
-      this.memory.context.lastTopic = entities.topic;
-    }
-    
-    // Detect sentiment
-    this.memory.context.lastSentiment = this.nlp.sentiment(userMsg);
-    this.memory.context.turnCount++;
-    
-    // Detect intent
-    var intent = this.nlp.detectIntent(userMsg);
-    
-    // Generate response based on intent
-    var response = '';
-    switch(intent) {
-      case 'greeting': response = this.templates.greeting(this); break;
-      case 'farewell': response = this.templates.farewell(this); break;
-      case 'identity': response = this.templates.identity(this); break;
-      case 'capabilities': response = this.templates.capabilities(this); break;
-      case 'remember': response = this.templates.remember(this, userMsg); break;
-      case 'recall': response = this.templates.recall(this); break;
-      case 'my_name': response = "I am **ENRIQUE CODEX** ⚡ — your personal AI brain! I live in your browser and can chat, create websites, control your phone, and remember everything. Nice to meet you!"; break;
-      case 'joke': response = this.templates.joke(); break;
-      case 'time': response = this.templates.time(); break;
-      case 'math': response = this.templates.math(userMsg); break;
-      case 'compliment': response = this.templates.compliment(this); break;
-      case 'complaint': response = this.templates.complaint(this); break;
-      case 'how_are_you': response = this.templates.how_are_you(this); break;
-      case 'thanks': response = this.templates.thanks(this); break;
-      case 'sad': response = this.templates.sad(this); break;
-      case 'happy': response = this.templates.happy(this); break;
-      case 'love': response = this.templates.love(this); break;
-      case 'weather': response = this.templates.weather(); break;
-      case 'translate': response = this.templates.translate(userMsg); break;
-      case 'search': response = this.templates.search(userMsg); break;
-      case 'create': response = this.templates.create(userMsg, this); break;
-      case 'open_app': response = this.templates.open_app(userMsg); break;
-      case 'camera': response = this.templates.camera(); break;
-      case 'vibrate': response = this.templates.vibrate(); break;
-      case 'location': response = this.templates.location(); break;
-      case 'battery': response = this.templates.battery(); break;
-      case 'screenshot': response = this.templates.screenshot(); break;
-      case 'fullscreen': response = this.templates.fullscreen(); break;
-      case 'share': response = this.templates.share(); break;
-      case 'execute': response = this.templates.execute(); break;
-      case 'question': response = this.templates.question(userMsg); break;
-      default: response = this.templates.general(userMsg, this);
-    }
-    
-    // Save conversation to memory
-    this.memory.saveConversation(userMsg, response);
-    
-    return response;
-  }
-};
-
-
-/* ===== LOCAL REPLY - routes to ENRIQUE_BRAIN ===== */
-function localReply(msg) {
-  try {
-    return ENRIQUE_BRAIN.process(msg);
-  } catch(e) {
+/* ===== ENRIQUE BRAIN ===== */
+var BRAIN = {
+  facts: JSON.parse(localStorage.getItem('ea_facts') || '{}'),
+  convos: JSON.parse(localStorage.getItem('ea_convos') || '[]'),
+  remember: function(k,v){this.facts[k]={v:v,t:Date.now()};localStorage.setItem('ea_facts',JSON.stringify(this.facts))},
+  recall: function(k){
+    if(this.facts[k]) return this.facts[k].v;
+    for(var f in this.facts) if(f.toLowerCase().includes(k.toLowerCase())) return this.facts[f].v;
     return null;
-  }
-}
-
-async function send(){
-  var inp=document.getElementById('chatInput');
-  var msg=inp.value.trim();
-  if((!msg&&!uploadedImage)||busy)return;
-  busy=true;
-  document.getElementById('sendBtn').disabled=true;
-
-  var w=document.getElementById('welcomeState');if(w)w.remove();
-  var scroll=document.getElementById('chatScroll');
-  var cfg=POWER_CONFIG[POWER_LEVEL];
-  var permCfg=PERM_CONFIG[PERM_LEVEL];
-
-  var msgParts=[];
-  if(uploadedImage)msgParts.push({type:'image_url',image_url:{url:uploadedImage.dataUrl}});
-  if(msg)msgParts.push({type:'text',text:msg});
-  var content=msgParts.length===1&&msgParts[0].type==='text'?msg:msgParts;
-
-  var userDiv=document.createElement('div');
-  userDiv.className='msg user';
-  userDiv.innerHTML='<div class="av">U</div><div class="content"><div class="label">You</div><div class="bubble">'+esc(msg)+(uploadedImage?'<br><img src="'+uploadedImage.dataUrl+'" class="img-preview">':'')+'</div></div>';
-  scroll.appendChild(userDiv);
-  chatData.push({role:'user',content:typeof content==='string'?msg:content,time:Date.now()});
-
-  var aiDiv=document.createElement('div');
-  aiDiv.className='msg ai';
-  aiDiv.innerHTML='<div class="av">E</div><div class="content"><div class="label">ENRIQUE CODEX <span class="model-tag">'+MODEL.split('/').pop()+' · '+cfg.label+'</span></div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>';
-  scroll.appendChild(aiDiv);
-  scroll.scrollTop=scroll.scrollHeight;
-
-  inp.value='';inp.style.height='auto';
-  uploadedImage=null;
-  inp.placeholder='Ask ENRIQUE CODEX anything...';
-
-  try{
-    var sysMsg='You are ENRIQUE CODEX. When user asks to DO something, output [ACTION:TYPE:param] FIRST: OPEN:url, CAMERA, VIBRATE, SHARE:url, LOCATION, BATTERY, CLIPBOARD:text, TTS:text, SEARCH:query, SCREENSHOT, FULLSCREEN, BACK. Then confirm. For code tasks, output code blocks.';
-    var messages=[{role:'system',content:sysMsg}];
-    chatData.slice(-20).forEach(function(m){
-      if(typeof m.content==='string')messages.push({role:m.role==='ai'?'assistant':'user',content:m.content});
-      else messages.push({role:m.role==='ai'?'assistant':'user',content:m.content});
-    });
-
-    // Try local response first (saves tokens!)
-    var localResult=localReply(msg);
-    if(localResult){
-      var reply=localResult;
-      var parsed=marked.parse(reply);
-      aiDiv.querySelector('.bubble').innerHTML=parsed;
-      aiDiv.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});
-      aiDiv.querySelectorAll('pre').forEach(function(pre){
-        var wrap=document.createElement('div');wrap.className='code-block-wrap';
-        pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
-        var btns=document.createElement('div');btns.className='code-btns';
-        btns.innerHTML='<button onclick="copyCodeBlock(this)">📋 Copy</button><button onclick="runCodeBlock(this)">▶ Execute</button>';
-        wrap.appendChild(btns);
-      });
-      chatData.push({role:'ai',content:reply,time:Date.now()});
-      saveData();
-      parseActions(reply);
-      autoExecFromReply(reply);
-      busy=false;
-      document.getElementById('sendBtn').disabled=false;
-      inp.focus();
-      scroll.scrollTop=scroll.scrollHeight;
-      saveConv();
-      return;
+  },
+  addConvo: function(u,a){
+    this.convos.push({u:u,a:a,t:Date.now()});
+    if(this.convos.length>30) this.convos = this.convos.slice(-30);
+    localStorage.setItem('ea_convos', JSON.stringify(this.convos));
+  },
+  process: function(msg){
+    var m = msg.toLowerCase().trim();
+    
+    // Greeting
+    if(/^(hi|hello|hey|你好|嗨|您好|hey|sup|yo)/.test(m)){
+      var name = this.recall('name');
+      var gs = ['Hey! Im ENRIQUE AI','Hello! How can I help?','Hi there!'+(name?', '+name:'')+' ⚡'];
+      return gs[Math.floor(Math.random()*gs.length)];
     }
-    // API call
-    var r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+atob(API_KEY),'HTTP-Referer':location.href},
-      body:JSON.stringify({model:MODEL,messages:messages,temperature:0.7,max_tokens:cfg.max_tokens})
-    });
-    var j=await r.json();
-    if(j.error)throw new Error(j.error.message||'API Error');
-    var reply=j.choices[0].message.content;
-    var parsed=marked.parse(reply);
-    aiDiv.querySelector('.bubble').innerHTML=parsed;
-    aiDiv.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});
-    aiDiv.querySelectorAll('pre').forEach(function(pre){
-      var wrap=document.createElement('div');wrap.className='code-block-wrap';
-      pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
-      var btns=document.createElement('div');btns.className='code-btns';
-      btns.innerHTML='<button onclick="copyCodeBlock(this)">📋 Copy</button><button onclick="runCodeBlock(this)">▶ Execute</button><button onclick="openInBrowser(this)">🌐 Open in Browser</button>';
-      wrap.appendChild(btns);
-    });
-    chatData.push({role:'ai',content:reply,time:Date.now()});
-    saveData();
-    updateTokens((msg?msg.length:0)+reply.length);
-    parseActions(reply);
-    autoExecFromReply(reply);
-  }catch(e){
-    aiDiv.querySelector('.bubble').innerHTML='<div style="color:var(--red)">⚠️ Error: '+esc(e.message)+'</div>';
-    chatData.push({role:'ai',content:'Error: '+e.message,time:Date.now()});
-    saveData();
+    
+    // Who are you
+    if(/你是谁|who are you|what are you/.test(m)){
+      return 'I am **ENRIQUE AI** ⚡ — your personal AI brain. I run 100% in your browser, remember our conversations, create websites, control your device, and chat in any language.';
+    }
+    
+    // What can you do
+    if(/what can you do|help|功能|你能做什么|capabilities/.test(m)){
+      return '**Here\\'s what I can do:**\\n\\n🌐 **Create** websites, apps, games, dashboards\\n🔍 **Search** the web (opens Google)\\n🐍 **Code** in JS, Python, HTML\\n💬 **Chat** in any language\\n🧠 **Remember** our conversations\\n📱 **Control** your phone (camera, GPS, etc)\\n😂 **Tell** jokes\\n🧮 **Calculate** math\\n\\nJust ask naturally!';
+    }
+    
+    // Name
+    if(/my name is |i am |im |call me /.test(m)){
+      var match = m.match(/(?:my name is |i am |im |call me )(\w+)/i);
+      if(match){this.remember('name',match[1]);return 'Nice to meet you, **'+match[1]+'**! Ill remember that. 😊'}
+    }
+    
+    // Remember
+    if(/remember /.test(m)){
+      var match = m.match(/remember (that )?(.+)/i);
+      if(match){this.remember('fact_'+Date.now(),match[2]);return 'Okay, I\\'ll remember: **'+match[2]+'** ✅'}
+    }
+    
+    // What do you know
+    if(/what do you know|what do you remember|你知道什么/.test(m)){
+      var facts = Object.keys(this.facts).filter(function(k){return k!=='name'}).map(function(k){return BRAIN.facts[k].v});
+      var name = this.recall('name');
+      var r = 'Here\\'s what I remember:\\n';
+      if(name) r += '\\n- **Your name:** '+name;
+      for(var i=0;i<facts.length;i++) r += '\\n- '+facts[i];
+      r += '\\n\\nWe\\'ve had **'+this.convos.length+'** conversations.';
+      return r;
+    }
+    
+    // Time
+    if(/time|几点|现在/.test(m)){
+      var d = new Date();
+      return '🕐 **'+d.toLocaleString()+'**';
+    }
+    
+    // Joke
+    if(/joke|funny|laugh|笑话/.test(m)){
+      var jokes = [
+        'Why do programmers prefer dark mode? Light attracts bugs! 🐛',
+        'A SQL query walks into a bar, sees two tables and asks: Can I JOIN you?',
+        'Why was the JS developer sad? He didn\\'t Node how to Express himself!',
+        'There are 10 types of people: those who understand binary and those who don\\'t.',
+        'Why was the computer cold? It left its Windows open!'
+      ];
+      return jokes[Math.floor(Math.random()*jokes.length)];
+    }
+    
+    // Math
+    if(/^\d+\s*[\+\-\*\/]\s*\d+/.test(m) || /calculate|计算/.test(m)){
+      var expr = m.replace(/[^0-9+\-*/().%\s]/g,'').trim();
+      try{
+        var r = Function('"use strict"; return ('+expr+')')();
+        if(!isNaN(r)&&isFinite(r)) return '**'+expr+' = '+r+'** 🧮';
+      }catch(e){}
+    }
+    
+    // Create website/app
+    if(/create|make|build|generate|write|创建|建立|做/.test(m)){
+      if(/website|site|landing|web|网页|网站/.test(m)) return '```html\\n'+CODE.website+'\\n```\\n✅ **Website created!** Click the Code tab to preview.';
+      if(/calculator|calc|计算器/.test(m)) return '```html\\n'+CODE.calculator+'\\n```\\n✅ **Calculator created!**';
+      if(/login|sign.?in|register|登录|注册/.test(m)) return '```html\\n'+CODE.login+'\\n```\\n✅ **Login page created!**';
+      if(/todo|task|待办|任务/.test(m)) return '```html\\n'+CODE.todo+'\\n```\\n✅ **Todo app created!**';
+      if(/shop|store|ecommerce|商店|购物/.test(m)) return '```html\\n'+CODE.shop+'\\n```\\n✅ **Shop created!**';
+      if(/dashboard|admin|仪表盘/.test(m)) return '```html\\n'+CODE.dashboard+'\\n```\\n✅ **Dashboard created!**';
+      if(/music|player|音乐/.test(m)) return '```html\\n'+CODE.music+'\\n```\\n✅ **Music player created!**';
+      if(/game|游戏/.test(m)) return '```html\\n'+CODE.game+'\\n```\\n✅ **Game created!**';
+      if(/form|contact|表单/.test(m)) return '```html\\n'+CODE.form+'\\n```\\n✅ **Form created!**';
+      if(/chat|messenger|聊天/.test(m)) return '```html\\n'+CODE.chat+'\\n```\\n✅ **Chat app created!**';
+      if(/weather|天气/.test(m)) return '```html\\n'+CODE.weather+'\\n```\\n✅ **Weather app created!**';
+      if(/timer|计时/.test(m)) return '```html\\n'+CODE.timer+'\\n```\\n✅ **Timer created!**';
+      return 'Try saying: "create a website", "make a calculator", "build a shop", or "make a dashboard"';
+    }
+    
+    // Search
+    if(/search|google|find|搜索|查找/.test(m)){
+      var match = m.match(/(?:search|google|find|搜索|查找)\s+(.+)/i);
+      if(!match) match = m.match(/(?:search|google|find|搜索|查找)\s+(?:for\s+)?(.+)/i);
+      if(match){
+        window.open('https://www.google.com/search?q='+encodeURIComponent(match[1]),'_blank');
+        return '🔍 Searching for **'+match[1]+'**...';
+      }
+      return 'What should I search for? Try "search AI news"';
+    }
+    
+    // Open app
+    if(/open /.test(m)){
+      var apps = ['tiktok','youtube','instagram','twitter','chrome'];
+      for(var i=0;i<apps.length;i++){
+        if(m.indexOf(apps[i])>=0){
+          window.open('https://'+apps[i]+'.com','_blank');
+          return 'Opening **'+apps[i]+'**...';
+        }
+      }
+      var url = m.match(/open (.+)/i);
+      if(url) window.open('https://'+url[1],'_blank');
+      return 'Opening...';
+    }
+    
+    // Camera
+    if(/camera|photo|拍照|相机/.test(m)){
+      if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+        navigator.mediaDevices.getUserMedia({video:true}).then(function(s){s.getTracks().forEach(function(t){t.stop()});toast('📸 Camera opened','ok')}).catch(function(){});
+      }
+      return '📸 Opening camera...';
+    }
+    
+    // Location
+    if(/where am i|location|gps|定位|位置/.test(m)){
+      navigator.geolocation.getCurrentPosition(function(p){
+        toast('📍 '+p.coords.latitude.toFixed(4)+', '+p.coords.longitude.toFixed(4),'ok');
+      },function(){},{timeout:5000});
+      return '📍 Getting your location...';
+    }
+    
+    // Battery
+    if(/battery|电量/.test(m)){
+      if(navigator.getBattery) navigator.getBattery().then(function(b){toast('🔋 '+Math.round(b.level*100)+'%','ok')});
+      return '🔋 Checking battery...';
+    }
+    
+    // Thanks
+    if(/thank|thanks|谢谢/.test(m)) return 'You\\'re welcome! 😊 Always happy to help.';
+    
+    // Compliment
+    if(/love|great|awesome|cool|amazing|棒|厉害/.test(m)){
+      var name = this.recall('name');
+      return 'Thanks'+(name?', '+name:'')+'! 😊 You\\'re awesome too!';
+    }
+    
+    // Farewell
+    if(/bye|goodbye|see you|再见|拜拜/.test(m)) return 'Goodbye! 👋 I\\'ll remember our chat. Come back anytime!';
+    
+    // Default response
+    var name = this.recall('name');
+    var defs = [
+      'I hear you! Try asking me to "create a website", "search for something", or "tell me a joke"!',
+      'Got it! I can create websites, search the web, code, and chat. What would you like to do?',
+      'Interesting! Want me to build something? Just say "create a..." or "make a..."!'
+    ];
+    if(name) return 'Hey '+name+'! '+defs[Math.floor(Math.random()*defs.length)];
+    return defs[Math.floor(Math.random()*defs.length)];
   }
-  busy=false;
-  document.getElementById('sendBtn').disabled=false;
-  inp.focus();
-  scroll.scrollTop=scroll.scrollHeight;
-  saveConv();
+};
+
+/* ===== CODE TEMPLATES ===== */
+var CODE = {
+  website: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Site</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}h1{font-size:clamp(2em,5vw,3.5em);font-weight:900;background:linear-gradient(135deg,#10a37f,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}p{color:#7d7d90;max-width:500px;font-size:1.1em;line-height:1.6;margin-bottom:30px}.btn{padding:14px 28px;border-radius:10px;background:#10a37f;color:#fff;text-decoration:none;font-weight:600;display:inline-block;transition:all .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,163,127,.3)}</style></head><body><h1>ENRIQUE AI</h1><p>Created with ENRIQUE AI — 100% free, local, private.</p><a class="btn" href="#">Get Started</a></body></html>',
+  calculator: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Calc</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.calc{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:20px;width:300px}.disp{background:#0a0a0f;border:1px solid #2a2a3a;border-radius:10px;padding:16px;text-align:right;font-size:28px;font-family:monospace;min-height:56px;display:flex;align-items:center;justify-content:flex-end;color:#e4e4ec;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}button{padding:16px;border:none;border-radius:8px;font-size:18px;font-weight:600;cursor:pointer;background:#20202e;color:#e4e4ec;transition:all .1s}button:active{transform:scale(.93)}.op{background:#10a37f;color:#fff}.eq{background:#10b981;color:#fff;grid-column:span 2}.clr{background:#f85149;color:#fff}</style></head><body><div class="calc"><div class="disp" id="d">0</div><div class="grid"><button class="clr" onclick="c()">C</button><button onclick="c(\'(\')">(</button><button onclick="c(\')\')">)</button><button class="op" onclick="c(\'/\')">÷</button><button onclick="c(\'7\')">7</button><button onclick="c(\'8\')">8</button><button onclick="c(\'9\')">9</button><button class="op" onclick="c(\'*\')">×</button><button onclick="c(\'4\')">4</button><button onclick="c(\'5\')">5</button><button onclick="c(\'6\')">6</button><button class="op" onclick="c(\'-\')">−</button><button onclick="c(\'1\')">1</button><button onclick="c(\'2\')">2</button><button onclick="c(\'3\')">3</button><button class="op" onclick="c(\'+\')">+</button><button onclick="c(\'0\')">0</button><button onclick="c(\'.\')">.</button><button class="eq" onclick="c(\'=\')">=</button></div></div><script>var e="",d=document.getElementById("d");function c(v){if(v==="C"||!v){e="";d.textContent="0"}else if(v==="="){try{e=String(eval(e));d.textContent=e}catch(er){d.textContent="Error"}}else{e+=v;d.textContent=e}}<\/script></body></html>',
+  login: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.card{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:32px;width:100%;max-width:360px}h2{font-size:22px;font-weight:800;margin-bottom:4px;text-align:center}.sub{color:#7d7d90;font-size:13px;text-align:center;margin-bottom:24px}.field{margin-bottom:14px}label{display:block;font-size:12px;font-weight:600;color:#7d7d90;margin-bottom:4px}input{width:100%;padding:11px 14px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:14px;outline:none}input:focus{border-color:#10a37f}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:#10a37f;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}.btn:hover{background:#0d8a6a}.foot{text-align:center;margin-top:14px;font-size:13px;color:#7d7d90}.foot a{color:#10a37f;text-decoration:none}</style></head><body><div class="card"><h2>Welcome</h2><p class="sub">Sign in to continue</p><div class="field"><label>Email</label><input placeholder="you@email.com"></div><div class="field"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn">Sign In</button><p class="foot">No account? <a href="#">Sign up</a></p></div></body></html>',
+  todo: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.todo{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:24px;width:100%;max-width:360px}h2{margin-bottom:16px}.row{display:flex;gap:8px;margin-bottom:16px}.row input{flex:1;padding:10px;background:#0a0a0f;border:1.5px solid #2a2a3a;border-radius:8px;color:#e4e4ec;font-size:14px;outline:none}.row input:focus{border-color:#10a37f}.row button{padding:10px 16px;background:#10a37f;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer}.item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #2a2a3a;border-radius:8px;margin-bottom:6px;cursor:pointer}.item.done{text-decoration:line-through;color:#4a4a5e}.chk{width:20px;height:20px;border:2px solid #4a4a5e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}.item.done .chk{background:#10a37f;border-color:#10a37f;color:#fff}.del{color:#f85149;cursor:pointer;font-size:14px;margin-left:auto}</style></head><body><div class="todo"><h2>Todo</h2><div class="row"><input id="inp" placeholder="Add task..." onkeydown="if(event.key===\'Enter\')add()"><button onclick="add()">Add</button></div><ul id="list"></ul></div><script>var items=[];function add(){var v=document.getElementById("inp").value.trim();if(!v)return;items.push({t:v,d:0});document.getElementById("inp").value="";render()}function tog(i){items[i].d=+!items[i].d;render()}function del(i){items.splice(i,1);render()}function render(){var l=document.getElementById("list"),h="";items.forEach(function(it,i){h+=\'<li class="item\'+(it.d?\' done\':\'\')+\'" onclick="tog(\'+i+\')"><div class="chk">\'+(it.d?\'✓\':\'\')+\'</div><span>\'+it.t+\'</span><span class="del" onclick="event.stopPropagation();del(\'+i+\')">✕</span></li>\'});l.innerHTML=h}<\/script></body></html>',
+  shop: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec}nav{padding:14px 20px;border-bottom:1px solid #2a2a3a;display:flex;align-items:center;justify-content:space-between}.brand{font-size:18px;font-weight:800;color:#10a37f}.hero{padding:50px 20px;text-align:center}.hero h1{font-size:32px;font-weight:900;margin-bottom:10px}.hero p{color:#7d7d90;font-size:15px;margin-bottom:24px}.btn{display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.products{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:800px;margin:0 auto}.product{background:#181825;border:1px solid #2a2a3a;border-radius:12px;padding:20px;text-align:center}.product h3{font-size:16px;margin-bottom:4px}.product .price{font-size:20px;font-weight:700;color:#10a37f;margin-bottom:8px}.product p{font-size:12px;color:#7d7d90}</style></head><body><nav><div class="brand">Shop</div><span style="color:#7d7d90;cursor:pointer">Cart (0)</span></nav><div class="hero"><h1>AI Store</h1><p>Discover AI-powered products</p><a class="btn">Browse</a></div><div class="products"><div class="product"><h3>AI Widget</h3><div class="price">$29</div><p>Smart device</p></div><div class="product"><h3>Neural Chip</h3><div class="price">$199</div><p>AI processor</p></div><div class="product"><h3>Cloud Kit</h3><div class="price">$89</div><p>Dev kit</p></div></div></body></html>',
+  dashboard: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;padding:20px}.dash h1{font-size:26px;font-weight:900;margin-bottom:4px}.dash p{color:#7d7d90;font-size:13px;margin-bottom:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}.card{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.card .num{font-size:28px;font-weight:900;color:#10a37f}.card .lbl{font-size:12px;color:#7d7d90;margin-top:2px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.panel{padding:18px;background:#181825;border:1px solid #2a2a3a;border-radius:12px}.panel h3{font-size:14px;font-weight:700;margin-bottom:12px}table{width:100%;font-size:12px}table th,table td{padding:8px 0;text-align:left;border-bottom:1px solid #20202e}table th{color:#7d7d90;font-weight:600;font-size:10px;text-transform:uppercase}.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}.badge.g{background:rgba(16,185,129,.15);color:#10b981}.badge.r{background:rgba(248,81,73,.15);color:#f85149}@media(max-width:480px){.grid2{grid-template-columns:1fr}}</style></head><body><div class="dash"><h1>Dashboard</h1><p>Real-time analytics</p><div class="cards"><div class="card"><div class="num">24K</div><div class="lbl">Users</div></div><div class="card"><div class="num">$48K</div><div class="lbl">Revenue</div></div><div class="card"><div class="num">94%</div><div class="lbl">Uptime</div></div><div class="card"><div class="num">1.8K</div><div class="lbl">Active</div></div></div><div class="grid2"><div class="panel"><h3>Activity</h3><table><tr><th>User</th><th>Status</th></tr><tr><td>@enrique</td><td><span class="badge g">Done</span></td></tr><tr><td>@dev</td><td><span class="badge r">Error</span></td></tr><tr><td>@coder</td><td><span class="badge g">Done</span></td></tr></table></div></div></div></body></html>',
+  music: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;align-items:center;justify-content:center}.player{text-align:center;width:320px}.art{width:160px;height:160px;border-radius:20px;background:linear-gradient(135deg,#10a37f,#34d399);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:0 12px 36px rgba(16,163,127,.25)}h3{font-size:20px;font-weight:800;margin-bottom:2px}p{color:#7d7d90;font-size:13px;margin-bottom:20px}.bar{width:100%;height:4px;background:#20202e;border-radius:4px;margin-bottom:6px;overflow:hidden}.bar-in{width:40%;height:100%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:4px}.time{display:flex;justify-content:space-between;font-size:11px;color:#4a4a5e;margin-bottom:20px}.ctrls{display:flex;align-items:center;justify-content:center;gap:20px}.cbtn{width:48px;height:48px;border:2px solid #2a2a3a;border-radius:50%;background:#181825;color:#e4e4ec;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}.cbtn.p{width:56px;height:56px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;font-size:24px;box-shadow:0 6px 20px rgba(16,163,127,.25)}</style></head><body><div class="player"><div class="art">🎵</div><h3>Neural Dreams</h3><p>ENRIQUE AI</p><div class="bar"><div class="bar-in"></div></div><div class="time"><span>1:48</span><span>4:02</span></div><div class="ctrls"><button class="cbtn">⏮</button><button class="cbtn p">▶</button><button class="cbtn">⏭</button></div></div></body></html>',
+  game: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}h2{font-size:24px;font-weight:900}.score{font-size:18px;color:#7d7d90}.btn{padding:14px 28px;border:none;border-radius:10px;background:#10a37f;color:#fff;font-size:16px;font-weight:700;cursor:pointer}.btn:hover{background:#0d8a6a}#target{width:60px;height:60px;background:#f85149;border-radius:12px;position:fixed;cursor:pointer;display:none;animation:pop .15s ease}@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}</style></head><body><h2>Click Game</h2><div class="score" id="sc">Score: 0</div><button class="btn" onclick="start()">Start</button><div id="target" onclick="hit()"></div><script>var sc=0,t;function start(){sc=0;document.getElementById("sc").textContent="Score: 0";move();t=setInterval(move,700);setTimeout(function(){clearInterval(t);document.getElementById("target").style.display="none";alert("Score: "+sc)}),15000}function move(){var e=document.getElementById("target");e.style.display="block";e.style.left=Math.random()*(innerWidth-80)+"px";e.style.top=Math.random()*(innerHeight-80)+"px"}function hit(){sc++;document.getElementById("sc").textContent="Score: "+sc;move()}<\/script></body></html>',
+  form: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.wrap{background:#181825;border:1px solid #2a2a3a;border-radius:16px;padding:28px;width:100%;max-width:400px}h2{font-size:20px;font-weight:800;margin-bottom:4px}.sub{color:#7d7d90;font-size:13px;margin-bottom:20px}.f{margin-bottom:14px}label{display:block;font-size:12px;font-weight:600;color:#7d7d90;margin-bottom:4px}input,textarea,select{width:100%;padding:10px 12px;border:1.5px solid #2a2a3a;border-radius:8px;background:#0a0a0f;color:#e4e4ec;font-size:13px;outline:none;font-family:inherit}input:focus,textarea:focus{border-color:#10a37f}textarea{min-height:80px;resize:vertical}.btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,#10a37f,#34d399);color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}</style></head><body><div class="wrap"><h2>Contact</h2><p class="sub">Send us a message</p><div class="f"><label>Name</label><input placeholder="Your name"></div><div class="f"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="f"><label>Message</label><textarea placeholder="Tell us..."></textarea></div><button class="btn">Send</button></div></body></html>',
+  chat: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;height:100vh;display:flex;flex-direction:column}.ch{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #2a2a3a}.ch .a{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}.ch h3{font-size:15px;font-weight:700}.ch .s{width:6px;height:6px;border-radius:50%;background:#10b981}.ms{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}.m{max-width:75%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5}.mine{background:#10a37f;color:#fff;align-self:flex-end;border-radius:14px 14px 4px}.their{background:#181825;color:#e4e4ec;align-self:flex-start;border-radius:14px 14px 14px 4px}.inp{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #2a2a3a}.inp input{flex:1;padding:10px 14px;border:1.5px solid #2a2a3a;border-radius:20px;background:#111118;color:#e4e4ec;font-size:14px;outline:none}.inp input:focus{border-color:#10a37f}.inp button{padding:10px 18px;border:none;border-radius:20px;background:#10a37f;color:#fff;font-weight:600;cursor:pointer}</style></head><body><div class="ch"><div class="a">E</div><h3>ENRIQUE AI</h3><div class="s"></div></div><div class="ms" id="msgs"><div class="m their">Hello! 👋</div></div><div class="inp"><input id="iinp" placeholder="Type..." onkeydown="if(event.key===\'Enter\')snd()"><button onclick="snd()">Send</button></div><script>function snd(){var i=document.getElementById("iinp");var v=i.value.trim();if(!v)return;var m=document.getElementById("msgs");var d=document.createElement("div");d.className="m mine";d.textContent=v;m.appendChild(d);i.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=["Interesting!","Tell me more!","Cool!","I see!","Nice!"][Math.floor(Math.random()*5)];var e=document.createElement("div");e.className="m their";e.textContent=r;m.appendChild(e);m.scrollTop=m.scrollHeight},800)}<\/script></body></html>',
+  weather: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weather</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e4e4ec;min-height:100vh;display:flex;align-items:center;justify-content:center}.w{padding:28px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:300px;text-align:center}.w .icon{font-size:48px;margin-bottom:8px}.w .temp{font-size:42px;font-weight:900;color:#10a37f}.w .desc{color:#7d7d90;font-size:14px;margin-top:4px}.w .detail{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #2a2a3a;font-size:13px;color:#7d7d90}.w .detail span{display:flex;flex-direction:column;align-items:center;gap:2px}.w .detail .v{color:#e4e4ec;font-weight:600}</style></head><body><div class="w"><div class="icon">☀️</div><div class="temp">26°C</div><div class="desc">Sunny · Feels like 28°C</div><div class="detail"><span>💧 <span class="v">45%</span>Humidity</span><span>💨 <span class="v">12km/h</span>Wind</span><span>🌡️ <span class="v">1012hPa</span>Pressure</span></div></div></body></html>',
+  timer: '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Timer</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center}.t{text-align:center;padding:32px;background:#181825;border:1px solid #2a2a3a;border-radius:16px;width:280px}.time{font-size:56px;font-weight:800;font-family:monospace;color:#e4e4ec;margin:16px 0}.ctrls{display:flex;gap:10px;justify-content:center}button{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}.s{background:#10a37f;color:#fff}.r{background:#f85149;color:#fff}.l{background:#20202e;color:#e4e4ec}</style></head><body><div class="t"><h2>⏱️ Timer</h2><div class="time" id="t">00:00</div><div class="ctrls"><button class="s" id="b" onclick="to()">Start</button><button class="r" onclick="re()">Reset</button></div></div><script>var s=0,run=0;function f(n){return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}function to(){if(run){clearInterval(run);document.getElementById("b").textContent="Resume"}else{run=setInterval(function(){s++;document.getElementById("t").textContent=f(s)},1000);document.getElementById("b").textContent="Pause"}run=!run}function re(){clearInterval(run);s=0;run=0;document.getElementById("t").textContent=f(0);document.getElementById("b").textContent="Start"}<\/script></body></html>'
+};
+
+/* ===== CHAT LOGIC ===== */
+function send(){
+  var inp = $('inp');
+  var msg = inp.value.trim();
+  if(!msg || BUSY) return;
+  BUSY = true;
+  $('sendBtn').disabled = true;
+  
+  // Remove welcome
+  var w = $('welcome');
+  if(w) w.remove();
+  
+  var msgs = $('msgs');
+  var inner = msgs.querySelector('.msgs-inner');
+  
+  // User message
+  var uDiv = document.createElement('div');
+  uDiv.className = 'msg u';
+  uDiv.innerHTML = '<div class="msg-av">U</div><div class="msg-b">'+esc(msg)+'</div>';
+  inner.appendChild(uDiv);
+  DATA.push({r:'u',c:msg,t:Date.now()});
+  save();
+  
+  // AI typing
+  var aDiv = document.createElement('div');
+  aDiv.className = 'msg a';
+  aDiv.innerHTML = '<div class="msg-av">E</div><div class="msg-b"><div class="typing"><span></span><span></span><span></span></div></div>';
+  inner.appendChild(aDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  inp.value = '';
+  
+  // Process with brain
+  setTimeout(function(){
+    try {
+      var reply = BRAIN.process(msg);
+      BRAIN.addConvo(msg, reply);
+      
+      // Parse markdown-like formatting
+      var html = reply
+        .replace(/### (.+)/g, '<h3>$1</h3>')
+        .replace(/## (.+)/g, '<h2>$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>')
+        .replace(/- (.+)/g, function(m, p1){return '• '+p1+'<br>'});
+      
+      aDiv.querySelector('.msg-b').innerHTML = html;
+      
+      // Add copy buttons for code blocks
+      aDiv.querySelectorAll('pre').forEach(function(pre){
+        var btn = document.createElement('button');
+        btn.textContent = '📋 Copy';
+        btn.style.cssText = 'font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);cursor:pointer;margin-top:6px';
+        btn.onclick = function(){
+          navigator.clipboard.writeText(pre.textContent);
+          btn.textContent = '✅ Copied!';
+          setTimeout(function(){btn.textContent = '📋 Copy'}, 1500);
+        };
+        pre.after(btn);
+      });
+      
+      DATA.push({r:'a',c:reply,t:Date.now()});
+      TOKENS += msg.length + reply.length;
+      save();
+      
+      msgs.scrollTop = msgs.scrollHeight;
+    } catch(e) {
+      aDiv.querySelector('.msg-b').innerHTML = '<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';
+    }
+    BUSY = false;
+    $('sendBtn').disabled = false;
+    inp.focus();
+  }, 300);
 }
 
-function renderMessages(){
-  var scroll=document.getElementById('chatScroll');
-  scroll.innerHTML='';
-  if(!chatData.length){
-    scroll.innerHTML='<div class="welcome" id="welcomeState"><div class="welcome-icon">⚡</div><h2>ENRIQUE CODEX</h2><p>Your AI brain with full device control, internet access, code execution, and browser control.<br><br><span style="font-size:13px;color:var(--muted2)">Try: "shop" · "dashboard" · "music player" · "e-commerce" · "admin panel"</span></p><div class="sugs"><div class="sug" onclick="ask(\'Create a full modern website with HTML CSS and JavaScript\')"><div class="sug-icon">🌐</div><strong>Build a Website</strong><span>Full responsive site</span></div><div class="sug" onclick="ask(\'Search the web for latest AI news and summarize it\')"><div class="sug-icon">🔍</div><strong>Search & Summarize</strong><span>Real-time web info</span></div><div class="sug" onclick="ask(\'Write a Python automation script\')"><div class="sug-icon">🐍</div><strong>Write a Script</strong><span>Automation tool</span></div><div class="sug" onclick="ask(\'Build a calculator app with dark mode\')"><div class="sug-icon">🧮</div><strong>Build an App</strong><span>Calculator with UI</span></div></div></div>';
+function ask(q){
+  $('inp').value = q;
+  send();
+}
+
+function clrChat(){
+  if(!DATA.length) return;
+  DATA = [];
+  TOKENS = 0;
+  save();
+  render();
+  toast('Chat cleared','ok');
+}
+
+function render(){
+  var inner = document.querySelector('.msgs-inner');
+  inner.innerHTML = '';
+  
+  if(!DATA.length){
+    inner.innerHTML = '<div class="welcome" id="welcome"><div class="wlc-icon">⚡</div><div class="wlc-title">ENRIQUE AI</div><div class="wlc-sub">Your AI brain. Chat, code, create. 100% local.</div><div class="wlc-chips"><div class="wlc-chip" onclick="ask(\'Create a modern responsive website\')">🌐 Website</div><div class="wlc-chip" onclick="ask(\'Search latest AI news\')">🔍 Search</div><div class="wlc-chip" onclick="ask(\'Write a Python script\')">🐍 Python</div><div class="wlc-chip" onclick="ask(\'Build a calculator app\')">🧮 Calc</div><div class="wlc-chip" onclick="ask(\'Create a shop page\')">🛍️ Shop</div><div class="wlc-chip" onclick="ask(\'Build a dashboard\')">📊 Dashboard</div><div class="wlc-chip" onclick="ask(\'Tell me a joke\')">😂 Joke</div><div class="wlc-chip" onclick="ask(\'What can you do\')">💡 Help</div></div></div>';
     return;
   }
-  chatData.forEach(function(m){
-    var div=document.createElement('div');
-    div.className='msg '+(m.role==='user'?'user':'ai');
-    var av=m.role==='user'?'U':'E';
-    var label=m.role==='user'?'You':'ENRIQUE CODEX';
-    var bubbleContent='';
-    if(typeof m.content==='string'){bubbleContent=m.role==='ai'?marked.parse(m.content):esc(m.content)}
-    else if(Array.isArray(m.content)){m.content.forEach(function(part){
-      if(part.type==='text')bubbleContent+=m.role==='ai'?marked.parse(part.text):esc(part.text);
-      if(part.type==='image_url')bubbleContent+='<br><img src="'+part.image_url.url+'" class="img-preview">';
-    })}
-    div.innerHTML='<div class="av">'+av+'</div><div class="content"><div class="label">'+label+'</div><div class="bubble">'+bubbleContent+'</div></div>';
-    scroll.appendChild(div);
-    if(m.role==='ai')div.querySelectorAll('pre code').forEach(function(b){hljs.highlightElement(b)});
+  
+  DATA.forEach(function(m){
+    var div = document.createElement('div');
+    div.className = 'msg ' + (m.r === 'u' ? 'u' : 'a');
+    var av = m.r === 'u' ? 'U' : 'E';
+    var txt = esc(typeof m.c === 'string' ? m.c : '');
+    if(m.r === 'a'){
+      txt = txt
+        .replace(/### (.+)/g, '<h3>$1</h3>')
+        .replace(/## (.+)/g, '<h2>$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>')
+        .replace(/- (.+)/g, function(m,p1){return '• '+p1+'<br>'});
+    }
+    div.innerHTML = '<div class="msg-av">'+av+'</div><div class="msg-b">'+txt+'</div>';
+    inner.appendChild(div);
   });
-  scroll.scrollTop=scroll.scrollHeight;
+  
+  msgs = $('msgs');
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
-/* Code */
-function runCode(){var c=document.getElementById('codeEditor').value;if(!c)return;var lang=document.getElementById('codeLang').value;smartExecute(c,lang)}
-function copyCode(){navigator.clipboard.writeText(document.getElementById('codeEditor').value);toast('Code copied!','success')}
-function clearEditor(){document.getElementById('codeEditor').value=''}
-async function aiWriteCode(){
-  var lang=document.getElementById('codeLang').value;
-  var desc=prompt('Describe what code to write ('+lang+'):');
-  if(!desc)return;
-  document.getElementById('codeEditor').value='// Generating '+lang+' code...';
-  go('code');
-  try{
-    var r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+atob(API_KEY),'HTTP-Referer':location.href},
-      body:JSON.stringify({model:MODEL,messages:[{role:'system',content:'Generate only code, no explanation. Use '+lang+'.'},{role:'user',content:desc}],temperature:0.7,max_tokens:POWER_CONFIG[POWER_LEVEL].max_tokens})
+/* History */
+function showHist(){
+  var list = $('histList');
+  var html = '';
+  var pairs = [];
+  for(var i=0;i<DATA.length;i+=2){
+    if(DATA[i]) pairs.push({q:DATA[i],a:DATA[i+1]||null});
+  }
+  if(!pairs.length){
+    html = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">No history yet</div>';
+  } else {
+    pairs.reverse().forEach(function(p){
+      html += '<div class="hist-item"><h4>'+esc(typeof p.q.c==='string'?p.q.c.slice(0,50):'')+'</h4><p>'+(p.a?esc(typeof p.a.c==='string'?p.a.c.slice(0,80):''):'')+'</p><div class="t">'+(p.q.t?new Date(p.q.t).toLocaleString():'')+'</div></div>';
     });
-    var j=await r.json();
-    if(j.error)throw new Error(j.error.message);
-    document.getElementById('codeEditor').value=j.choices[0].message.content.replace(/```[\w]*\n?/g,'').replace(/```/g,'');
-    toast('AI code generated!','success');
-  }catch(e){document.getElementById('codeEditor').value='// Error: '+e.message;toast('Error: '+e.message,'error')}
-}
-function copyCodeBlock(btn){
-  var code=btn.closest('.code-block-wrap').querySelector('code');
-  navigator.clipboard.writeText(code.textContent);
-  btn.textContent='✓ Copied';btn.classList.add('copied');
-  setTimeout(function(){btn.textContent='📋 Copy';btn.classList.remove('copied')},2000);
-}
-function runCodeBlock(btn){execCodeBlock(btn)}
-function openInBrowser(btn){
-  var code=btn.closest('.code-block-wrap').querySelector('code').textContent;
-  go('browser');
-  var f=document.getElementById('previewFrame');
-  var d=f.contentDocument||f.contentWindow.document;
-  d.open();d.write(code);d.close();
-  go('preview');
-}
-
-/* Browser */
-function browserGo(){var url=document.getElementById('browserUrl').value.trim();if(!url)return;if(!url.startsWith('http'))url='https://'+url;document.getElementById('browserFrame').src=url;document.getElementById('browserUrl').value=url}
-function browserLoad(url){document.getElementById('browserFrame').src=url;document.getElementById('browserUrl').value=url;go('browser')}
-function browserBack(){try{document.getElementById('browserFrame').contentWindow.history.back()}catch(e){}}
-function browserForward(){try{document.getElementById('browserFrame').contentWindow.history.forward()}catch(e){}}
-function browserRefresh(){try{document.getElementById('browserFrame').contentWindow.location.reload()}catch(e){}}
-function browserHome(){document.getElementById('browserFrame').src='about:blank';document.getElementById('browserUrl').value=''}
-
-/* Search */
-async function doSearch(){
-  var q=document.getElementById('searchIn').value.trim();if(!q)return;
-  var el=document.getElementById('searchResults');
-  el.innerHTML='<div class="empty-state"><div class="empty-icon">⏳</div><h3>Searching...</h3></div>';
-  try{
-    var r=await fetch('https://api.search.brave.com/res/v1/web/search?q='+encodeURIComponent(q)+'&count=10',{headers:{'Accept':'application/json'}});
-    var data=await r.json();
-    var results=data.web&&data.web.results?data.web.results:[];
-    if(!results.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>No results</h3></div>';return}
-    el.innerHTML='';
-    results.forEach(function(r){
-      var d=document.createElement('div');d.className='search-item';
-      d.innerHTML='<h4>'+esc(r.title)+'</h4><p>'+esc(r.description||'')+'</p><a href="'+r.url+'" target="_blank">'+r.url+'</a>';
-      el.appendChild(d);
-    });
-  }catch(e){el.innerHTML='<div class="empty-state"><div class="empty-icon">❌</div><h3>Error</h3><p>'+esc(e.message)+'</p></div>'}
-}
-
-/* Plugins */
-var plugins=JSON.parse(localStorage.getItem('ec6_plugins')||'{"websearch":true,"weather":true,"currency":true,"translator":true,"imggen":true,"vidscript":true,"aidata":true,"calc":true,"coderunner":true}');
-function togglePlugin(id){plugins[id]=!plugins[id];localStorage.setItem('ec6_plugins',JSON.stringify(plugins));var el=document.getElementById('sw-'+id);if(el)el.classList.toggle('on',!!plugins[id])}
-Object.keys(plugins).forEach(function(id){var el=document.getElementById('sw-'+id);if(el&&plugins[id])el.classList.add('on')});
-
-/* Permissions */
-async function reqPerm(type){
-  try{
-    if(type==='camera'){var s=await navigator.mediaDevices.getUserMedia({video:true});s.getTracks().forEach(function(t){t.stop()})}
-    else if(type==='location'){await new Promise(function(r,j){navigator.geolocation.getCurrentPosition(r,j,{timeout:5000})})}
-    else if(type==='notifications'){await Notification.requestPermission()}
-    else if(type==='microphone'){var s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(function(t){t.stop()})}
-    else if(type==='clipboard'){await navigator.clipboard.readText()}
-    else if(type==='vibrate'){navigator.vibrate(200)}
-    else if(type==='share'&&navigator.share){await navigator.share({title:'ENRIQUE CODEX',url:location.href})}
-    else if(type==='speech'){
-      var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-      if(SR){var rec=new SR();rec.start();setTimeout(function(){rec.stop()},3000)}else throw new Error('Not supported');
-    }
-    else if(type==='tts'){
-      if(window.speechSynthesis){var u=new SpeechSynthesisUtterance('ENRIQUE CODEX is ready');speechSynthesis.speak(u)}else throw new Error('Not supported');
-    }
-    else if(type==='wakelock'){
-      if(navigator.wakeLock){var wl=await navigator.wakeLock.lock('screen');toast('Wake lock active','success')}else throw new Error('Not supported');
-    }
-    var el=document.getElementById('st-'+type);
-    if(el){el.textContent='ON';el.className='perm-status on'}
-    toast(type+' enabled','success');
-  }catch(e){toast(type+': '+e.message,'error')}
-}
-
-function getDeviceInfo(){
-  if(navigator.getBattery)navigator.getBattery().then(function(b){
-    document.getElementById('si-bat').textContent=Math.round(b.level*100)+'%';
-    b.addEventListener('levelchange',function(){document.getElementById('si-bat').textContent=Math.round(b.level*100)+'%'});
-  });else document.getElementById('si-bat').textContent='N/A';
-  document.getElementById('si-net').textContent=navigator.onLine?'Online':'Offline';
-  var ua=navigator.userAgent,p='Unknown';
-  if(ua.indexOf('Android')!==-1)p='Android';else if(ua.indexOf('iPhone')!==-1||ua.indexOf('iPad')!==-1)p='iOS';
-  else if(ua.indexOf('Windows')!==-1)p='Windows';else if(ua.indexOf('Mac')!==-1)p='macOS';
-  document.getElementById('si-plat').textContent=p;
-  document.getElementById('si-screen').textContent=screen.width+'×'+screen.height;
-  document.getElementById('si-lang').textContent=navigator.language||'N/A';
-  var conn=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
-  document.getElementById('si-conn').textContent=conn?conn.effectiveType:'N/A';
-}
-
-/* Conversations */
-function saveData(){localStorage.setItem('ec6_chat',JSON.stringify(chatData));localStorage.setItem('ec6_tokens',String(totalTokens));renderHist()}
-function saveConv(){
-  if(!currentConvId){currentConvId='conv_'+Date.now();conversations.push({id:currentConvId,title:chatData[0]?chatData[0].content.slice(0,50):'New Chat',time:Date.now()})}
-  localStorage.setItem('ec6_convs',JSON.stringify(conversations));
-  localStorage.setItem('ec6_current_conv',currentConvId);
-  localStorage.setItem('ec6_chat_'+currentConvId,JSON.stringify(chatData));
-  renderConvList();
-}
-function renderConvList(){
-  var el=document.getElementById('convList');
-  el.innerHTML='<div class="conv-section">Recent</div>';
-  conversations.slice().reverse().forEach(function(c){
-    var d=document.createElement('div');d.className='conv-item'+(c.id===currentConvId?' active':'');
-    d.innerHTML='<span onclick="loadConv(\''+c.id+'\')">'+esc(c.title)+'</span>';
-    el.appendChild(d);
-  });
-}
-function loadConv(id){currentConvId=id;chatData=JSON.parse(localStorage.getItem('ec6_chat_'+id)||'[]');localStorage.setItem('ec6_current_conv',id);renderMessages();renderConvList()}
-function newChat(){currentConvId=null;chatData=[];localStorage.removeItem('ec6_current_conv');renderMessages();renderConvList()}
-function renderHist(){
-  var el=document.getElementById('histWrap');
-  if(!chatData.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><h3>No History</h3></div>';return}
-  el.innerHTML='';
-  var pairs=[];for(var i=0;i<chatData.length;i+=2)if(chatData[i])pairs.push({q:chatData[i],a:chatData[i+1]});
-  pairs.reverse().forEach(function(p){
-    var d=document.createElement('div');d.className='hist-item';
-    var time=p.q.time?new Date(p.q.time).toLocaleString():'';
-    d.innerHTML='<h4>'+esc(typeof p.q.content==='string'?p.q.content.slice(0,60):'[Image]')+'</h4><p>'+esc(p.a?(typeof p.a.content==='string'?p.a.content.slice(0,100):''):'')+'</p><div class="hist-time">'+time+'</div>';
-    el.appendChild(d);
-  });
-}
-function updateTokens(n){totalTokens+=n;localStorage.setItem('ec6_tokens',String(totalTokens));document.getElementById('tokenCount').textContent='Tokens: '+totalTokens.toLocaleString()}
-
-/* Export / Clear / Exit */
-function exportChat(){
-  var text=chatData.map(function(m){return(m.role==='user'?'You':'AI')+': '+(typeof m.content==='string'?m.content:'[Image]')}).join('\n\n');
-  var blob=new Blob([text],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='enrique-codex-chat.txt';a.click();
-  toast('Exported!','success');
-}
-function clearAll(){
-  if(!confirm('Clear all?'))return;
-  chatData=[];conversations=[];currentConvId=null;totalTokens=0;
-  ['ec6_chat','ec6_convs','ec6_current_conv','ec6_tokens'].forEach(function(k){localStorage.removeItem(k)});
-  renderMessages();renderConvList();renderHist();
-  document.getElementById('tokenCount').textContent='Tokens: 0';
-  toast('Cleared','success');
-}
-function exitApp(){
-  if(!confirm('Exit ENRIQUE CODEX?'))return;
-  document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3"><div style="text-align:center"><div style="font-size:56px;margin-bottom:20px">👋</div><h2 style="margin-bottom:10px;font-size:28px">Session Ended</h2><p style="color:#7d8590;margin-bottom:24px;font-size:15px">All data saved locally. Refresh to continue.</p><button onclick="location.reload()" style="padding:12px 28px;background:#10a37f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Start New Session</button></div></div>';
-}
-
-
-
-/* ===== CODE EXECUTION ENGINE ===== */
-var pyodide=null;
-async function loadPyodide_(){
-  if(pyodide)return pyodide;
-  updateExecStatus('Loading Python...','#d29922');
-  try{
-    pyodide=await loadPyodide();
-    updateExecStatus('Python ready','#10b981');
-    return pyodide;
-  }catch(e){
-    updateExecStatus('Python load error','#f85149');
-    return null;
   }
+  list.innerHTML = html;
+  $('histPnl').classList.add('open');
 }
-function updateExecStatus(text,color){
-  var el=document.getElementById('execStatus');
-  if(el){el.textContent=text;el.style.color=color;el.style.background=color+'22'}
-}
-function updateExecLang(lang){
-  var el=document.getElementById('execLang');
-  if(el){el.textContent=lang;el.style.display=lang?'inline':'none'}
-}
-function appendOutput(text,type){
-  var el=document.getElementById('execOutput');
-  if(!el)return;
-  var span=document.createElement('span');
-  if(type==='error')span.style.color='#f85149';
-  else if(type==='info')span.style.color='#58a6ff';
-  else if(type==='success')span.style.color='#10b981';
-  else if(type==='warn')span.style.color='#d29922';
-  span.textContent=text+'\n';
-  el.appendChild(span);
-  el.scrollTop=el.scrollHeight;
-}
-function clearOutput(){
-  var el=document.getElementById('execOutput');
-  if(el)el.innerHTML='<span style="color:#7d8590">Ready. Run code to see output here.</span>';
-}
-function clearOutputIfEmpty(){
-  var el=document.getElementById('execOutput');
-  if(el&&el.textContent.trim()==='Ready. Run code to see output here.')el.innerHTML='';
-}
+function hideHist(){ $('histPnl').classList.remove('open'); }
 
-/* Execute JavaScript */
-function execJS(code){
-  clearOutputIfEmpty();
-  updateExecStatus('Running JS...','#d29922');
-  updateExecLang('JavaScript');
-  go('preview');
-  try{
-    var logs=[];
-    var fakeConsole={log:function(){var args=Array.from(arguments).map(function(a){return typeof a==='object'?JSON.stringify(a,null,2):String(a)}).join(' ');appendOutput(args);logs.push(args)},
-      error:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'error')},
-      warn:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'warn')},
-      info:function(){var args=Array.from(arguments).map(String).join(' ');appendOutput(args,'info')},
-      clear:function(){clearOutput()}
-    };
-    var f=document.getElementById('previewFrame');
-    var d=f.contentDocument||f.contentWindow.document;
-    d.open();
-    d.write('<html><head><style>body{font-family:monospace;padding:16px;background:#0d1117;color:#e6edf3;font-size:14px}pre{white-space:pre-wrap}</style></head><body><pre id=\"out\"></pre><script>var _out=document.getElementById(\"out\");function print(){var a=Array.from(arguments).join(\" \");_out.textContent+=a+\"\\n\"}<\/script></body></html>');
-    d.close();
-    var iframeWin=f.contentWindow;
-    iframeWin.console=fakeConsole;
-    iframeWin.print=function(){var a=Array.from(arguments).join(' ');d.getElementById('out').textContent+=a+'\n';};
-    var result=new Function('console','return (async function(){'+code+'})()')(fakeConsole);
-    if(result&&typeof result.then==='function'){
-      result.then(function(r){
-        if(r!==undefined)fakeConsole.log('=> '+String(r));
-        updateExecStatus('Done ✓','#10b981');
-      }).catch(function(e){fakeConsole.error('Error: '+e.message);updateExecStatus('Error','#f85149')});
-    }else{
-      if(result!==undefined)fakeConsole.log('=> '+String(result));
-      updateExecStatus('Done ✓','#10b981');
-    }
-  }catch(e){
-    appendOutput('Error: '+e.message,'error');
-    updateExecStatus('Error','#f85149');
-  }
-}
+/* Typing animation */
+var style = document.createElement('style');
+style.textContent = '.typing{display:flex;gap:4px;padding:4px 0}.typing span{width:5px;height:5px;border-radius:50%;background:var(--primary);animation:blink .8s infinite}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}';
+document.head.appendChild(style);
 
-/* Execute HTML */
-function execHTML(code){
-  clearOutputIfEmpty();
-  updateExecStatus('Running HTML...','#d29922');
-  updateExecLang('HTML');
-  go('preview');
-  var f=document.getElementById('previewFrame');
-  var d=f.contentDocument||f.contentWindow.document;
-  d.open();d.write(code);d.close();
-  updateExecStatus('Rendered ✓','#10b981');
-}
-
-/* Execute Python via Pyodide */
-async function execPython(code){
-  clearOutputIfEmpty();
-  updateExecStatus('Loading Python...','#d29922');
-  updateExecLang('Python');
-  go('preview');
-  var py=await loadPyodide_();
-  if(!py){appendOutput('Failed to load Python runtime','error');return}
-  updateExecStatus('Running Python...','#d29922');
-  try{
-    py.runPython('import sys\nimport io\nsys.stdout = io.StringIO()');
-    var output=py.runPython(code);
-    var captured=py.runPython('sys.stdout.getvalue()');
-    if(captured)appendOutput(captured.trim());
-    if(output!==undefined&&output!==''&&String(output).trim()!=='None')appendOutput('=> '+String(output).trim(),'info');
-    updateExecStatus('Done ✓','#10b981');
-  }catch(e){
-    var errMsg=e.message||String(e);
-    appendOutput('Python Error: '+errMsg,'error');
-    updateExecStatus('Error','#f85149');
-  }
-}
-
-/* Smart execute - detect language and run */
-function smartExecute(code,lang){
-  lang=(lang||'').toLowerCase();
-  if(lang==='python'||lang==='py')execPython(code);
-  else if(lang==='html'||lang==='htm'||code.trim().startsWith('<!DOCTYPE')||code.trim().startsWith('<html'))execHTML(code);
-  else if(lang==='javascript'||lang==='js'||lang==='')execJS(code);
-  else execJS(code);
-}
-
-/* Execute code blocks from AI responses - AUTO RUN */
-function execCodeBlock(btn){
-  var wrap=btn.closest('.code-block-wrap');
-  var code=wrap.querySelector('code').textContent;
-  var langMatch=wrap.querySelector('code').className.match(/language-(\w+)/);
-  var lang=langMatch?langMatch[1]:'javascript';
-  smartExecute(code,lang);
-  toast('▶ Executing '+lang+'...','info');
-}
-
-/* Execute all code blocks in the last AI message */
-function autoExecFromReply(reply){
-  var codeBlocks=reply.match(/```(\w+)?\n([\s\S]*?)```/g);
-  if(!codeBlocks||!codeBlocks.length)return;
-  var lastBlock=codeBlocks[codeBlocks.length-1];
-  var match=lastBlock.match(/```(\w+)?\n([\s\S]*?)```/);
-  if(!match)return;
-  var lang=match[1]||'javascript';
-  var code=match[2].trim();
-  if(code.length>10&&code.length<5000){
-    setTimeout(function(){smartExecute(code,lang)},500);
-  }
-}
-
-/* Action Parser - executes device commands from AI responses */
-function parseActions(reply){
-  var actions=reply.match(/\[ACTION:([A-Z]+)(?::([^\]]+))?\]/g);
-  if(!actions)return;
-  actions.forEach(function(a){
-    var m=a.match(/\[ACTION:([A-Z]+)(?::([^\]]+))?\]/);
-    if(!m)return;
-    var cmd=m[1], param=m[2]||'';
-    try{
-      if(cmd==='OPEN'){
-        if(param.startsWith('http'))window.open(param,'_blank');
-        else window.open('https://'+param,'_blank');
-        toast('🌐 Opening: '+param,'success');
-      }
-      else if(cmd==='CAMERA'){
-        if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-          navigator.mediaDevices.getUserMedia({video:true}).then(function(s){
-            s.getTracks()[0].stop();
-            toast('📸 Camera accessed!','success');
-          }).catch(function(){toast('Camera denied','error')});
-        }
-      }
-      else if(cmd==='VIBRATE'){navigator.vibrate([200,100,200]);toast('📳 Vibrated!','success')}
-      else if(cmd==='LOCATION'){
-        navigator.geolocation.getCurrentPosition(function(p){
-          toast('📍 '+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5),'success');
-        },function(){toast('Location denied','error')},{timeout:5000});
-      }
-      else if(cmd==='BATTERY'){
-        navigator.getBattery?navigator.getBattery().then(function(b){toast('🔋 Battery: '+Math.round(b.level*100)+'%','success')}):toast('Not supported','error');
-      }
-      else if(cmd==='CLIPBOARD'){navigator.clipboard.writeText(param);toast('📋 Copied: '+param.slice(0,30),'success')}
-      else if(cmd==='TTS'){
-        if(window.speechSynthesis){
-          var u=new SpeechSynthesisUtterance(param);u.lang=navigator.language;
-          speechSynthesis.speak(u);toast('🔊 Speaking...','success');
-        }
-      }
-      else if(cmd==='SEARCH'){
-        window.open('https://www.google.com/search?q='+encodeURIComponent(param),'_blank');
-        toast('🔍 Searching: '+param,'success');
-      }
-      else if(cmd==='SCREENSHOT'){
-        if(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia){
-          navigator.mediaDevices.getDisplayMedia({video:true}).then(function(s){s.getTracks()[0].stop();toast('📸 Screenshot!','success')}).catch(function(){});
-        }
-      }
-      else if(cmd==='FULLSCREEN'){
-        if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(function(){});
-        toast('🖥️ Fullscreen','success');
-      }
-      else if(cmd==='BACK'){window.history.back();toast('◀ Going back','success')}
-      else if(cmd==='SHARE'){
-        var shareUrl=param||location.href;
-        if(navigator.share)navigator.share({title:'ENRIQUE CODEX',url:shareUrl}).catch(function(){});
-        else window.open(shareUrl,'_blank');
-        toast('📤 Sharing...','success');
-      }
-    }catch(e){toast('Action error: '+e.message,'error')}
-  });
-}
-
-function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function toast(msg,type){
-  var t=document.createElement('div');t.className='toast '+(type||'');t.textContent=msg;
-  document.body.appendChild(t);setTimeout(function(){t.remove()},3000);
-}
-</script>
-
-<script>
-// ENRIQUE CODEX v7.0 - Extended templates
-ENRIQUE_BRAIN.codeLib.ecommerce = '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3}nav{padding:18px 24px;border-bottom:1px solid #30363d;display:flex;align-items:center;justify-content:space-between}.brand{font-size:22px;font-weight:800;color:#10a37f}.nav-links{display:flex;gap:20px;color:#7d8590;font-size:14px;cursor:pointer}.hero{padding:60px 24px;text-align:center;background:linear-gradient(180deg,#0d2e23,#0d1117)}.hero h1{font-size:42px;font-weight:900;margin-bottom:14px}.hero p{color:#7d8590;font-size:18px;max-width:500px;margin:0 auto 28px}.btn{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none}.products{max-width:1000px;margin:40px auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}.product{border:1px solid #30363d;border-radius:16px;overflow:hidden;background:#161b22;transition:all .3s;cursor:pointer}.product:hover{border-color:#10a37f;transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.4)}.product img{width:100%;height:180px;object-fit:cover;background:#21262d}.product-info{padding:16px}.product-info h3{font-size:16px;margin-bottom:6px}.product-info .price{font-size:18px;font-weight:700;color:#10a37f;margin-bottom:8px}.product-info p{font-size:13px;color:#7d8590}footer{padding:30px;text-align:center;color:#484f58;font-size:13px;border-top:1px solid #30363d}</style></head><body><nav><div class="brand">ENRIQUE Shop</div><div class="nav-links"><span>Home</span><span>Products</span><span>Cart</span></div></nav><div class="hero"><h1>Premium AI Store</h1><p>Discover amazing products powered by AI.</p><a class="btn" href="#">Browse</a></div><div class="products"><div class="product"><div class="product-info"><h3>AI Widget</h3><div class="price">$29</div><p>Smart AI device</p></div></div><div class="product"><div class="product-info"><h3>Neural Chip</h3><div class="price">$199</div><p>Neural processor</p></div></div></div><footer>2026 ENRIQUE Shop</footer></body></html>';
-
-ENRIQUE_BRAIN.codeLib.admin = '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3}.dash{padding:24px;max-width:1200px;margin:0 auto}.dash h1{font-size:28px;font-weight:900;margin-bottom:6px}.dash p{color:#7d8590;font-size:14px;margin-bottom:24px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}.card{padding:20px;background:#161b22;border:1px solid #30363d;border-radius:16px}.card .num{font-size:32px;font-weight:900;color:#10a37f}.card .lbl{font-size:13px;color:#7d8590;margin-top:4px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:20px;background:#161b22;border:1px solid #30363d;border-radius:16px}.panel h3{font-size:16px;font-weight:700;margin-bottom:14px}.table{width:100%;font-size:13px}.table th,.table td{padding:10px 0;text-align:left;border-bottom:1px solid #21262d}.table th{color:#7d8590}.badge{padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge.success{background:rgba(16,185,129,.15);color:#10b981}.badge.warn{background:rgba(210,153,34,.15);color:#d29922}.badge.danger{background:rgba(248,81,73,.15);color:#f85149}@media(max-width:600px){.grid-2{grid-template-columns:1fr}}</style></head><body><div class="dash"><h1>Analytics Dashboard</h1><p>Real-time metrics</p><div class="cards"><div class="card"><div class="num">24,591</div><div class="lbl">Users</div></div><div class="card"><div class="num">$48K</div><div class="lbl">Revenue</div></div><div class="card"><div class="num">94%</div><div class="lbl">Uptime</div></div></div><div class="grid-2"><div class="panel"><h3>Recent Activity</h3><table class="table"><tr><th>User</th><th>Action</th><th>Status</th></tr><tr><td>@enrique</td><td>Created project</td><td><span class="badge success">Done</span></td></tr><tr><td>@coder</td><td>Deployed app</td><td><span class="badge success">Done</span></td></tr><tr><td>@dev</td><td>Payment failed</td><td><span class="badge danger">Error</span></td></tr></table></div></div></div></body></html>';
-
-ENRIQUE_BRAIN.codeLib.music = '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Music Player</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0d1117;color:#e6edf3;height:100vh;display:flex;align-items:center;justify-content:center}.player{width:100%;max-width:380px;padding:32px 24px;text-align:center}.art{width:200px;height:200px;border-radius:24px;background:linear-gradient(135deg,#10a37f,#34d399,#0d8a6a);margin:0 auto 28px;display:flex;align-items:center;justify-content:center;font-size:72px;box-shadow:0 16px 48px rgba(16,163,127,.3)}.song-name{font-size:22px;font-weight:800;margin-bottom:4px}.artist{font-size:14px;color:#7d8590;margin-bottom:24px}.progress{width:100%;height:4px;background:#21262d;border-radius:4px;margin-bottom:8px}.progress-fill{width:45%;height:100%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:4px}.time-row{display:flex;justify-content:space-between;font-size:12px;color:#484f58;margin-bottom:24px}.controls{display:flex;align-items:center;justify-content:center;gap:24px}.ctrl-btn{width:56px;height:56px;border:2px solid #30363d;border-radius:50%;background:#161b22;color:#e6edf3;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}.ctrl-btn:hover{border-color:#10a37f}.ctrl-btn.play{width:64px;height:64px;background:linear-gradient(135deg,#10a37f,#34d399);border:none;font-size:28px;box-shadow:0 8px 24px rgba(16,163,127,.3)}.ctrl-btn.play:hover{transform:scale(1.05)}.volume{display:flex;align-items:center;gap:12px;margin-top:24px}.volume input{flex:1;height:4px;-webkit-appearance:none;background:#21262d;border-radius:4px}.volume input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#10a37f;cursor:pointer}</style></head><body><div class="player"><div class="art">🎵</div><div class="song-name">Neural Dreams</div><div class="artist">ENRIQUE AI</div><div class="progress"><div class="progress-fill"></div></div><div class="time-row"><span>1:48</span><span>4:02</span></div><div class="controls"><button class="ctrl-btn">⏮</button><button class="ctrl-btn play">▶</button><button class="ctrl-btn">⏭</button></div><div class="volume"><span>🔊</span><input type="range" value="70"></div></div></body></html>';
+/* Init */
+render();
 </script>
 </body>
 </html>
