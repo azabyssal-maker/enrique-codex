@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>ENRIQUE AI - 智能助手</title>
+<title>ENRIQUE AI - 智能引擎</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif;--shadow:0 8px 24px rgba(0,0,0,.5)}
+:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--pink:#f778ba;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 button,input,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -16,78 +16,74 @@ button,input,textarea{font-family:inherit}
 ::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
 
-/* === SIDEBAR === */
-.sidebar{width:270px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
-.sb-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
-.sb-title{font-size:15px;font-weight:800;flex:1}
-
-.actions{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+/* SIDEBAR */
+.sb{width:270px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
+.sb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
+.sb-t{font-size:15px;font-weight:800;flex:1}
+.acts{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
 .btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
-.btn:hover{border-color:var(--primary);background:var(--primary-l)}
-.btn:active{transform:scale(.98)}
-
+.btn:hover{border-color:var(--primary);background:var(--primary-l)}.btn:active{transform:scale(.98)}
 .sec{padding:8px 14px;border-bottom:1px solid var(--border)}
-.sec-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.pw-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.pw-b{padding:6px 0;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
-.pw-b:hover{border-color:var(--blue);color:var(--blue)}
-.pw-b.on{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
-.pw-b.h5.on{border-color:var(--purple);background:#1a1140;color:var(--purple)}
-.pw-b.h4.on{border-color:var(--blue);background:#0c1e3a;color:var(--blue)}
-.pw-desc{font-size:9px;color:var(--muted2);margin-top:4px}
-.stat-box{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
-.stat-box em{color:var(--muted)}
-.sb-foot{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
+.sl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.pb{padding:6px 0;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.pb:hover{border-color:var(--blue);color:var(--blue)}
+.pb.on{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
+.pb.h5.on{border-color:var(--purple);background:#1a1140;color:var(--purple)}
+.pb.h4.on{border-color:var(--blue);background:#0c1e3a;color:var(--blue)}
+.pd{font-size:9px;color:var(--muted2);margin-top:4px}
+.st{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
+.st em{color:var(--muted)}
+.sf{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
 
-/* === MAIN === */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+/* MAIN */
+.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
-.top .menu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
-.top .brand{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.top .brand .tag{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange)}
-.top .tokens{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border);white-space:nowrap}
+.top .mu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
+.top .br{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.top .br .ta{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange)}
+.top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border);white-space:nowrap}
 
-/* === POWER BAR (top) === */
+/* POWER BAR */
 .pbar{display:flex;gap:4px;padding:4px 14px;background:var(--bg2);border-bottom:1px solid var(--border)}
 .pbi{flex:1;padding:4px 0;border:none;border-radius:4px;background:transparent;color:var(--muted2);font-size:9px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
-.pbi:hover{color:var(--muted)}
-.pbi.on{color:var(--primary);background:var(--primary-l)}
+.pbi:hover{color:var(--muted)}.pbi.on{color:var(--primary);background:var(--primary-l)}
 .pbi.h5.on{color:var(--purple);background:#1a1140}
 .pbi.h4.on{color:var(--blue);background:#0c1e3a}
 
-/* === MESSAGES === */
-.msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
-.msgs-inner{max-width:720px;margin:0 auto}
+/* MESSAGES */
+.ms{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
+.mi{max-width:720px;margin:0 auto}
 .msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .msg.u{justify-content:flex-end}
-.msg-av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
-.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
-.msg.a .msg-av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
-.msg-b{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
-.msg.u .msg-b{background:var(--card);border:1px solid var(--border)}
-.msg.a .msg-b{background:var(--card2);border:1px solid var(--border2)}
-.msg-b h2{font-size:15px;color:var(--text);margin:8px 0 4px}
-.msg-b h3{font-size:13px;color:var(--text);margin:6px 0 3px}
-.msg-b strong{color:var(--text)}
-.msg-b code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--blue);font-family:monospace}
-.msg-b pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;overflow-x:auto;position:relative}
-.msg-b pre code{background:none;padding:0;color:var(--text2);font-size:11px;line-height:1.5;display:block}
-.msg-b .cp{position:relative;float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
-.msg-b ul{padding-left:18px;margin:4px 0}
-.msg-b li{margin:2px 0}
+.av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.msg.u .av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
+.msg.a .av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
+.mb{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
+.msg.u .mb{background:var(--card);border:1px solid var(--border)}
+.msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
+.mb h2{font-size:15px;color:var(--text);margin:8px 0 4px}
+.mb h3{font-size:13px;color:var(--text);margin:6px 0 3px}
+.mb strong{color:var(--text)}
+.mb code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--blue);font-family:monospace}
+.mb pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;overflow-x:auto}
+.mb pre code{background:none;padding:0;color:var(--text2);font-size:11px;line-height:1.5;display:block}
+.mb .cp{float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
+.mb ul{padding-left:18px;margin:4px 0}
+.mb li{margin:2px 0}
 
-/* === WELCOME === */
-.welc{text-align:center;padding:30px 20px}
+/* WELCOME */
+.wc{text-align:center;padding:30px 20px}
 .wi{width:60px;height:60px;margin:0 auto 14px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
 .wt{font-size:22px;font-weight:900;color:var(--text);margin-bottom:4px}
 .ws{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 .wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:480px;margin:0 auto}
-.wc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
-.wc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
+.gc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
+.gc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
 
-/* === INPUT === */
+/* INPUT */
 .ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
 .iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
 .iw:focus-within{border-color:var(--primary)}
@@ -97,543 +93,466 @@ button,input,textarea{font-family:inherit}
 .iw button:hover{background:var(--primary-d)}
 .iw button:disabled{opacity:.4;cursor:default}
 
-/* === TYPING === */
-.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
-.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
+/* TYPING */
+.ty{display:flex;gap:4px;align-items:center;padding:4px 0}
+.ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
+.ty span:nth-child(2){animation-delay:.2s}
+.ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
 
-/* === TOAST === */
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
+/* TOAST */
+.ts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
 @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-/* === OVERLAY === */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}
-.ov.on{display:block}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
 
-/* === RESPONSIVE === */
 @media(max-width:768px){
-  .sidebar{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
-  .pbar{overflow-x:auto;gap:2px}
-  .pbi{font-size:8px;padding:3px 2px;flex:none;min-width:50px}
+  .sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}
+  .sb.open{transform:translateX(0)}.ov.on{display:block}
+  .pbar{overflow-x:auto}.pbi{font-size:8px;flex:none;min-width:50px}
   .wg{grid-template-columns:repeat(2,1fr)}
-  .msg-b{max-width:92%;font-size:13px}
-  .msg-av{width:28px;height:28px;font-size:10px}
+  .mb{max-width:92%;font-size:13px}
+  .av{width:28px;height:28px;font-size:10px}
 }
-</style>
-</head>
-<body>
-
+</style></head><body>
 <div class="app">
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sb">
-    <div class="sb-head">
-      <div class="sb-icon">E</div>
-      <div class="sb-title">ENRIQUE AI</div>
-    </div>
-    <div class="actions">
-      <button class="btn" onclick="newChat()"><span style="font-size:14px">✚</span> New Chat</button>
-      <button class="btn" onclick="clearChat()"><span style="font-size:14px">✕</span> Clear</button>
-    </div>
-    <div class="sec">
-      <div class="sec-lbl">Power Level</div>
-      <div class="pw-grid" id="pwGrid"></div>
-      <div class="pw-desc" id="pwDesc">Balanced - medium detail</div>
-    </div>
-    <div class="sec">
-      <div class="sec-lbl">Stats</div>
-      <div class="stat-box">
-        <em>Tokens:</em> <span id="tokCnt">0</span><br>
-        <em>Version:</em> ENRIQUE v3.0<br>
-        <em>Messages:</em> <span id="msgCnt">0</span><br>
-        <em>Status:</em> <span id="aiStat" style="color:var(--primary)">Ready</span>
-      </div>
-    </div>
-    <div class="sb-foot">ENRIQUE AI v3 • 100% Original Code</div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-    <div class="top">
-      <button class="menu" id="menuBtn" onclick="toggleSidebar()">☰</button>
-      <div class="brand">
-        <span>ENRIQUE AI</span>
-        <span class="tag" id="powerTag">MEDIUM</span>
-      </div>
-      <div class="tokens">⚡ <span id="tokDisp">0</span></div>
-    </div>
-
-    <!-- Power bar -->
-    <div class="pbar" id="pbar"></div>
-
-    <!-- Messages -->
-    <div class="msgs" id="msgs">
-      <div class="msgs-inner" id="msgsInner">
-        <div class="welc" id="welc">
-          <div class="wi">🧠</div>
-          <div class="wt">ENRIQUE AI</div>
-          <div class="ws">Built from scratch • 100% original code<br>Chinese &amp; English • Code • Websites • Knowledge</div>
-          <div class="wg">
-            <div class="wc" onclick="qa('Hello! What can you do?')">👋 Hello</div>
-            <div class="wc" onclick="qa('Create a website')">🌐 Website</div>
-            <div class="wc" onclick="qa('Write JavaScript code')">⚡ JavaScript</div>
-            <div class="wc" onclick="qa('Write Python code')">🐍 Python</div>
-            <div class="wc" onclick="qa('Explain neural networks')">🧠 AI Explain</div>
-            <div class="wc" onclick="qa('Help me learn coding')">📚 Learn</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Input -->
-    <div class="ia">
-      <div class="iw">
-        <textarea id="inp" rows="1" placeholder="Type your message..."></textarea>
-        <button id="snd" onclick="send()">➤</button>
-      </div>
-    </div>
-  </div>
+<div class="sb" id="sb">
+<div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE AI</div></div>
+<div class="acts">
+<button class="btn" onclick="nw()"><span style="font-size:14px">+</span> New Chat</button>
+<button class="btn" onclick="cl()"><span style="font-size:14px">x</span> Clear</button>
 </div>
-
-<div class="ov" id="ov" onclick="toggleSidebar()"></div>
+<div class="sec"><div class="sl">Power Level</div>
+<div class="pg" id="pg"></div><div class="pd" id="pd">Balanced</div></div>
+<div class="sec"><div class="sl">Stats</div>
+<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Version:</em> ENRIQUE v4.0<br><em>Messages:</em> <span id="mc">0</span><br><em>Status:</em> <span id="as" style="color:var(--primary)">Ready</span></div></div>
+<div class="sf">ENRIQUE AI v4 • Built from Scratch</div>
+</div>
+<div class="mn">
+<div class="top">
+<button class="mu" onclick="tsb()">=</button>
+<div class="br"><span>ENRIQUE AI</span><span class="ta" id="pt">BALANCED</span></div>
+<div class="tk"><span id="td">0</span></div>
+</div>
+<div class="pbar" id="pbar"></div>
+<div class="ms" id="ms"><div class="mi" id="mi"></div></div>
+<div class="ia"><div class="iw">
+<textarea id="inp" rows="1" placeholder="Type your message..."></textarea>
+<button id="snd" onclick="sd()">></button>
+</div></div>
+</div></div>
+<div class="ov" id="ov" onclick="tsb()"></div>
 
 <script>
-// ================================================================
-// ENRIQUE AI v3.1 - Enhanced Edition
-// 100% Original Code, No APIs, No Libraries
-// ================================================================
+// ====================================================================
+// ENRIQUE AI v4.0 - Ultimate Intelligence Engine
+// 100% Original JavaScript • Zero Dependencies • No APIs
+// ====================================================================
 
-var DATA = [];
-var TOKENS = 0;
-var POWER = 3;
-var BUSY = false;
-var MEM = {};
+var D = []; var T = 0; var P = 3; var B = false; var M = {};
 
-var PCFG = {
-  1:{l:'LOWEST',t:'MIN',d:'Shortest, most concise',c:'#7d7d90'},
-  2:{l:'LOW',t:'SIMPLE',d:'Brief but helpful',c:'#58a6ff'},
-  3:{l:'MEDIUM',t:'BALANCED',d:'Balanced with examples',c:'#10a37f'},
-  4:{l:'HIGH',t:'DETAILED',d:'Detailed explanations',c:'#d29922'},
-  5:{l:'HIGHEST',t:'MAX',d:'Maximum depth, comprehensive',c:'#a371f7'}
+var PC = {
+  1:{l:'MINIMAL',d:'Shortest replies',c:'#7d7d90'},
+  2:{l:'SIMPLE',d:'Brief answers',c:'#58a6ff'},
+  3:{l:'BALANCED',d:'Moderate depth',c:'#10a37f'},
+  4:{l:'DEEP',d:'Detailed answers',c:'#d29922'},
+  5:{l:'MAXIMUM',d:'Full depth',c:'#a371f7'}
 };
 
-// ========== KNOWLEDGE BASE ==========
-var KB = {
-  html:{
-    d:'HTML (HyperText Markup Language) is the standard language for creating web pages. It uses tags to structure content like headings, paragraphs, links, images, and more.',
-    t:'<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Website</title>\n  <style>\n    body { font-family: system-ui; padding: 20px; background: #f5f5f5; }\n    h1 { color: #333; }\n  </style>\n</head>\n<body>\n  <h1>Hello World!</h1>\n  <p>Created with ENRIQUE AI.</p>\n</body>\n</html>',
-    ex:[{n:'Button',c:'<button style="padding:10px 20px;background:#10a37f;color:#fff;border:none;border-radius:8px;cursor:pointer">Click</button>'},{n:'Card',c:'<div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.1);max-width:300px"><h2>Title</h2><p>Content here</p></div>'}]
+// ===== KNOWLEDGE ENGINE =====
+// Structured as: topic -> { desc, examples, concepts }
+var K = {
+  py: {
+    n:'Python', d:'High-level, interpreted. Used for web, data science, AI, automation.',
+    e:[
+      'print("Hello World")',
+      'def fib(n): a,b=0,1\\n for _ in range(n): print(a,end=" "); a,b=b,a+b',
+      'class Dog:\\n def __init__(self,n): self.name=n\\n def bark(self): return f"{self.name} says woof!"',
+      'nums = [1,2,3,4,5]\\nsq = [x*x for x in nums]\\nprint(sum(nums), list(reversed(nums)))',
+      'with open("file.txt","r") as f:\\n content = f.read()\\n print(content)'
+    ],
+    c:'types,functions,classes,list comprehension,file I/O,modules,pip,decorators,generators'
   },
-  js:{
-    d:'JavaScript is a versatile programming language for web browsers and servers (Node.js). It enables interactive web pages and full-stack applications.',
-    ex:[{n:'Function',c:'function greet(name) {\n  return `Hello, ${name}!`;\n}\nconsole.log(greet("ENRIQUE"));'},{n:'Fetch API',c:'async function getData(url) {\n  const res = await fetch(url);\n  const data = await res.json();\n  return data;\n}'},{n:'Array',c:'const nums = [1,2,3,4,5];\nconst dbl = nums.map(n => n*2);\nconst evens = nums.filter(n => n%2===0);\nconst sum = nums.reduce((a,b) => a+b, 0);'}]
+  js: {
+    n:'JavaScript', d:'Web language. Runs in browsers and Node.js. Event-driven, functional.',
+    e:[
+      'function greet(n){return `Hello ${n}!`}',
+      'const nums=[1,2,3,4,5]; nums.map(x=>x*2).filter(x=>x>5)',
+      'fetch("/api/data").then(r=>r.json()).then(console.log)',
+      'class Animal{constructor(n){this.n=n} speak(){return this.n}}}',
+      'document.querySelector("button").addEventListener("click",()=>alert("Hi!"))'
+    ],
+    c:'closures,promises,async/await,DOM,events,prototypes,modules,arrow functions'
   },
-  py:{
-    d:'Python is a high-level, interpreted language known for readability and versatility. Used in web dev, data science, AI, and automation.',
-    ex:[{n:'Hello',c:'print("Hello from ENRIQUE AI!")'},{n:'Fibonacci',c:'def fib(n):\n    a,b = 0,1\n    for _ in range(n):\n        print(a, end=" ")\n        a,b = b, a+b\nfib(10)'},{n:'Class',c:'class Student:\n    def __init__(self, name):\n        self.name = name\n    def say_hi(self):\n        return f"Hi, I\'m {self.name}"'}]
+  html: {
+    n:'HTML', d:'Structure of web pages. Uses tags for content.',
+    t:'<!DOCTYPE html>\\n<html>\\n<head><title>Page</title></head>\\n<body>\\n <h1>Hello</h1>\\n <p>Content</p>\\n</body>\\n</html>',
+    e:['<a href="https://x.com">Link</a>','<img src="pic.jpg" alt="Photo">','<ul><li>Item</li><li>Item</li></ul>'],
+    c:'tags,attributes,forms,semantic HTML,accessibility,SEO'
   },
-  react:{
-    d:'React is a JavaScript library for building user interfaces with reusable components.',
-    t:'import React, { useState } from \'react\';\n\nfunction App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n      <button onClick={() => setCount(c => c+1)}>+</button>\n    </div>\n  );\n}\n\nexport default App;'
+  css: {
+    n:'CSS', d:'Styles web pages. Controls layout, colors, fonts, animations.',
+    t:'*{margin:0;padding:0;box-sizing:border-box}\\n:root{--p:#10a37f}\\nbody{font-family:system-ui;background:#0a0a0f;color:#fff}\\n.flex{display:flex;gap:10px}',
+    c:'flexbox,grid,animations,variables,responsive,selectors,box model'
   },
-  nn:{
-    d:'A neural network is a computing system inspired by biological brains. It consists of layers of interconnected nodes (neurons) that learn patterns from data.',
-    c:'Neurons, weights, biases, activation functions, forward propagation, backpropagation, gradient descent, loss functions, layers, epochs, learning rate, overfitting, regularization',
-    t:'• CNN - for images\n• RNN - for sequences\n• LSTM - improved RNN\n• Transformer - modern (GPT, BERT)\n• GAN - for generation'
+  react: {
+    n:'React', d:'JS library for UI components. Virtual DOM, one-way data flow.',
+    e:['function App(){const[c,s]=useState(0);return <div><h1>{c}</h1><button onClick={()=>s(c+1)}>+</button></div>}'],
+    c:'components,props,state,hooks,JSX,effects,context,router'
   },
-  web:{
-    s:['1. Plan structure and content','2. Write HTML for structure','3. Add CSS for styling','4. Add JS for interactivity','5. Test on all devices','6. Deploy to hosting'],
-    h:'Free hosting:\n• GitHub Pages - push to repo\n• Netlify - drag-drop or git\n• Vercel - great for frameworks\n• Cloudflare Pages - global CDN'
+  nn: {
+    n:'Neural Network', d:'Computing system inspired by brain. Learns patterns from data via layered neurons.',
+    e:['Layer: input -> weights -> activation -> output','Training: forward pass -> loss calc -> backpropagation -> weight update'],
+    c:'neurons,weights,biases,activation(ReLU,sigmoid,tanh),backpropagation,gradient descent,CNN,RNN,Transformer,epochs,learning rate'
   },
-  tips:[
-    'Plan before you code. Architecture matters more than syntax.',
-    'Write readable code. It is read far more than written.',
-    'Test early and often. Bugs caught early are cheap.',
-    'Use version control (git) for every project.',
-    'Break large problems into small pieces.',
-    'Practice consistently. 30 min daily beats 5 hours weekly.'
-  ]
+  ml: {
+    n:'Machine Learning', d:'AI subset where systems learn from data without explicit programming.',
+    e:['Supervised: labeled data -> predict labels','Unsupervised: unlabeled data -> find patterns','Reinforcement: agent + environment -> maximize reward'],
+    c:'regression,classification,clustering,overfitting,train/test split,cross-validation,feature engineering'
+  },
+  git: {
+    n:'Git', d:'Version control system. Tracks code changes, enables collaboration.',
+    e:['git init','git add .','git commit -m "msg"','git push origin main','git pull','git branch feature','git merge feature'],
+    c:'commit,branch,merge,rebase,push,pull,clone,stash,log,diff,conflict'
+  },
+  sql: {
+    n:'SQL', d:'Language for managing databases. CRUD operations on relational data.',
+    e:['SELECT * FROM users WHERE age > 18','INSERT INTO users(name,age) VALUES("Alice",25)','UPDATE users SET age=26 WHERE name="Alice"','DELETE FROM users WHERE id=1'],
+    c:'SELECT,INSERT,UPDATE,DELETE,JOIN,GROUP BY,ORDER BY,indexes,transactions,normalization'
+  },
+  linux: {
+    n:'Linux', d:'Open-source OS. Popular for servers, development, and embedded systems.',
+    e:['ls -la','cd /home/user','grep "text" file.txt','chmod 755 script.sh','ps aux | grep python','sudo apt install package'],
+    c:'filesystem,permissions,processes,packages,shell,pipe,redirection,cron'
+  },
+  docker: {
+    n:'Docker', d:'Container platform. Packages apps with dependencies for consistent deployment.',
+    e:['docker build -t myapp .','docker run -p 8080:80 myapp','docker-compose up','docker ps','docker stop container_id'],
+    c:'images,containers,Dockerfile,volumes,networks,docker-compose,registry'
+  },
+  api: {
+    n:'API', d:'Interface between software components. Enables communication between services.',
+    e:['GET /api/users -> list users','POST /api/users -> create user','fetch("/api").then(r=>r.json())'],
+    c:'REST,GraphQL,HTTP methods,status codes,authentication,rate limiting,versioning'
+  },
+  ds: {
+    n:'Data Structures', d:'Ways to organize data for efficient access and modification.',
+    e:['Array: contiguous memory, O(1) index','LinkedList: nodes+pointers, O(1) insert','HashMap: key-value, O(1) lookup','Tree: hierarchical, O(log n) search'],
+    c:'array,linked list,stack,queue,hashmap,tree,graph,heap,trie,complexity'
+  },
+  algo: {
+    n:'Algorithms', d:'Step-by-step procedures for solving problems.',
+    e:['Binary Search: O(log n) sorted search','QuickSort: O(n log n) divide-conquer sort','BFS: level-order graph traversal','Dijkstra: shortest path in weighted graph'],
+    c:'sorting,searching,dynamic programming,greedy,divide-conquer,graph,complexity(Big O)'
+  }
 };
 
-// ========== INTENT ENGINE v2 - Better Chinese Support ==========
-function intent(msg) {
-  var m = msg.toLowerCase().trim();
-  var r = [];
+// ===== INTENT ANALYZER v4 =====
+function IA(m) {
+  var s = m.toLowerCase().trim(); var r = [];
+  var c = /[\\u4e00-\\u9fff]/.test(m);
   
-  // Note: No \b at end of patterns - \b breaks Chinese character matching!
-  if(/^(hi|hello|hey|你好|您好|嗨|哈[喽罗]|早上好|晚上好|下午好|good\s*morn|good\s*eve|whats?\s*up|sup|喂)/.test(m)) r.push('greet');
-  if(/(你是谁|who\s*(are|'re)\s*(you|u)|你叫什么|your\s*name|介绍一下你自己|介绍你)/.test(m)) r.push('who');
-  if(/再见|bye|goodbye|see\s*you|拜拜|回头聊/.test(m)) r.push('bye');
-  if(/(create|make|build|生成|创建|搭建).*(website|site|web|网页|网站)/.test(m) || /(website|site|网页|网站).*(create|make|build|生成|创建|搭建)/.test(m)) r.push('mkweb');
-  if(/写|write|code|program|script|代码|编程/.test(m) && /python|javascript|js|java|html|css|cpp|c\+\+|rust|go|php|swift|kotlin|typescript|ts/.test(m)) r.push('speccode');
-  if(/python/.test(m)) r.push('py');
-  if(/javascript|js/.test(m) && !/java/.test(m)) r.push('js');
-  if(/html/.test(m)) r.push('html');
-  if(/css/.test(m)) r.push('css');
-  if(/react/.test(m)) r.push('react');
-  if(/code|program|编程|写代码|coding|developer|程序员/.test(m)) r.push('code');
-  if(/(explain|what\s*is|what\s*are|how\s*does|什么是|解释|说明|介绍).*(neural|network|神经网络|machine\s*learning|机器学习|deep\s*learning|深度学习|ai|人工智能)/.test(m)) r.push('explain_nn');
-  if(/explain|解释|说明|介绍|what\s*is|什么是/.test(m)) r.push('explain');
-  if(/help|how\s*to|how\s*do\s*i|怎么做|怎么用|功能|what\s*can\s*you\s*do|你能做什么/.test(m)) r.push('help');
-  if(/(learn|学习|教|teach|tutorial|教程|培训|课程).*(code|program|编程|python|js|web|前端|后端)/.test(m)) r.push('learn');
-  if(/joke|笑话|funny|搞笑|讲个笑话/.test(m)) r.push('joke');
-  if(/thanks|thank\s*you|谢谢|多谢|thx|感谢/.test(m)) r.push('thanks');
-  if(/translate|翻译|英文|中文/.test(m)) r.push('trans');
-  if(/(meaning|life|purpose|42|意义|人生|目的)/.test(m) && !/code|program/.test(m)) r.push('deep');
-  if(/math|calculate|compute|计算|数[学值]/.test(m)||/^\d+\s*[+\-*\/]\s*\d+/.test(m)) r.push('math');
-  if(/bored|无聊|没事做|无聊死了/.test(m)) r.push('bored');
-  if(/good|great|awesome|nice|棒|好|厉害|牛/.test(m) && /you|你/.test(m)) r.push('praise');
-  if(/sad|cry|depressed|难过|伤心|不开心/.test(m)) r.push('sad');
-  if(r.length===0) r.push('gen');
+  // Basic detection
+  if(/^(hi|hello|hey|你好|您好|嗨|哈[喽罗]|喂|早上好|晚上好|下午好|good\\s*morn|good\\s*eve|whats?\\s*up)/.test(s)) r.push('hi');
+  if(/(你是谁|who\\s*are.*(you|u)|你叫什么|your\\s*name|介绍[你一下]|tell.*about.*your)/.test(s)) r.push('who');
+  if(/再见|bye|goodbye|see\\s*ya|拜拜|回头聊|later/.test(s)) r.push('bye');
+  
+  // Code detection
+  if(/python/.test(s) || /^py\\b/.test(s)) r.push('py');
+  if(/javascript|js/.test(s) && !/java\\b/.test(s)) r.push('js');
+  if(/html/.test(s) && !/python|js/.test(s)) r.push('html');
+  if(/css/.test(s)) r.push('css');
+  if(/react/.test(s)) r.push('react');
+  if(/sql/.test(s)) r.push('sql');
+  if(/git/.test(s)) r.push('git');
+  if(/docker/.test(s)) r.push('docker');
+  if(/linux|bash|终端|命令/.test(s)) r.push('linux');
+  
+  // Code general
+  if(/code|program|编程|写代码|代码|developer|程序员/.test(s)) r.push('code');
+  
+  // Website
+  if(/(create|make|build|生成|创建|搭建|做).*(website|site|web|网页|网站|页面)/.test(s)) r.push('web');
+  
+  // Learning
+  if(/learn|学习|教|teach|tutorial|教程|怎么学|如何学|入门/.test(s)) r.push('learn');
+  
+  // Concepts
+  if(/explain|what\\s*is|what\\s*are|how\\s*does|什么是|解释|说明|介绍/.test(s) && /neural|network|神经网络|machine.learning|机器学习|deep.learning|深度学习|ai|人工智能/.test(s)) r.push('nn');
+  if(/explain|解释|说明|介绍|什么是/.test(s)) r.push('explain');
+  
+  // APIs
+  if(/api|rest|graphql|endpoint/.test(s)) r.push('api');
+  if(/datastruct|数据结构|array|linked.list|stack|queue|tree|hashmap|哈希/.test(s)) r.push('ds');
+  if(/algorithm|算法|sort|search|排序|搜索|复杂度/.test(s)) r.push('algo');
+  
+  // General
+  if(/help|how\\s*to|how\\s*do|怎么做|怎么用|功能|what\\s*can.you|你能做什么|help/.test(s)) r.push('help');
+  if(/joke|笑话|funny|搞笑|讲.*笑话|笑[话一].*个/.test(s)) r.push('jk');
+  if(/thanks|thank|谢谢|多谢|thx|感谢/.test(s)) r.push('thx');
+  if(/translate|翻译/.test(s)) r.push('tr');
+  if(/math|计算|算式|\\d+\\s*[+\\-*\\/]\\s*\\d+/.test(s)) r.push('math');
+  if(/bored|无聊|没事|闷/.test(s)) r.push('br');
+  if(/sad|难过|不开心|伤心|depress|cry|哭/.test(s)) r.push('sd');
+  if(/good|great|nice|棒|厉害|牛|awesome/.test(s) && /you|你/.test(s)) r.push('pr');
+  
+  if(r.length==0) r.push('gen');
   return r;
 }
 
-// ========== MEMORY ==========
-function learn(k,v){ MEM[k]={v:v,t:Date.now()}; saveMem(); }
-function recall(k){ return MEM[k]?MEM[k].v:null; }
-function saveMem(){ try{localStorage.setItem('ea_mem',JSON.stringify(MEM))}catch(e){} }
-function loadMem(){ try{var d=localStorage.getItem('ea_mem');if(d)MEM=JSON.parse(d)}catch(e){} }
-function saveData(){ try{localStorage.setItem('ea_dat',JSON.stringify({d:DATA,t:TOKENS}))}catch(e){} }
-function loadData(){ try{var d=localStorage.getItem('ea_dat');if(d){var p=JSON.parse(d);DATA=p.d||[];TOKENS=p.t||0}}catch(e){} }
-
-// ========== RESPONSE GENERATOR v2 - More Natural ==========
-function respond(msg, ints) {
-  var lv = POWER, cn = /[\u4e00-\u9fff]/.test(msg), m = msg.toLowerCase().trim();
-
-  function trimR(t, extra) {
-    if(lv<=2){var s=t.split(/\n+/);return s.slice(0,1).join('\n').substring(0,150)}
-    if(lv===3) return t.substring(0,400);
-    if(lv===4) return t.substring(0,800);
-    return t+(extra?'\n\n'+extra:'');
-  }
+// ===== RESPONSE ENGINE v4 =====
+function RE(m, ints) {
+  var lv = P, cn = /[\\u4e00-\\u9fff]/.test(m), s = m.toLowerCase().trim();
+  function pk(a){return a[Math.floor(Math.random()*a.length)]}
+  function tr(t,e){if(lv<=1) return t.split(/\\n/)[0].substring(0,120); if(lv<=2) return t.split(/\\n/).slice(0,2).join('\\n').substring(0,250); if(lv===3) return t.substring(0,500); if(lv===4) return t.substring(0,900); return t+(e?'\\n\\n'+e:'');}
+  function sec(title,items){ var r='\\n'+title+'\\n'; for(var i=0;i<items.length;i++) r+= (i+1)+'. '+items[i]+'\\n'; return r; }
+  function getLang(n){ return K[n]?K[n].n:n.toUpperCase(); }
   
-  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
   for(var i=0;i<ints.length;i++){
     var it=ints[i];
     
-    if(it==='greet'){
-      if(cn) {
-        var g = pick([
-          '你好！我是 ENRIQUE AI，很高兴见到你！有什么我可以帮你的吗？',
-          '嗨！你好呀！我是 ENRIQUE，一个从零构建的 AI 助手。有什么需要我帮忙的吗？',
-          '你好！欢迎！我是 ENRIQUE AI。我可以帮你写代码、创建网站、回答技术问题等。请随意提问！',
-          '你好你好！很高兴见到你！今天有什么可以帮你的吗？',
-          '嗨！欢迎来到 ENRIQUE AI！有什么问题尽管问我，我会尽全力帮你解答！'
-        ]);
-        return g;
-      } else {
-        var g = pick([
-          'Hello! I\'m ENRIQUE AI, nice to meet you! How can I help you today?',
-          'Hi there! Welcome to ENRIQUE AI. I can help you code, create websites, explain concepts, and more!',
-          'Hey! Great to see you! I\'m ENRIQUE - your AI assistant built from scratch. What can I do for you?',
-          'Hello and welcome! I\'m ENRIQUE AI. Feel free to ask me anything about coding, web development, or technology!'
-        ]);
-        return g;
-      }
-    }
-    
-    if(it==='bye'){
-      return cn?'再见！希望下次还能帮到你！有需要随时来找我 😊':'Goodbye! Feel free to come back anytime you need help! 😊';
-    }
-    
-    if(it==='praise'){
-      return cn?'谢谢你的夸奖！我会继续努力进步的！有什么需要帮忙的吗？':'Thank you! I really appreciate that! Is there anything I can help you with?';
-    }
-    
-    if(it==='sad'){
-      return cn?'没事的，我在这里陪着你。有什么想聊聊的吗？或者我可以帮你做点开心的事？😊':'I\'m here for you. Want to talk about it? Or I can help you with something fun! 😊';
-    }
-    
-    if(it==='bored'){
-      return cn?'无聊的话，要不要试试？\n\n1. 让我教你编程 - 说"教我 Python"\n2. 让我创建一个网站 - 说"创建网站"\n3. 让我讲个笑话 - 说"讲个笑话"\n4. 学习新知识 - 说"什么是神经网络"':'Bored? Try these:\n\n1. "Teach me Python"\n2. "Create a website"\n3. "Tell me a joke"\n4. "What is a neural network"';
+    if(it==='hi'){
+      return cn?pk(['你好！我是 ENRIQUE AI，很高兴见到你！有什么可以帮你的吗？','嗨！你好！欢迎来到 ENRIQUE AI。我可以帮你写代码、做网站、解答问题，请随意提问！','你好你好！我是 ENRIQUE，一个从零构建的 AI 助手。有什么需要尽管说！','嗨！欢迎！我是 ENRIQUE AI，你可以问我任何关于编程、技术、学习的问题！']):
+      pk(['Hello! I\\'m ENRIQUE AI, nice to meet you! How can I help?','Hi there! Welcome to ENRIQUE AI. I can write code, create websites, explain concepts, and more!','Hey! Great to see you! I\\'m ENRIQUE, your AI assistant. What can I do for you?']);
     }
     
     if(it==='who'){
-      return trimR(cn?
-        '我叫 ENRIQUE AI，是一个完全从零构建的 AI 助手！\n\n🧠 关于我：\n• 100% 原创代码 - 没有使用任何外部 API\n• 纯浏览器运行 - 你的数据不会离开你的设备\n• 支持中文和英文 - 双语交流无压力\n• 可以写代码、创建网站、解释复杂概念\n• 有记忆能力 - 我能记住我们的对话\n• 免费使用 - 完全不需要付费\n\n你可以通过侧边栏的 Power Level 控制我的回答详细度，从最简洁到最全面！':
-        'I\'m ENRIQUE AI - an intelligent assistant built entirely from scratch!\n\n🧠 About me:\n• 100% original code - no external APIs\n• Runs in browser - your data stays on your device\n• Bilingual - Chinese & English\n• Can write code, create websites, explain concepts\n• Has memory - remembers our conversations\n• Completely free\n\nUse the Power Level slider to control how detailed my responses are!'
-      ,'');
+      return tr(cn?'我叫 ENRIQUE AI，是一个完全从零构建的智能助手！\\n\\n🧠 核心能力：\\n• 写代码 - Python, JavaScript, C++, Rust 等多种语言\\n• 创建网站 - 从 HTML 到 React 完整项目\\n• 解释概念 - AI、算法、数据结构、框架\\n• 技术支持 - Git、Docker、Linux、数据库\\n• 双语交流 - 中文 & 英文\\n\\n📊 知识库：包含 15+ 技术领域的深度知识\\n⚡ Power Level 控制回答详细度（1-5）\\n💾 记忆系统 - 我能记住我们的对话':'I\\'m ENRIQUE AI - an intelligence engine built entirely from scratch!\\n\\n🧠 Core Abilities:\\n• Write code in 10+ languages\\n• Create websites & full projects\\n• Explain AI, algorithms, data structures\\n• Tech support - Git, Docker, Linux, DB\\n• Bilingual - Chinese & English\\n\\n📊 Knowledge: 15+ tech domains\\n⚡ Power Level controls depth (1-5)\\n💾 Memory system - remembers conversations','');
     }
     
-    if(it==='mkweb'){
-      return trimR(
-        (cn?'当然可以！我来帮你创建一个网站。这是一个完整的 HTML 模板，你可以直接使用：\n\n':'Sure! Here\'s a complete HTML template for your website:\n\n')+
-        '```html\n'+KB.html.t+'\n```\n\n'+
-        (cn?'📋 创建网站的步骤：\n':'📋 Steps:\n')+KB.web.s.join('\n'),
-        (cn?'📦 免费部署平台：\n'+KB.web.h:'📦 Free hosting:\n'+KB.web.h)
-      );
+    if(it==='bye') return cn?'再见！下次有需要随时来找我！😊':'Bye! Come back anytime! 😊';
+    if(it==='pr') return cn?'谢谢你的夸奖！我会继续努力进步的！有什么需要帮忙的吗？':'Thanks! I really appreciate that! Need any help?';
+    if(it==='sd') return cn?'没事的，我在这里陪你。想聊聊什么吗？或者我可以教你点有趣的东西！':'I\\'m here for you. Want to chat? Or I can teach you something fun!';
+    if(it==='br') return cn?'无聊的话，试试这些：\\n\\n• "教我 Python" - 学习编程\\n• "创建网站" - 做个网站\\n• "讲个笑话" - 开心一下\\n• "什么是 AI" - 学习知识':'Bored? Try:\\n\\n• "Teach me Python"\\n• "Create a website"\\n• "Tell me a joke"\\n• "What is AI"';
+    if(it==='thx') return cn?pk(['不客气！随时欢迎！😊','不用谢！有需要就找我！']):pk(['You\\'re welcome! 😊','Anytime! Glad to help!']);
+    if(it==='jk') return cn?pk(['为什么程序员分不清万圣节和圣诞节？因为 Oct 31 = Dec 25！😂','为什么神经网络过马路？为了到达另一层！🧠','程序员为什么喜欢黑暗模式？因为 light 吸引 bug！','0 和 255 争论谁更酷，255 说"我颜色多"，0 说"但我才是真黑！"']):
+      pk(['Why did the neural network cross the road? To get to the other layer!','Why do programmers prefer dark mode? Light attracts bugs!','How many programmers to change a light bulb? None, that\\'s hardware!']);
+    
+    if(it==='tr') return cn?'我可以帮中英文翻译！发给我需要翻译的内容。':'I can help with translation! Send me the text.';
+    
+    if(it==='math'){
+      var mm=s.match(/(\\d+)\\s*([+\\-*\\/x])\\s*(\\d+)/);
+      if(mm){var a=+mm[1],op=mm[2],b=+mm[3];if(op==='x')op='*';
+        switch(op){case'+':return a+' + '+b+' = '+(a+b);case'-':return a+' - '+b+' = '+(a-b);case'*':return a+' × '+b+' = '+(a*b);case'/':return a+' ÷ '+b+' = '+(b!==0?a/b:'不能除以零');}}
+      return cn?'给我一个算式，如 "5 + 3" 或 "10 * 20"':'Give me an expression like "5 + 3"';
     }
     
-    if(it==='speccode'||it==='py'||it==='js'||it==='html'||it==='css'||it==='react'){
-      var lang=it==='py'?'Python':it==='js'?'JavaScript':it==='react'?'React':it==='html'?'HTML':it==='css'?'CSS':'code';
-      var code='';
-      if(it==='py'||(it==='speccode'&&/python/.test(m))) code='```python\n'+KB.py.ex.map(function(e){return '# '+e.n+'\n'+e.c}).join('\n\n')+'\n```';
-      else if(it==='js'||(it==='speccode'&&/javascript|js/.test(m))) code='```javascript\n'+KB.js.ex.map(function(e){return '// '+e.n+'\n'+e.c}).join('\n\n')+'\n```';
-      else if(it==='html') code='```html\n'+KB.html.t+'\n```\n\n'+KB.html.ex.map(function(e){return '• '+e.n+':\n```html\n'+e.c+'\n```'}).join('\n');
-      else if(it==='css') code='```css\n/* CSS Variables & Flexbox */\n:root{--primary:#10a37f;--bg:#0a0a0f;--text:#e4e4ec}\nbody{font-family:system-ui;background:var(--bg);color:var(--text);line-height:1.6}\n.container{display:flex;justify-content:center;align-items:center;min-height:100vh}\n.btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;border:none;cursor:pointer}```';
-      else if(it==='react') code='```jsx\n'+KB.react.t+'\n```';
-      return trimR((cn?'好的，这里是一些 '+lang+' 代码示例：\n\n':'Here are some '+lang+' code examples:\n\n')+code,(cn?'需要更多帮助吗？':'Need more help?'));
+    // Specific language knowledge
+    if(K[it] && K[it].e){
+      var lang = K[it].n;
+      var ex = K[it].e.slice(0, Math.min(lv+1, K[it].e.length));
+      var r = cn?'📌 '+lang+' 代码示例：\\n\\n':'📌 '+lang+' Code Examples:\\n\\n';
+      for(var j=0;j<ex.length;j++){
+        r += '```'+it+'\\n'+ex[j]+'\\n```\\n\\n';
+      }
+      if(K[it].c && lv>=4){
+        r += (cn?'📚 关键概念：\\n':'📚 Key Concepts:\\n')+K[it].c.split(',').map(function(x){return '• '+x.trim()}).join('\\n');
+      }
+      return r;
     }
     
     if(it==='code'){
-      return trimR(
-        (cn?'关于编程，我可以分享一些经验和知识！\n\n':'Here\'s what I know about coding!\n\n')+
-        (cn?'💡 编程技巧：\n':'💡 Tips:\n')+KB.tips.slice(0,lv).map(function(t,i){return (i+1)+'. '+t}).join('\n')+'\n\n'+
-        (cn?'我可以帮你写以下语言的代码：\n':'I can write code in:\n')+'• Python • JavaScript • HTML/CSS • React • Java • C++ • Rust • Go',
-        cn?'想看我展示某个语言的代码吗？告诉我你感兴趣的语言！':'Want me to show you code in a specific language? Just ask!'
+      var langs = Object.keys(K).filter(function(k){return K[k].e}).map(function(k){return K[k].n});
+      return tr(
+        (cn?'💻 编程知识库：\\n\\n我可以帮你写以下语言的代码：\\n':'💻 Programming Knowledge:\\n\\nI can write code in:\\n')+langs.join(', ')+'\\n\\n'+
+        (cn?'🎯 试试说具体语言名，如 "Python"、"JavaScript" 等':'🎯 Say a language name for examples!'),
+        cn?'需要我展示哪个语言的代码？':'Which language?'
       );
     }
     
-    if(it==='explain_nn'){
-      return trimR(
-        (cn?'🧠 神经网络详解：\n\n':'🧠 Neural Networks Explained:\n\n')+KB.nn.d+'\n\n'+
-        (cn?'📚 主要概念：\n':'📚 Key Concepts:\n')+KB.nn.c.split(',').map(function(x){return '• '+x.trim()}).join('\n')+'\n\n'+
-        (cn?'🔬 神经网络类型：\n':'🔬 Types:\n')+KB.nn.t,
-        cn?'💡 实际上，ENRIQUE AI 本身就是一个神经网络的实现！我的代码完全是原创的，从零开始构建。':'💡 I myself am a neural network implementation! 100% original code.'
+    if(it==='web'){
+      var t = K.html.t || '<html>\\n<body>\\n<h1>Website</h1>\\n</body>\\n</html>';
+      return tr(
+        (cn?'🌐 网站创建指南：\\n\\n完整的 HTML 模板：\\n':'🌐 Website Creation Guide:\\n\\nComplete HTML template:\\n')+
+        '```html\\n'+t+'\\n```\\n\\n'+
+        (cn?'📋 开发步骤：\\n1. 规划结构\\n2. 编写 HTML\\n3. 添加 CSS\\n4. 增加 JavaScript\\n5. 测试\\n6. 部署':'📋 Steps:\\n1. Plan structure\\n2. Write HTML\\n3. Add CSS\\n4. Add JS\\n5. Test\\n6. Deploy')+'\\n\\n'+
+        (cn?'📦 免费部署：GitHub Pages、Netlify、Vercel':'📦 Free hosting: GitHub Pages, Netlify, Vercel'),
+        cn?'需要更详细的指导？告诉我你想做什么类型的网站！':'Need more detail? Tell me what kind of site!'
+      );
+    }
+    
+    if(it==='nn'){
+      var dd = K.nn;
+      return tr(
+        (cn?'🧠 神经网络详解：\\n\\n':'🧠 Neural Networks Explained:\\n\\n')+dd.d+'\\n\\n'+
+        (cn?'关键概念：\\n':'Key Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n')+'\\n\\n'+
+        (cn?'🔬 ENRIQUE AI 本身就是一个神经网络实现！我的代码是完全原创的。':'🔬 I am implemented as a neural network!'),
+        cn?'想了解某个概念的具体细节？':'Want details on a specific concept?'
+      );
+    }
+    
+    if(it==='learn'){
+      return tr(
+        (cn?'📚 编程学习路线：\\n\\n1. 选语言 - Python 或 JavaScript\\n2. 学基础 - 变量、循环、函数\\n3. 做项目 - 从小开始\\n4. 数据结构 - 数组、链表、树\\n5. Git 版本控制\\n6. 参与开源\\n\\n💡 免费资源：freeCodeCamp、MDN、LeetCode、GitHub':
+         '📚 Learning Roadmap:\\n\\n1. Choose language (Python/JS)\\n2. Learn basics\\n3. Build projects\\n4. Data structures\\n5. Git\\n6. Open source\\n\\n💡 Resources: freeCodeCamp, MDN, LeetCode, GitHub'),
+        cn?'想让我展示代码？告诉我语言！':'Want me to show code? Tell me a language!'
+      );
+    }
+    
+    if(it==='api'){
+      var dd = K.api;
+      return tr(
+        (cn?'🔗 API 详解：\\n\\n':'🔗 API Explained:\\n\\n')+dd.d+'\\n\\n'+
+        (cn?'示例：\\n':'Examples:\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
+        (cn?'关键概念：\\n':'Key Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
+        cn?'REST API 和 GraphQL 有什么区别？需要例子吗？':'Need examples of REST vs GraphQL?'
+      );
+    }
+    
+    if(it==='ds'){
+      var dd = K.ds;
+      return tr(
+        (cn?'📊 数据结构详解：\\n\\n':'📊 Data Structures:\\n\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
+        (cn?'关键概念：\\n':'Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
+        cn?'想了解具体某个数据结构的实现？':'Want implementation details?'
+      );
+    }
+    
+    if(it==='algo'){
+      var dd = K.algo;
+      return tr(
+        (cn?'🔢 算法详解：\\n\\n':'🔢 Algorithms:\\n\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
+        (cn?'关键概念：\\n':'Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
+        cn?'想了解某个算法的具体实现？':'Want to see an algorithm implementation?'
       );
     }
     
     if(it==='explain'){
-      var topics={
-        'api':cn?'API (应用程序接口) 是不同软件组件之间通信的接口。比如，天气预报 App 通过 API 从气象服务器获取数据。常见的有 REST API 和 GraphQL。':'API (Application Programming Interface) enables software components to communicate. For example, a weather app uses an API to get data from a weather server.',
-        'ai|人工智能':cn?'AI (人工智能) 是计算机科学的一个分支，目标是创造能模拟人类智能的系统。包括机器学习、深度学习、自然语言处理等子领域。':'AI (Artificial Intelligence) is a branch of computer science aimed at creating systems that simulate human intelligence.',
-        'algorithm|算法':cn?'算法是解决特定问题的一系列明确定义的步骤。好的算法应该高效、正确、易读。常见的算法有排序算法(快速排序、归并排序)、搜索算法(二分搜索)等。':'An algorithm is a well-defined sequence of steps to solve a problem. Examples include sorting algorithms (quicksort, mergesort) and search algorithms (binary search).',
-        'database|数据库':cn?'数据库是 organized 存储和管理数据的系统。关系型数据库用表格存储(如 MySQL, PostgreSQL)，NoSQL 数据库用文档或键值对存储(如 MongoDB, Redis)。':'A database is an organized system for storing and managing data. Relational (MySQL, PostgreSQL) use tables; NoSQL (MongoDB, Redis) use documents or key-value pairs.',
-        'server|服务器':cn?'服务器是提供计算服务的设备或程序。Web 服务器处理 HTTP 请求(如 Nginx, Apache)，应用服务器运行业务逻辑，数据库服务器管理数据存储。':'A server provides computing services. Web servers handle HTTP requests, application servers run business logic, database servers manage data storage.',
-        'variable|变量':cn?'变量是存储数据的容器。在编程中，你可以把变量想象成一个带标签的盒子，里面可以放数字、文字、对象等各种数据。':'A variable is a container for storing data. Think of it as a labeled box that can hold numbers, text, objects, etc.',
-        'function|函数':cn?'函数是一段可重复使用的代码块，用于执行特定任务。它接受输入（参数），处理数据，然后返回结果。函数让代码更模块化、更易维护。':'A function is a reusable block of code that performs a specific task. It takes inputs (parameters), processes them, and returns a result.'
+      var topics = {
+        'api':K.api?K.api.d:'',
+        'ai|artificial intelligence|人工智能':K.nn?K.nn.d:'',
+        'neural|network|神经网络':K.nn?K.nn.d:'',
+        'machine learning|机器学习':K.ml?K.ml.d:'',
+        'git':K.git?K.git.d:'',
+        'docker':K.docker?K.docker.d:'',
+        'sql|database|数据库':K.sql?K.sql.d:'',
+        'linux':K.linux?K.linux.d:'',
+        'algorithm|算法':K.algo?K.algo.d:'',
+        'data struct|数据结构':K.ds?K.ds.d:''
       };
-      for(var k in topics){if(new RegExp(k,'i').test(m)) return trimR(topics[k],cn?'需要更详细的解释吗？可以告诉我具体想了解哪方面。':'Need more details? Let me know what aspect interests you.');}
-      return trimR(cn?'我可以解释各种编程和技术概念！你想了解什么？比如：API、AI、算法、数据库、服务器、函数等。':'I can explain various programming and tech concepts! What would you like to know about?','');
+      for(var k in topics){if(new RegExp(k,'i').test(s) && topics[k]) return tr(topics[k],cn?'需要更详细解释吗？':'Need more detail?');}
+      return cn?'我可以解释很多概念！如 AI、神经网络、API、Git、Docker、Linux、算法、数据结构等。你想了解什么？':'I can explain AI, neural networks, APIs, Git, Docker, Linux, algorithms, data structures, and more! What interests you?';
     }
     
     if(it==='help'){
-      return trimR(cn?
-        'ENRIQUE AI 可以帮你做这些事情：\n\n'+
-        '💻 写代码 - Python, JavaScript, HTML, React 等\n'+
-        '🌐 创建网站 - 从零开始到部署上线\n'+
-        '🧠 解释概念 - AI, 神经网络, 算法等\n'+
-        '📚 学习编程 - 入门指南与学习路线\n'+
-        '🔤 翻译 - 中英文互译\n'+
-        '😂 讲笑话 - 放松一下\n\n'+
-        '💡 使用侧边栏的 Power Level 可以控制我的回答详细度，从最低(最简洁)到最高(最全面)！':
-        'ENRIQUE AI can help you with:\n\n'+
-        '💻 Write code - Python, JavaScript, HTML, React\n'+
-        '🌐 Create websites - from scratch to deployment\n'+
-        '🧠 Explain concepts - AI, neural networks, algorithms\n'+
-        '📚 Learn programming - guides and resources\n'+
-        '🔤 Translate - Chinese & English\n'+
-        '😂 Tell jokes\n\n'+
-        '💡 Adjust Power Level in sidebar to control response detail!'
+      return tr(cn?
+        'ENRIQUE AI 能帮你做这些：\\n\\n💻 写代码 - Python, JS, HTML, CSS, React, SQL...\\n🌐 创建网站 - 完整模板+部署指南\\n🧠 解释概念 - AI, 神经网络, 算法...\\n📚 学习编程 - 路线图+资源推荐\\n📊 数据结构与算法 - 详解+示例\\n🔗 API 开发 - REST, GraphQL\\n🐳 Docker & Linux - 运维知识\\n🔤 中英翻译\\n\\n💡 使用 Power Level 控制详细度！':
+        'ENRIQUE AI can:\\n\\n💻 Write code in 10+ languages\\n🌐 Create websites\\n🧠 Explain AI/ML concepts\\n📚 Teach programming\\n📊 Data structures & algorithms\\n🔗 API development\\n🐳 Docker & Linux\\n💡 Power Level controls detail!'
       ,'');
-    }
-    
-    if(it==='learn'){
-      return trimR(cn?
-        '📚 学习编程路线图：\n\n'+
-        '1️⃣ 选择入门语言 - 推荐 Python（简单）或 JavaScript（通用）\n'+
-        '2️⃣ 学习基础语法 - 变量、条件判断、循环、函数\n'+
-        '3️⃣ 做小项目 - 从简单开始，逐步增加难度\n'+
-        '4️⃣ 学习数据结构与算法 - 数组、链表、树、排序\n'+
-        '5️⃣ 学习 Git 版本控制 - 团队协作必备\n'+
-        '6️⃣ 参与开源项目 - 在实践中成长\n\n'+
-        '💡 推荐免费资源：freeCodeCamp, MDN Web Docs, LeetCode, GitHub':
-        '📚 Learn Programming Roadmap:\n\n'+
-        '1️⃣ Choose a language - Python (easy) or JavaScript (versatile)\n'+
-        '2️⃣ Learn basics - variables, loops, functions\n'+
-        '3️⃣ Build small projects\n'+
-        '4️⃣ Study data structures & algorithms\n'+
-        '5️⃣ Learn Git\n'+
-        '6️⃣ Contribute to open source\n\n'+
-        '💡 Free resources: freeCodeCamp, MDN, LeetCode, GitHub'
-      ,cn?'想让我展示一些基础代码吗？告诉我你想学什么语言！':'Want me to show you some code? Tell me which language!');
-    }
-    
-    if(it==='joke'){
-      var j=cn?[
-        '为什么程序员分不清万圣节和圣诞节？\n因为 Oct 31 = Dec 25！😂',
-        '为什么神经网络过马路？\n为了到达另一层！🧠',
-        '程序员为什么喜欢黑暗模式？\n因为 Light 会吸引 Bug！',
-        'AI 为什么不会讲笑话？\n因为还在"学习"中！😄',
-        '0 和 255 在争论谁更酷。255 说：\n"我颜色多！" 0 说："但我才是真·黑色！"',
-        '为什么 Java 程序员总是戴眼镜？\n因为他们看不见 C#！😎'
-      ]:[
-        'Why did the neural network cross the road?\nTo get to the other layer! 🧠',
-        'Why do programmers prefer dark mode?\nBecause light attracts bugs!',
-        'What do you call an AI that sings?\nA neur-harmonic network! 🎵',
-        'Why was the JavaScript developer sad?\nBecause he didn\'t know how to "null" his feelings!',
-        'How many programmers does it take to change a light bulb?\nNone - that\'s a hardware problem!'
-      ];
-      return pick(j);
-    }
-    
-    if(it==='thanks'){
-      return cn?pick([
-        '不客气！很高兴能帮到你！😊',
-        '不用谢！随时欢迎来找我聊天或提问！',
-        '不客气！有需要就告诉我，我一直在这里！'
-      ]):pick([
-        'You\'re welcome! Happy to help! 😊',
-        'Anytime! Feel free to ask me anything!',
-        'Glad I could help! Come back anytime!'
-      ]);
-    }
-    
-    if(it==='deep'){
-      return cn?'这个问题很有意思！从科学的角度看，生命的意义可能在于学习和进化。就像神经网络通过训练不断优化一样，我们也在通过经历和学习不断成长。当然，Douglas Adams 会说答案是 42 😄':'That\'s a deep question! From a scientific perspective, life\'s meaning might be about learning and evolving. Like neural networks optimize through training, we grow through experiences. Douglas Adams would say the answer is 42 😄';
-    }
-    
-    if(it==='math'){
-      var mm=m.match(/(\d+)\s*([+\-*\/])\s*(\d+)/);
-      if(mm){var a=+mm[1],op=mm[2],b=+mm[3];
-        switch(op){case'+':return a+' + '+b+' = '+(a+b);case'-':return a+' - '+b+' = '+(a-b);case'*':return a+' × '+b+' = '+(a*b);case'/':return a+' ÷ '+b+' = '+(b!==0?a/b:'不能除以零');}}
-      return cn?'我可以帮你做计算！给我一个算式，比如 "5 + 3" 或 "10 * 20"':'I can help with math! Give me something like "5 + 3" or "10 * 20"';
-    }
-    
-    if(it==='trans'){
-      return cn?'我可以帮助中英文翻译！把你需要翻译的内容发给我就行。比如 "翻译这个：Hello world" 或者 "帮我翻成英文：今天天气真好"':'I can help with Chinese-English translation! Just send me the text you want translated.';
     }
   }
   
-  // Default - intelligent general response
-  if(cn) {
-    var reps = [
-      '我明白了！不过我需要更多信息才能更好地帮你。你可以试试以下功能：\n\n'+
-      '• "写一个 Python 程序" - 生成代码\n'+
-      '• "创建网站" - 获取网站模板\n'+
-      '• "什么是神经网络" - 解释概念\n'+
-      '• "教我编程" - 学习路线\n'+
-      '• "讲个笑话" - 放松一下',
-      '好的！你可以尝试让我：\n\n• 写代码 - 如 "写一个 JavaScript 函数"\n• 解释概念 - 如 "什么是 API"\n• 创建网站 - 如 "创建一个网页"\n• 学习编程 - 如 "帮我学 Python"',
-      '收到！以下是你可以让我做的事情：\n\n💻 写代码\n🌐 创建网站\n🧠 解释概念\n📚 编程教学\n😄 讲笑话'
-    ];
-    return pick(reps);
+  // Default
+  if(cn){
+    return pk([
+      '我明白你的意思了！你可以试试让我：\\n\\n• "写 Python 代码" - 生成代码示例\\n• "创建网站" - 获取网站模板\\n• "什么是 API" - 解释概念\\n• "帮我学编程" - 学习路线\\n• "讲个笑话" - 轻松一下',
+      '好的！需要我做什么？可以试试：\\n\\n• 写代码 - "写一个 JavaScript 函数"\\n• 做网站 - "帮我创建一个网页"\\n• 解释 - "什么是指针"\\n• 教学 - "教我 Python"',
+      '收到！以下是你可以让我做的事情：\\n\\n💻 写代码\\n🌐 做网站\\n🧠 解释概念\\n📚 教学\\n😄 讲笑话\\n\\n直接告诉我就好！'
+    ]);
   } else {
-    var reps = [
-      'I understand! But I could use more context. Here\'s what I can do:\n\n'+
-      '• "Write Python code" - generate code\n'+
-      '• "Create a website" - get a template\n'+
-      '• "What is a neural network" - explain\n'+
-      '• "Teach me coding" - learning path\n'+
-      '• "Tell me a joke" - have fun',
-      'Got it! Try asking me to:\n\n• Write code in any language\n• Create a website\n• Explain concepts\n• Help you learn programming\n• Tell you a joke'
-    ];
-    return pick(reps);
+    return pk([
+      'I understand! Try asking me to:\\n\\n• Write Python code\\n• Create a website\\n• Explain APIs\\n• Teach programming\\n• Tell a joke',
+      'Got it! I can help with:\\n\\n• Code in any language\\n• Website creation\\n• Tech explanations\\n• Programming lessons\\nJust tell me what!'
+    ]);
   }
 }
 
-// ========== UI ==========
+// ===== UI FUNCTIONS =====
 function initPW() {
-  var g=document.getElementById('pwGrid'),b=document.getElementById('pbar');
+  var g=document.getElementById('pg'),b=document.getElementById('pbar');
   g.innerHTML='';b.innerHTML='';
   for(var i=1;i<=5;i++){
-    var o=document.createElement('button');o.className='pw-b'+(i===POWER?' on':'')+(i===5?' h5':'')+(i===4?' h4':'');o.textContent=PCFG[i].l.substring(0,4);o.title=PCFG[i].d;o.onclick=function(l){return function(){setPW(l)}}(i);g.appendChild(o);
-    var p=document.createElement('button');p.className='pbi'+(i===POWER?' on':'')+(i===5?' h5':'')+(i===4?' h4':'');p.textContent=PCFG[i].l;p.onclick=function(l){return function(){setPW(l)}}(i);b.appendChild(p);
+    var o=document.createElement('button');
+    o.className='pb'+(i==P?' on':'')+(i==5?' h5':'')+(i==4?' h4':'');
+    o.textContent=PC[i].l.substring(0,4);o.title=PC[i].d;
+    o.onclick=function(l){return function(){sp(l)}}(i);g.appendChild(o);
+    var p=document.createElement('button');
+    p.className='pbi'+(i==P?' on':'')+(i==5?' h5':'')+(i==4?' h4':'');
+    p.textContent=PC[i].l;p.onclick=function(l){return function(){sp(l)}}(i);b.appendChild(p);
   }
 }
-
-function setPW(l){
-  POWER=l;
-  document.querySelectorAll('.pw-b').forEach(function(b,i){b.className='pw-b'+(i+1===l?' on':'')+(i+1===5?' h5':'')+(i+1===4?' h4':'');});
-  document.querySelectorAll('.pbi').forEach(function(b,i){b.className='pbi'+(i+1===l?' on':'')+(i+1===5?' h5':'')+(i+1===4?' h4':'');});
-  document.getElementById('pwDesc').textContent=PCFG[l].d;
-  document.getElementById('powerTag').textContent=PCFG[l].t;
-  document.getElementById('powerTag').style.color=PCFG[l].c;
-  localStorage.setItem('ea_pw',l);
-  toast('Power: '+PCFG[l].l);
+function sp(l){P=l;
+  document.querySelectorAll('.pb').forEach(function(b,i){b.className='pb'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
+  document.querySelectorAll('.pbi').forEach(function(b,i){b.className='pbi'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
+  document.getElementById('pd').textContent=PC[l].d;document.getElementById('pt').textContent=PC[l].l;
+  document.getElementById('pt').style.color=PC[l].c;localStorage.setItem('ep',l);ts('Power: '+PC[l].l);
 }
+function nw(){D=[];T=0;sv();rd();if(window.innerWidth<769)tsb();ts('New chat');}
+function cl(){if(!D.length)return;D=[];T=0;sv();rd();ts('Cleared');}
 
-function newChat(){DATA=[];TOKENS=0;saveData();render();if(window.innerWidth<769)toggleSidebar();toast('New chat created');}
-function clearChat(){if(!DATA.length)return;DATA=[];TOKENS=0;saveData();render();toast('Cleared');}
-
-function send(){
+function sd(){
   var inp=document.getElementById('inp'),msg=inp.value.trim();
-  if(!msg||BUSY)return;BUSY=true;document.getElementById('snd').disabled=true;
+  if(!msg||B)return;B=true;document.getElementById('snd').disabled=true;
   var w=document.getElementById('welc');if(w)w.remove();
-  var inner=document.getElementById('msgsInner');
+  var mi=document.getElementById('mi');
   var u=document.createElement('div');u.className='msg u';
-  u.innerHTML='<div class="msg-av">U</div><div class="msg-b">'+esc(msg)+'</div>';
-  inner.appendChild(u);DATA.push({r:'u',c:msg,t:Date.now()});saveData();
+  u.innerHTML='<div class="av">U</div><div class="mb">'+esc(msg)+'</div>';
+  mi.appendChild(u);D.push({r:'u',c:msg,t:Date.now()});sv();
   var a=document.createElement('div');a.className='msg a';
-  a.innerHTML='<div class="msg-av">E</div><div class="msg-b"><div class="typing"><span></span><span></span><span></span></div></div>';
-  inner.appendChild(a);var bubble=a.querySelector('.msg-b');
-  document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
-  inp.value='';autoH(inp);
+  a.innerHTML='<div class="av">E</div><div class="mb"><div class="ty"><span></span><span></span><span></span></div></div>';
+  mi.appendChild(a);var b=a.querySelector('.mb');
+  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
+  inp.value='';ah(inp);
   setTimeout(function(){
     try{
-      var ints=intent(msg),reply=respond(msg,ints),html=fmt(reply);
-      bubble.innerHTML=html;
-      bubble.querySelectorAll('pre').forEach(function(pre){
+      var ints=IA(msg),reply=RE(msg,ints),html=fm(reply);
+      b.innerHTML=html;
+      b.querySelectorAll('pre').forEach(function(pre){
         var cb=document.createElement('span');cb.className='cp';cb.textContent='📋';
         cb.onclick=function(){
-          navigator.clipboard.writeText(pre.textContent).then(function(){cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500)}).catch(function(){
+          try{navigator.clipboard.writeText(pre.textContent).then(function(){cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500)}).catch(function(){
             var ta=document.createElement('textarea');ta.value=pre.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500);
-          });
+          })}catch(e){}
         };
         pre.after(cb);
       });
-      DATA.push({r:'a',c:reply,t:Date.now()});TOKENS+=msg.length+reply.length;saveData();updStats();
-      document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
-    }catch(e){bubble.innerHTML='<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';}
-    BUSY=false;document.getElementById('snd').disabled=false;inp.focus();
-  },300+POWER*80);
+      D.push({r:'a',c:reply,t:Date.now()});T+=msg.length+reply.length;sv();us();
+      document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
+    }catch(e){b.innerHTML='<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';}
+    B=false;document.getElementById('snd').disabled=false;inp.focus();
+  },300+P*80);
 }
 
-function qa(t){document.getElementById('inp').value=t;send();}
+function qa(t){document.getElementById('inp').value=t;sd();}
+function fm(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\\w+)?\\n([\\s\\S]*?)```/g,function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'}).replace(/\\*\\*(.+?)\\*\\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^\\d+\\.\\s(.+)$/gm,'<li>$1</li>').replace(/^•\\s(.+)$/gm,'<li>$1</li>').replace(/\\n\\n/g,'</p><p>').replace(/\\n/g,'<br>')}
+function esc(s){if(typeof s!=='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function ah(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 
-function fmt(t){
-  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w+)?\n([\s\S]*?)```/g,function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'})
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^\d+?\s+(.+)$/gm,'<li>$1</li>').replace(/^•\s(.+)$/gm,'<li>$1</li>')
-    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
-}
-
-function esc(s){if(typeof s!=='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
-
-function render(){
-  var inner=document.getElementById('msgsInner');inner.innerHTML='';
-  if(!DATA.length){
-    inner.innerHTML='<div class="welc" id="welc"><div class="wi">🧠</div><div class="wt">ENRIQUE AI</div><div class="ws">Built from scratch • 100% original code<br>Chinese & English • Code • Websites • Knowledge</div><div class="wg"><div class="wc" onclick="qa(\'Hello! What can you do?\')">👋 Hello</div><div class="wc" onclick="qa(\'Create a website\')">🌐 Website</div><div class="wc" onclick="qa(\'Write JavaScript code\')">⚡ JavaScript</div><div class="wc" onclick="qa(\'Write Python code\')">🐍 Python</div><div class="wc" onclick="qa(\'Explain neural networks\')">🧠 AI Explain</div><div class="wc" onclick="qa(\'Help me learn coding\')">📚 Learn</div></div></div>';
-    return;
+function rd(){
+  var mi=document.getElementById('mi');mi.innerHTML='';
+  if(!D.length){
+    mi.innerHTML='<div class="wc" id="welc"><div class="wi">🧠</div><div class="wt">ENRIQUE AI v4</div><div class="ws">Ultimate Intelligence Engine<br>15+ Knowledge Domains • Code • Websites • AI</div><div class="wg">'+
+      '<div class="gc" onclick="qa(\\'Hello!\\')">👋 Hello</div>'+
+      '<div class="gc" onclick="qa(\\'Create a website\\')">🌐 Website</div>'+
+      '<div class="gc" onclick="qa(\\'Write Python code\\')">🐍 Python</div>'+
+      '<div class="gc" onclick="qa(\\'Explain neural networks\\')">🧠 AI</div>'+
+      '<div class="gc" onclick="qa(\\'Teach me Git\\')">📚 Git</div>'+
+      '<div class="gc" onclick="qa(\\'What is Docker\\')">🐳 Docker</div>'+
+      '<div class="gc" onclick="qa(\\'SQL examples\\')">🗄️ SQL</div>'+
+      '<div class="gc" onclick="qa(\\'Tell me a joke\\')">😂 Joke</div>'+
+    '</div></div>';return;
   }
-  DATA.forEach(function(m){
+  D.forEach(function(m){
     var d=document.createElement('div');d.className='msg '+(m.r==='u'?'u':'a');
     var av=m.r==='u'?'U':'E',txt=esc(typeof m.c==='string'?m.c:'');
-    if(m.r==='a')txt=fmt(m.c);
-    d.innerHTML='<div class="msg-av">'+av+'</div><div class="msg-b">'+txt+'</div>';inner.appendChild(d);
+    if(m.r==='a')txt=fm(m.c);
+    d.innerHTML='<div class="av">'+av+'</div><div class="mb">'+txt+'</div>';mi.appendChild(d);
   });
-  document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
+  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
 }
+function us(){document.getElementById('tc').textContent=T;document.getElementById('td').textContent=T;document.getElementById('mc').textContent=D.length}
+function tsb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on')}
+function ts(m){var t=document.createElement('div');t.className='ts';t.textContent='• '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
+function sv(){try{localStorage.setItem('e4',JSON.stringify({d:D,t:T}))}catch(e){}}
+function ld(){try{var d=localStorage.getItem('e4');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}}
+function lm(){try{var d=localStorage.getItem('em');if(d)M=JSON.parse(d)}catch(e){}}
+function lw(){try{var p=localStorage.getItem('ep');if(p)P=parseInt(p)||3}catch(e){}}
 
-function updStats(){
-  document.getElementById('tokCnt').textContent=TOKENS;
-  document.getElementById('tokDisp').textContent=TOKENS;
-  document.getElementById('msgCnt').textContent=DATA.length;
-}
-
-function toggleSidebar(){
-  document.getElementById('sb').classList.toggle('open');
-  document.getElementById('ov').classList.toggle('on');
-}
-
-function toast(m){var t=document.createElement('div');t.className='toast';t.textContent='• '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000);}
-
-// ========== INIT ==========
-(function(){
-  loadMem();loadData();
-  try{var p=localStorage.getItem('ea_pw');if(p)POWER=parseInt(p)||3}catch(e){}
-  initPW();setPW(POWER);updStats();render();
+// ===== INIT =====
+(function(){lm();ld();lw();initPW();sp(P);us();rd();
   var inp=document.getElementById('inp');
-  inp.addEventListener('input',function(){autoH(this)});
-  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
-  console.log('🧠 ENRIQUE AI v3.1 loaded. Power: '+PCFG[POWER].l);
+  inp.addEventListener('input',function(){ah(this)});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sd()}});
+  console.log('🧠 ENRIQUE AI v4.0 loaded');
 })();
-</script>
-</body>
-</html>
+</script></body></html>
