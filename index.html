@@ -4,34 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>ENRIQUE GPT - Browser AI</title>
+<title>ENRIQUE GPT - AI Assistant</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 button,input,textarea{font-family:inherit}
-::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
-.sb{width:270px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
+
+/* SIDEBAR */
+.sb{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
 .sb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
+.sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#58a6ff);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
 .sb-t{font-size:15px;font-weight:800;flex:1}
 .acts{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
 .btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
 .btn:hover{border-color:var(--primary);background:var(--primary-l)}.btn:active{transform:scale(.98)}
+
 .sec{padding:8px 14px;border-bottom:1px solid var(--border)}
 .sl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
 .st{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
 .st em{color:var(--muted)}
+
+/* API Key input */
+.kb{display:flex;gap:4px;margin-top:4px}
+.kb input{flex:1;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:10px;outline:none;transition:border-color .2s}
+.kb input:focus{border-color:var(--blue)}
+.kb input::placeholder{color:var(--muted2)}
+.kb button{padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s}
+.kb button:hover{border-color:var(--blue);color:var(--blue)}
+
 .sf{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
+.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.pb{padding:6px 0;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.pb:hover{border-color:var(--blue);color:var(--blue)}
+.pb.on{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
+.pb.h5.on{border-color:var(--purple);background:#1a1140;color:var(--purple)}
+.pb.h4.on{border-color:var(--blue);background:#0c1e3a;color:var(--blue)}
+.pd{font-size:9px;color:var(--muted2);margin-top:4px}
+
+/* MAIN */
 .mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
 .top .mu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
 .top .br{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.top .br .ta{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(58,106,255,.15);color:var(--blue)}
+.top .br .ta{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange)}
 .top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
+.pbar{display:flex;gap:4px;padding:4px 14px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.pbi{flex:1;padding:4px 0;border:none;border-radius:4px;background:transparent;color:var(--muted2);font-size:9px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+.pbi:hover{color:var(--muted)}.pbi.on{color:var(--primary);background:var(--primary-l)}
+.pbi.h5.on{color:var(--purple);background:#1a1140}
+.pbi.h4.on{color:var(--blue);background:#0c1e3a}
+
+/* MESSAGES */
 .ms{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
 .mi{max-width:720px;margin:0 auto}
 .msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
@@ -52,6 +80,8 @@ button,input,textarea{font-family:inherit}
 .mb .cp{float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
 .mb ul{padding-left:18px;margin:4px 0}
 .mb li{margin:2px 0}
+
+/* WELCOME */
 .wc{text-align:center;padding:40px 20px}
 .wi{width:64px;height:64px;margin:0 auto 14px;background:linear-gradient(135deg,var(--blue),#58a6ff);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px}
 .wt{font-size:24px;font-weight:900;color:var(--text);margin-bottom:4px}
@@ -59,6 +89,8 @@ button,input,textarea{font-family:inherit}
 .wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:480px;margin:0 auto}
 .gc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
 .gc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
+
+/* INPUT */
 .ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
 .iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
 .iw:focus-within{border-color:var(--primary)}
@@ -67,142 +99,177 @@ button,input,textarea{font-family:inherit}
 .iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
 .iw button:hover{background:var(--primary-d)}
 .iw button:disabled{opacity:.4;cursor:default}
+
 .ty{display:flex;gap:4px;align-items:center;padding:4px 0}
 .ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
 .ty span:nth-child(2){animation-delay:.2s}
 .ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+
 .ts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
 @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
+
 @media(max-width:768px){.sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.ov.on{display:block}.mb{max-width:92%;font-size:13px}.av{width:28px;height:28px;font-size:10px}}
 </style>
 </head>
 <body>
-<div class="app"><div class="sb" id="sb">
+<div class="app">
+<div class="sb" id="sb">
 <div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE GPT</div></div>
 <div class="acts">
 <button class="btn" onclick="nw()"><span style="font-size:14px">+</span> New Chat</button>
 <button class="btn" onclick="cl()"><span style="font-size:14px">x</span> Clear</button>
 </div>
-<div class="sec"><div class="sl">AI Engine</div>
-<div class="st" id="aiStatus"><em>Status:</em> Loading WebLLM...<br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Downloading ~1GB on first load</span></div>
-<div class="btn" id="loadBtn" onclick="loadModel()" style="display:none">Load AI Model</div>
-<div style="margin-top:6px;height:4px;background:var(--card2);border-radius:2px;overflow:hidden"><div id="progBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--primary));border-radius:2px;transition:width .3s"></div></div>
-<div id="progText" style="font-size:8px;color:var(--muted2);margin-top:2px;text-align:center"></div>
+<div class="sec">
+<div class="sl">API Key</div>
+<div class="st">输入 OpenRouter API Key 使用 GPT-4/Claude</div>
+<div class="kb">
+<input id="keyInp" type="password" placeholder="sk-or-v1-...">
+<button onclick="setKey()">Save</button>
 </div>
-<div class="sec"><div class="sl">Stats</div>
-<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span></div></div>
-<div class="sf">ENRIQUE GPT • Powered by WebLLM</div></div>
+</div>
+<div class="sec">
+<div class="sl">Model</div>
+<div class="st"><em>Current:</em> <span id="modelName">GPT-4o</span></div>
+<div class="kb" style="flex-wrap:wrap;gap:4px">
+<button onclick="setModel('openai/gpt-4o')" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--muted);font-size:9px;cursor:pointer">GPT-4o</button>
+<button onclick="setModel('anthropic/claude-3.5-sonnet')" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--muted);font-size:9px;cursor:pointer">Claude 3.5</button>
+<button onclick="setModel('google/gemini-2.0-flash-001')" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--muted);font-size:9px;cursor:pointer">Gemini Flash</button>
+<button onclick="setModel('openai/gpt-4o-mini')" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--muted);font-size:9px;cursor:pointer">GPT-4o Mini</button>
+<button onclick="setModel('meta-llama/llama-3.2-3b-instruct')" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);color:var(--muted);font-size:9px;cursor:pointer">Llama 3</button>
+</div>
+</div>
+<div class="sec">
+<div class="sl">Power</div>
+<div class="pg" id="pg"></div>
+<div class="pd" id="pd">Balanced</div>
+</div>
+<div class="sec">
+<div class="sl">Stats</div>
+<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span><br><em>Status:</em> <span id="as" style="color:var(--orange)">No API Key</span></div>
+</div>
+<div class="sf">ENRIQUE GPT • Powered by OpenRouter</div>
+</div>
 <div class="mn">
-<div class="top"><button class="mu" onclick="tsb()">=</button>
-<div class="br"><span>ENRIQUE GPT</span><span class="ta" id="modeTag">LOCAL AI</span></div>
-<div class="tk">⚡ <span id="td">0</span></div></div>
+<div class="top">
+<button class="mu" onclick="tsb()">=</button>
+<div class="br"><span>ENRIQUE GPT</span><span class="ta" id="mt">GPT-4o</span></div>
+<div class="tk">⚡ <span id="td">0</span></div>
+</div>
 <div class="ms" id="ms"><div class="mi" id="mi"></div></div>
 <div class="ia"><div class="iw">
-<textarea id="inp" rows="1" placeholder="Ask me anything..."></textarea>
+<textarea id="inp" rows="1" placeholder="Ask me anything... (need API key in sidebar)"></textarea>
 <button id="snd" onclick="sd()">></button>
-</div></div></div></div>
+</div></div>
+</div>
+</div>
 <div class="ov" id="ov" onclick="tsb()"></div>
 
-<script type="importmap">
-{
-  "imports": {
-    "@mlc-ai/web-llm": "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.73/+esm"
+<script>
+// ================================================================
+// ENRIQUE GPT v5.0 - Powered by OpenRouter API
+// GPT-4 / Claude / Gemini level AI, no loading, instant use
+// ================================================================
+
+var D = [], T = 0, P = 3, B = false;
+var API_KEY = localStorage.getItem('eg_key') || '';
+var MODEL = localStorage.getItem('eg_model') || 'openai/gpt-4o';
+var MODEL_SHORT = 'GPT-4o';
+
+var PC = [,{l:'MINIMAL'},{l:'SIMPLE'},{l:'BALANCED'},{l:'DEEP'},{l:'MAXIMUM'}];
+
+// ===== OpenRouter API =====
+async function askAI(msg) {
+  if (!API_KEY) {
+    return '⚠️ 请先在侧边栏输入 OpenRouter API Key。\n\n你可以在这里获取：https://openrouter.ai/keys\n\n免费注册后可以获得 $1 试用额度。';
   }
-}
-</script>
-<script type="module">
-// ===== ENRIQUE GPT - Powered by WebLLM =====
-import { CreateMLCEngine } from "@mlc-ai/web-llm";
-
-var D = [], T = 0, B = false, ENGINE = null, ENGINE_LOADING = false;
-var MODEL_ID = "Qwen2.5-1.5B-Instruct-q4f16_1-MLC";
-
-// ===== WebLLM Engine =====
-async function loadModel() {
-  if (ENGINE || ENGINE_LOADING) return;
-  ENGINE_LOADING = true;
-  document.getElementById('loadBtn').style.display = 'none';
-  document.getElementById('progText').textContent = 'Loading model... (this may take a few minutes on first load)';
+  
+  var msgs = [{role:'system', content:'You are ENRIQUE GPT, a helpful AI assistant. Respond in the same language as the user (Chinese or English). Be concise but thorough. Can write code, create websites, explain concepts.'}];
+  var ctx = D.slice(-10);
+  for (var i = 0; i < ctx.length; i++) msgs.push({role: ctx[i].r=='u'?'user':'assistant', content: ctx[i].c});
+  msgs.push({role:'user', content: msg});
+  
+  document.getElementById('as').innerHTML = '<span style="color:var(--blue)">Thinking...</span>';
   
   try {
-    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> Downloading model...<br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">First load downloads ~1GB</span>';
-    
-    ENGINE = await CreateMLCEngine(MODEL_ID, {
-      initProgressCallback: function(progress) {
-        var pct = Math.round(progress.progress * 100);
-        document.getElementById('progBar').style.width = pct + '%';
-        document.getElementById('progText').textContent = progress.text || 'Loading ' + pct + '%';
-        if (pct >= 100) {
-          document.getElementById('progText').textContent = 'Model ready!';
-          document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--primary)">Running locally</span><br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Running in browser via WebGPU</span>';
-        }
-      }
+    var res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + API_KEY,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://azabyssal-maker.github.io/enrique-codex/',
+        'X-Title': 'ENRIQUE GPT'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: msgs,
+        max_tokens: P <= 2 ? 512 : P == 3 ? 1024 : P == 4 ? 2048 : 4096,
+        temperature: 0.7
+      })
     });
     
-    document.getElementById('progBar').style.width = '100%';
-    document.getElementById('progText').textContent = 'AI Ready!';
-    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--primary)">Running locally</span><br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Running in browser via WebGPU</span>';
-    document.getElementById('modeTag').textContent = 'LOCAL AI';
-    ts('AI model loaded! You can now chat.');
-  } catch(e) {
-    document.getElementById('progText').textContent = 'Error: ' + e.message;
-    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--red)">Failed to load</span><br><span style="font-size:9px;color:var(--muted2)">Using fallback engine</span>';
-    document.getElementById('loadBtn').style.display = 'block';
-    document.getElementById('loadBtn').textContent = 'Retry Load Model';
-  }
-  ENGINE_LOADING = false;
-}
-
-async function askAI(msg) {
-  // If WebLLM is loaded, use it
-  if (ENGINE) {
-    try {
-      var msgs = [
-        { role: "system", content: "You are ENRIQUE GPT, a helpful AI assistant running in the browser via WebLLM. You can write code, create websites, explain concepts, and answer questions. Be concise but thorough. Support Chinese and English." }
-      ];
-      // Add recent conversation context
-      var ctx = D.slice(-6);
-      for (var i = 0; i < ctx.length; i++) {
-        msgs.push({ role: ctx[i].r === 'u' ? 'user' : 'assistant', content: ctx[i].c });
-      }
-      msgs.push({ role: "user", content: msg });
-      
-      var reply = await ENGINE.chat.completions.create({
-        messages: msgs,
-        max_tokens: 1024,
-        temperature: 0.7,
-        top_p: 0.95
-      });
-      
-      return reply.choices[0].message.content;
-    } catch(e) {
-      console.error('WebLLM error:', e);
-      return fallbackResponse(msg);
+    var data = await res.json();
+    if (data.error) {
+      document.getElementById('as').innerHTML = '<span style="color:var(--red)">Error</span>';
+      return '❌ Error: ' + data.error.message;
     }
+    
+    document.getElementById('as').innerHTML = '<span style="color:var(--primary)">Ready</span>';
+    return data.choices[0].message.content;
+  } catch(e) {
+    document.getElementById('as').innerHTML = '<span style="color:var(--red)">Error</span>';
+    return '❌ Connection error: ' + e.message;
   }
-  return fallbackResponse(msg);
 }
 
-// ===== Fallback Engine (when WebLLM not loaded) =====
-function fallbackResponse(msg) {
-  var m = msg.toLowerCase().trim();
-  var cn = /[\u4e00-\u9fff]/.test(msg);
-  
-  function pk(a){return a[Math.random()*a.length|0]}
-  
-  if (/^(hi|hello|hey|你好|您好|嗨|哈[喽罗]|喂|早上好|晚上好|下午好)$/.test(m)) {
-    return cn ? pk(['你好！我是 ENRIQUE GPT！请先在侧边栏加载 AI 模型，我就能用真正的 AI 回答你！','嗨！加载模型后我能回答任何问题！']) : pk(['Hello! I\'m ENRIQUE GPT! Load the AI model in the sidebar for real AI responses!','Hi! After loading the model I can answer anything!']);
+// ===== SETTINGS =====
+function setKey() {
+  var inp = document.getElementById('keyInp');
+  API_KEY = inp.value.trim();
+  localStorage.setItem('eg_key', API_KEY);
+  if (API_KEY) {
+    document.getElementById('as').innerHTML = '<span style="color:var(--primary)">Ready</span>';
+    ts('API Key saved!');
   }
-  if (/python/.test(m)) return cn?'Python 是一种高级编程语言。加载 AI 模型后我可以生成代码示例！':'Python is a high-level language. Load the AI model and I can generate code examples!';
-  if (/(create|make|build).*(website|site|web|网站)/.test(m)) return cn?'我可以帮你创建网站！不过需要先加载 AI 模型才能生成完整的代码。请点击侧边栏的"Load AI Model"。':'I can help create websites! Please load the AI model first for complete code generation.';
-  
-  return cn ? '请先在侧边栏点击 "Load AI Model" 加载真正的 AI！加载后我可以回答任何问题、写代码、做网站。' : 'Please click "Load AI Model" in the sidebar first! After loading, I can answer anything, write code, and create websites.';
+  inp.value = '';
 }
 
-// ===== UI =====
-function sd(){
+function setModel(m) {
+  MODEL = m;
+  localStorage.setItem('eg_model', m);
+  MODEL_SHORT = m.split('/').pop().replace(/-/g,' ');
+  document.getElementById('modelName').textContent = MODEL_SHORT;
+  document.getElementById('mt').textContent = MODEL_SHORT;
+  ts('Model: ' + MODEL_SHORT);
+}
+
+// ===== POWER UI =====
+function initPW() {
+  var g = document.getElementById('pg'), b = document.querySelector('.pbar');
+  if (!b) { b = document.createElement('div'); b.className = 'pbar'; document.querySelector('.mn').insertBefore(b, document.querySelector('.ms')); }
+  g.innerHTML = ''; b.innerHTML = '';
+  for (var i = 1; i <= 5; i++) {
+    var o = document.createElement('button');
+    o.className = 'pb' + (i==P?' on':'') + (i==5?' h5':'') + (i==4?' h4':'');
+    o.textContent = PC[i].l.substring(0,4); o.onclick = function(l){return function(){sp(l)}}(i);
+    g.appendChild(o);
+    var p = document.createElement('button');
+    p.className = 'pbi' + (i==P?' on':'') + (i==5?' h5':'') + (i==4?' h4':'');
+    p.textContent = PC[i].l; p.onclick = function(l){return function(){sp(l)}}(i);
+    b.appendChild(p);
+  }
+}
+function sp(l){P=l;
+  document.querySelectorAll('.pb').forEach(function(b,i){b.className='pb'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
+  document.querySelectorAll('.pbi').forEach(function(b,i){b.className='pbi'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
+  document.getElementById('pd').textContent = ['','Shortest','Brief','Balanced','Detailed','Maximum'][l];
+  localStorage.setItem('eg_pw',l); ts('Power: '+PC[l].l);
+}
+
+// ===== CHAT =====
+function sd() {
   var inp = document.getElementById('inp'), msg = inp.value.trim();
   if (!msg || B) return; B = true;
   document.getElementById('snd').disabled = true;
@@ -220,9 +287,9 @@ function sd(){
   document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
   inp.value = ''; ah(inp);
   
-  setTimeout(async function(){
+  var startTime = Date.now();
+  askAI(msg).then(function(reply) {
     try {
-      var reply = await askAI(msg);
       var html = fmt(reply);
       bubble.innerHTML = html;
       bubble.querySelectorAll('pre').forEach(function(pre){
@@ -232,19 +299,22 @@ function sd(){
         };
         pre.after(cb);
       });
-      D.push({r:'a', c:reply, t:Date.now()}); T += msg.length + reply.length; sv(); us();
+      D.push({r:'a', c:reply, t:Date.now()});
+      T += Math.round((msg.length + reply.length) / 4);
+      sv(); us();
       document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
     } catch(e) {
       bubble.innerHTML = '<span style="color:var(--red)">Error: ' + esc(e.message) + '</span>';
     }
     B = false; document.getElementById('snd').disabled = false; inp.focus();
-  }, 200);
+  });
 }
 
-function qa(t){document.getElementById('inp').value = t; sd();}
+function qa(t){document.getElementById('inp').value=t;sd();}
 function nw(){D=[];T=0;sv();rd();if(window.innerWidth<769)tsb();ts('New chat');}
 function cl(){if(!D.length)return;D=[];T=0;sv();rd();ts('Cleared');}
-function fmt(t){
+
+function fmt(t) {
   return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/```(\w+)?\n([\s\S]*?)```/g, function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'})
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
@@ -254,44 +324,53 @@ function fmt(t){
 }
 function esc(s){if(typeof s!='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function ah(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
-function rd(){
-  var mi=document.getElementById('mi'); mi.innerHTML = '';
+
+function rd() {
+  var mi = document.getElementById('mi'); mi.innerHTML = '';
   if (!D.length) {
-    mi.innerHTML = '<div class="wc" id="welc"><div class="wi">E</div><div class="wt">ENRIQUE GPT</div><div class="ws">Real AI running in your browser via WebLLM<br>Load the model once for GPT-level intelligence</div><div class="wg">'+
-      '<div class="gc" onclick="qa(\'Hello\')">👋 Hello</div>'+
-      '<div class="gc" onclick="qa(\'Write Python code\')">🐍 Python</div>'+
-      '<div class="gc" onclick="qa(\'Create a website\')">🌐 Website</div>'+
-      '<div class="gc" onclick="qa(\'Explain AI\')">🧠 Explain AI</div>'+
-      '<div class="gc" onclick="qa(\'Tell me a joke\')">😄 Joke</div>'+
-      '<div class="gc" onclick="qa(\'Help me study\')">📚 Study</div>'+
-    '</div><div style="margin-top:16px;font-size:11px;color:var(--muted2);line-height:1.5">⚠️ First time? Click "Load AI Model" in the sidebar<br>Downloads ~1GB model (one-time), then runs 100% offline</div></div>';
+    mi.innerHTML = '<div class="wc" id="welc"><div class="wi">E</div><div class="wt">ENRIQUE GPT</div>'+
+      '<div class="ws">Powered by OpenRouter<br>GPT-4o / Claude 3.5 / Gemini • Instant • No download</div>'+
+      '<div class="wg">'+
+      '<div class="gc" onclick="qa(\'Hello!\')">👋 Hello</div>'+
+      '<div class="gc" onclick="qa(\'Write Python code to sort a list\')">🐍 Python</div>'+
+      '<div class="gc" onclick="qa(\'Create a website for a coffee shop\')">🌐 Website</div>'+
+      '<div class="gc" onclick="qa(\'Explain quantum computing\')">🔬 Explain</div>'+
+      '<div class="gc" onclick="qa(\'Write a poem about AI\')">📝 Poem</div>'+
+      '<div class="gc" onclick="qa(\'Help me debug this: for i in range(10) print(i)\')">🔧 Debug</div>'+
+    '</div>'+
+    (API_KEY ? '' : '<div style="margin-top:16px;padding:10px;background:var(--card);border:1px solid var(--orange);border-radius:8px;font-size:11px;color:var(--orange)">⚠️ 请在侧边栏输入 OpenRouter API Key 后开始使用</div>')+
+    '</div>';
     return;
   }
   D.forEach(function(m){
-    var d = document.createElement('div'); d.className = 'msg ' + (m.r == 'u' ? 'u' : 'a');
-    var av = m.r == 'u' ? 'U' : 'E', txt = esc(m.c || '');
-    if (m.r == 'a') txt = fmt(m.c);
+    var d = document.createElement('div'); d.className = 'msg ' + (m.r=='u'?'u':'a');
+    var av = m.r=='u'?'U':'E', txt = esc(m.c||'');
+    if (m.r=='a') txt = fmt(m.c);
     d.innerHTML = '<div class="av">'+av+'</div><div class="mb">'+txt+'</div>'; mi.appendChild(d);
   });
   document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
 }
-function us(){document.getElementById('tc').innerHTML = T; document.getElementById('td').innerHTML = T; document.getElementById('mc').innerHTML = D.length}
-function tsb(){document.getElementById('sb').classList.toggle('open'); document.getElementById('ov').classList.toggle('on')}
+
+function us(){document.getElementById('tc').innerHTML=T;document.getElementById('td').innerHTML=T;document.getElementById('mc').innerHTML=D.length}
+function tsb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on')}
 function ts(m){var t=document.createElement('div');t.className='ts';t.textContent=' '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
-function sv(){try{localStorage.setItem('eg',JSON.stringify({d:D,t:T}))}catch(e){}}
+function sv(){try{localStorage.setItem('eg5',JSON.stringify({d:D,t:T}))}catch(e){}}
+
+// ===== INIT =====
 (function(){
-  try{var d=localStorage.getItem('eg');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}
-  us(); rd();
+  try{var d=localStorage.getItem('eg5');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}
+  try{var p=localStorage.getItem('eg_pw');if(p)P=parseInt(p)||3}catch(e){}
+  if(API_KEY) document.getElementById('as').innerHTML = '<span style="color:var(--primary)">Ready</span>';
+  MODEL_SHORT = MODEL.split('/').pop().replace(/-/g,' ');
+  document.getElementById('modelName').textContent = MODEL_SHORT;
+  document.getElementById('mt').textContent = MODEL_SHORT;
+  initPW(); sp(P); us(); rd();
   var inp = document.getElementById('inp');
   inp.addEventListener('input', function(){ah(this)});
   inp.addEventListener('keydown', function(e){if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();sd()}});
-  // Show load button if no engine
-  setTimeout(function(){
-    if(!ENGINE) {
-      document.getElementById('loadBtn').style.display = 'block';
-    }
-  }, 1000);
-  console.log('ENRIQUE GPT loaded');
+  var keyInp = document.getElementById('keyInp');
+  keyInp.addEventListener('keydown', function(e){if(e.key=='Enter')setKey()});
+  console.log('ENRIQUE GPT v5.0 loaded');
 })();
 </script>
 </body></html>
