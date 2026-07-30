@@ -4,810 +4,503 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>ENRIQUE AI - Neural Network</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ENRIQUE AI - 智能助手</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--shadow2:0 8px 24px rgba(0,0,0,.5)}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,system-ui,sans-serif}
+:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif;--shadow:0 8px 24px rgba(0,0,0,.5)}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 button,input,textarea{font-family:inherit}
-.app{display:flex;height:100vh;height:100dvh}
-.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;overflow:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+.app{display:flex;height:100vh;height:100dvh;overflow:hidden}
+
+/* === SIDEBAR === */
+.sidebar{width:270px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
 .sb-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.sb-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
 .sb-title{font-size:15px;font-weight:800;flex:1}
-.sb-close{width:26px;height:26px;border:none;border-radius:6px;background:var(--card);color:var(--muted);cursor:pointer;font-size:12px;display:none}
-.newchat{display:block;margin:10px 14px;padding:9px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
-.newchat:hover{border-color:var(--primary);background:var(--primary-l)}
-.newchat span{display:inline-block;margin-right:6px}
-.sec{padding:10px 14px;border-bottom:1px solid var(--border)}
-.sec-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.sub-label{font-size:9px;font-weight:700;color:var(--muted);margin-bottom:4px}
-.nn-info{font-size:8px;color:var(--muted2);margin-bottom:4px;line-height:1.3}
-.model-status{font-size:9px;color:var(--muted2);margin-bottom:6px}
-.model-btn{width:100%;padding:7px;border:1.5px solid var(--primary);border-radius:6px;background:var(--primary-l);color:var(--primary);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
-.model-btn:hover{background:var(--primary);color:#fff}
-.model-btn:disabled{opacity:.4;cursor:default}
-.model-progress{margin-top:6px}
-.mp-bar{height:3px;background:var(--card2);border-radius:2px;overflow:hidden}
-.mp-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;width:0%;transition:width .3s}
-.mp-text{font-size:8px;color:var(--muted2);margin-top:2px;text-align:center}
-.chat-list{flex:1;overflow-y:auto;padding:4px 8px}
-.sb-foot{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center}
+
+.actions{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
+.btn:hover{border-color:var(--primary);background:var(--primary-l)}
+.btn:active{transform:scale(.98)}
+
+.sec{padding:8px 14px;border-bottom:1px solid var(--border)}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.pw-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.pw-b{padding:6px 0;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.pw-b:hover{border-color:var(--blue);color:var(--blue)}
+.pw-b.on{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
+.pw-b.h5.on{border-color:var(--purple);background:#1a1140;color:var(--purple)}
+.pw-b.h4.on{border-color:var(--blue);background:#0c1e3a;color:var(--blue)}
+.pw-desc{font-size:9px;color:var(--muted2);margin-top:4px}
+.stat-box{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
+.stat-box em{color:var(--muted)}
+.sb-foot{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
+
+/* === MAIN === */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px}
-.top .menu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
-.top .brand{font-size:14px;font-weight:700;flex:1;min-width:0}
-.top .brand .tag{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange);margin-left:6px}
-.top .tokens{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
-.top .act{display:flex;gap:6px}
-.top .act button{width:28px;height:28px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+.top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
+.top .menu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
+.top .brand{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.top .brand .tag{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange)}
+.top .tokens{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border);white-space:nowrap}
+
+/* === POWER BAR (top) === */
+.pbar{display:flex;gap:4px;padding:4px 14px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.pbi{flex:1;padding:4px 0;border:none;border-radius:4px;background:transparent;color:var(--muted2);font-size:9px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+.pbi:hover{color:var(--muted)}
+.pbi.on{color:var(--primary);background:var(--primary-l)}
+.pbi.h5.on{color:var(--purple);background:#1a1140}
+.pbi.h4.on{color:var(--blue);background:#0c1e3a}
+
+/* === MESSAGES === */
 .msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
-.msgs-inner{max-width:680px;margin:0 auto}
-.msg{margin-bottom:14px;display:flex;gap:10px;animation:up .2s ease}
+.msgs-inner{max-width:720px;margin:0 auto}
+.msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.u{justify-content:flex-end}.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted)}
-.msg-b{max-width:88%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
-.msg.u .msg-b{background:var(--primary);color:#fff;border-radius:12px 12px 4px 12px}
-.msg.a .msg-b{background:var(--card);border:1px solid var(--border);border-radius:12px 12px 12px 4px}
-.msg-b pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;overflow-x:auto;margin:8px 0;font-size:12px;max-height:400px}
-.msg-b code{font-size:12px;font-family:monospace}
-.msg-b :not(pre)>code{background:var(--card2);padding:2px 5px;border-radius:4px;font-size:12px}
-.msg-b .cp-btn{display:inline-block;font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--card);color:var(--muted);cursor:pointer;margin-top:4px}
-.msg-b .cp-btn:active{background:var(--primary-l);border-color:var(--primary)}
-.inp-bar{flex-shrink:0;padding:8px 10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);background:var(--bg2);position:relative;z-index:5}
-.ibar{display:flex;align-items:center;gap:8px;max-width:680px;margin:0 auto}
-.ifield{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:14px;outline:none;transition:all .2s}
-.ifield:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(16,163,127,.08)}
-.ifield::placeholder{color:var(--muted2)}
-.isend{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .15s}
-.isend:active{transform:scale(.92)}.isend:disabled{opacity:.3}
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;min-height:60vh}
-.wlc-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;margin-bottom:14px;box-shadow:0 6px 20px rgba(16,163,127,.2)}
-.wlc-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
-.wlc-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
-.wlc-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:420px}
-.wlc-chip{padding:7px 12px;border:1px solid var(--border);border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--card);color:var(--text)}
-.wlc-chip:active{transform:scale(.95);border-color:var(--primary);background:var(--primary-l)}
-.toast{position:fixed;top:16px;right:16px;padding:10px 16px;border-radius:10px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow2);font-size:13px;font-weight:500;z-index:999;animation:slide .2s ease;max-width:280px}
-@keyframes slide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
-.toast.ok{border-color:var(--green);color:var(--green)}
-.toast.bad{border-color:var(--red);color:var(--red)}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
-.overlay.on{display:block}
-.api-hint a{color:var(--blue);text-decoration:none}
+.msg.u{justify-content:flex-end}
+.msg-av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.msg.u .msg-av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
+.msg.a .msg-av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
+.msg-b{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
+.msg.u .msg-b{background:var(--card);border:1px solid var(--border)}
+.msg.a .msg-b{background:var(--card2);border:1px solid var(--border2)}
+.msg-b h2{font-size:15px;color:var(--text);margin:8px 0 4px}
+.msg-b h3{font-size:13px;color:var(--text);margin:6px 0 3px}
+.msg-b strong{color:var(--text)}
+.msg-b code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--blue);font-family:monospace}
+.msg-b pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;overflow-x:auto;position:relative}
+.msg-b pre code{background:none;padding:0;color:var(--text2);font-size:11px;line-height:1.5;display:block}
+.msg-b .cp{position:relative;float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
+.msg-b ul{padding-left:18px;margin:4px 0}
+.msg-b li{margin:2px 0}
+
+/* === WELCOME === */
+.welc{text-align:center;padding:30px 20px}
+.wi{width:60px;height:60px;margin:0 auto 14px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.wt{font-size:22px;font-weight:900;color:var(--text);margin-bottom:4px}
+.ws{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:480px;margin:0 auto}
+.wc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
+.wc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
+
+/* === INPUT === */
+.ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
+.iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
+.iw:focus-within{border-color:var(--primary)}
+.iw textarea{flex:1;border:none;background:transparent;padding:8px 10px;color:var(--text);font-size:14px;line-height:1.4;resize:none;outline:none;max-height:120px;min-height:24px}
+.iw textarea::placeholder{color:var(--muted2)}
+.iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
+.iw button:hover{background:var(--primary-d)}
+.iw button:disabled{opacity:.4;cursor:default}
+
+/* === TYPING === */
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+
+/* === TOAST === */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* === OVERLAY === */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}
+.ov.on{display:block}
+
+/* === RESPONSIVE === */
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-290px;top:0;bottom:0;z-index:100;transition:left .25s}
-  .sidebar.open{left:0}.overlay.on{display:block}
-  .top .menu{display:flex}.sb-close{display:flex}
-  .msgs{padding:12px 10px}.msg-b{font-size:13px;padding:9px 12px}
+  .sidebar{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .pbar{overflow-x:auto;gap:2px}
+  .pbi{font-size:8px;padding:3px 2px;flex:none;min-width:50px}
+  .wg{grid-template-columns:repeat(2,1fr)}
+  .msg-b{max-width:92%;font-size:13px}
+  .msg-av{width:28px;height:28px;font-size:10px}
 }
-.typing{display:flex;gap:4px;padding:4px 0}.typing span{width:5px;height:5px;border-radius:50%;background:var(--primary);animation:blink .8s infinite}
-.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
-@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 </style>
 </head>
 <body>
 
 <div class="app">
-  <div class="sidebar" id="sidebar">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sb">
     <div class="sb-head">
       <div class="sb-icon">E</div>
-      <span class="sb-title">ENRIQUE</span>
-      <button class="sb-close" onclick="toggleSidebar()">✕</button>
+      <div class="sb-title">ENRIQUE AI</div>
     </div>
-    <button class="newchat" onclick="newChat()"><span>+</span> New Chat</button>
+    <div class="actions">
+      <button class="btn" onclick="newChat()"><span style="font-size:14px">✚</span> New Chat</button>
+      <button class="btn" onclick="clearChat()"><span style="font-size:14px">✕</span> Clear</button>
+    </div>
     <div class="sec">
-      <div class="sec-label">🧠 Neural Network</div>
-      <div style="margin-top:8px">
-        <div class="sub-label">From Scratch RNN · 100% Original</div>
-        <div class="model-status" id="nnStatus">⚪ Fresh network</div>
-        <div class="nn-info" id="nnInfo"></div>
-        <button class="model-btn" id="trainBtn" onclick="trainNN()">🎓 Train ENRIQUE</button>
-        <div class="model-progress" id="trainProgress" style="display:none">
-          <div class="mp-bar"><div class="mp-fill" id="trainFill"></div></div>
-          <div class="mp-text" id="trainText">Training...</div>
-        </div>
-        <div class="api-hint" style="margin-top:6px;font-size:8px">No API · No libraries · Pure JS</div>
+      <div class="sec-lbl">Power Level</div>
+      <div class="pw-grid" id="pwGrid"></div>
+      <div class="pw-desc" id="pwDesc">Balanced - medium detail</div>
+    </div>
+    <div class="sec">
+      <div class="sec-lbl">Stats</div>
+      <div class="stat-box">
+        <em>Tokens:</em> <span id="tokCnt">0</span><br>
+        <em>Version:</em> ENRIQUE v3.0<br>
+        <em>Messages:</em> <span id="msgCnt">0</span><br>
+        <em>Status:</em> <span id="aiStat" style="color:var(--primary)">Ready</span>
       </div>
     </div>
-    <div class="chat-list" id="chatList"></div>
-    <div class="sb-foot" id="sbFoot">ENRIQUE AI · From Scratch Neural Network</div>
+    <div class="sb-foot">ENRIQUE AI v3 • 100% Original Code</div>
   </div>
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
+  <!-- MAIN -->
   <div class="main">
     <div class="top">
-      <button class="menu" onclick="toggleSidebar()">☰</button>
-      <span class="brand">ENRIQUE <span class="tag">NN</span></span>
-      <span class="tokens" id="tokenDisplay">0</span>
-      <div class="act">
-        <button onclick="clearChat()" title="Clear">🗑️</button>
+      <button class="menu" id="menuBtn" onclick="toggleSidebar()">☰</button>
+      <div class="brand">
+        <span>ENRIQUE AI</span>
+        <span class="tag" id="powerTag">MEDIUM</span>
       </div>
+      <div class="tokens">⚡ <span id="tokDisp">0</span></div>
     </div>
 
+    <!-- Power bar -->
+    <div class="pbar" id="pbar"></div>
+
+    <!-- Messages -->
     <div class="msgs" id="msgs">
       <div class="msgs-inner" id="msgsInner">
-        <div class="welcome" id="welcome">
-          <div class="wlc-icon">⚡</div>
-          <div class="wlc-title">ENRIQUE AI</div>
-          <div class="wlc-sub">A neural network built from scratch in JavaScript</div>
-          <div class="wlc-chips">
-            <div class="wlc-chip" onclick="ask(&#39;Hello&#39;)">👋 Hello</div>
-            <div class="wlc-chip" onclick="ask(&#39;Create a website&#39;)">🌐 Website</div>
-            <div class="wlc-chip" onclick="ask(&#39;Write Python code&#39;)">🐍 Python</div>
-            <div class="wlc-chip" onclick="ask(&#39;What can you do&#39;)">💡 Help</div>
-            <div class="wlc-chip" onclick="ask(&#39;Tell me a joke&#39;)">😂 Joke</div>
-            <div class="wlc-chip" onclick="ask(&#39;你是谁&#39;)">🤔 你是谁</div>
+        <div class="welc" id="welc">
+          <div class="wi">🧠</div>
+          <div class="wt">ENRIQUE AI</div>
+          <div class="ws">Built from scratch • 100% original code<br>Chinese &amp; English • Code • Websites • Knowledge</div>
+          <div class="wg">
+            <div class="wc" onclick="qa('Hello! What can you do?')">👋 Hello</div>
+            <div class="wc" onclick="qa('Create a website')">🌐 Website</div>
+            <div class="wc" onclick="qa('Write JavaScript code')">⚡ JavaScript</div>
+            <div class="wc" onclick="qa('Write Python code')">🐍 Python</div>
+            <div class="wc" onclick="qa('Explain neural networks')">🧠 AI Explain</div>
+            <div class="wc" onclick="qa('Help me learn coding')">📚 Learn</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="inp-bar">
-      <div class="ibar">
-        <textarea class="ifield" id="inp" rows="1" placeholder="Train me by chatting..." style="resize:none;overflow:hidden;padding-top:10px;padding-bottom:10px;min-height:36px;line-height:1.4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea>
-        <button class="isend" id="sendBtn" onclick="send()">↑</button>
+    <!-- Input -->
+    <div class="ia">
+      <div class="iw">
+        <textarea id="inp" rows="1" placeholder="Type your message..."></textarea>
+        <button id="snd" onclick="send()">➤</button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="ov" id="ov" onclick="toggleSidebar()"></div>
+
 <script>
-/* ===== ENRIQUE AI - Pure JavaScript Neural Network ===== */
-var VERSION = '9.0';
-var POWER = {min:200, low:500, med:1500, high:3000, max:4000};
-var CUR = 'med';
+// ================================================================
+// ENRIQUE AI v3.0 - 100% Original Code, No APIs, No Libraries
+// ================================================================
+
 var DATA = [];
 var TOKENS = 0;
+var POWER = 3;
 var BUSY = false;
+var MEM = {};
 
-// Load saved data
-try{
-  var d = localStorage.getItem('ea7_data');
-  if(d){ var p = JSON.parse(d); DATA = p.d||[]; TOKENS = p.t||0; CUR = p.c||'med'; }
-}catch(e){}
+var PCFG = {
+  1:{l:'LOWEST',t:'MIN',d:'Shortest, most concise',c:'#7d7d90'},
+  2:{l:'LOW',t:'SIMPLE',d:'Brief but helpful',c:'#58a6ff'},
+  3:{l:'MEDIUM',t:'BALANCED',d:'Balanced with examples',c:'#10a37f'},
+  4:{l:'HIGH',t:'DETAILED',d:'Detailed explanations',c:'#d29922'},
+  5:{l:'HIGHEST',t:'MAX',d:'Maximum depth, comprehensive',c:'#a371f7'}
+};
 
-function $(id){return document.getElementById(id)}
+// ========== KNOWLEDGE BASE ==========
+var KB = {
+  html:{
+    d:'HTML (HyperText Markup Language) is the standard language for creating web pages. It uses tags to structure content like headings, paragraphs, links, images, and more.',
+    t:'<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Website</title>\n  <style>\n    body { font-family: system-ui; padding: 20px; background: #f5f5f5; }\n    h1 { color: #333; }\n  </style>\n</head>\n<body>\n  <h1>Hello World!</h1>\n  <p>Created with ENRIQUE AI.</p>\n</body>\n</html>',
+    ex:[{n:'Button',c:'<button style="padding:10px 20px;background:#10a37f;color:#fff;border:none;border-radius:8px;cursor:pointer">Click</button>'},{n:'Card',c:'<div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.1);max-width:300px"><h2>Title</h2><p>Content here</p></div>'}]
+  },
+  js:{
+    d:'JavaScript is a versatile programming language for web browsers and servers (Node.js). It enables interactive web pages and full-stack applications.',
+    ex:[{n:'Function',c:'function greet(name) {\n  return `Hello, ${name}!`;\n}\nconsole.log(greet("ENRIQUE"));'},{n:'Fetch API',c:'async function getData(url) {\n  const res = await fetch(url);\n  const data = await res.json();\n  return data;\n}'},{n:'Array',c:'const nums = [1,2,3,4,5];\nconst dbl = nums.map(n => n*2);\nconst evens = nums.filter(n => n%2===0);\nconst sum = nums.reduce((a,b) => a+b, 0);'}]
+  },
+  py:{
+    d:'Python is a high-level, interpreted language known for readability and versatility. Used in web dev, data science, AI, and automation.',
+    ex:[{n:'Hello',c:'print("Hello from ENRIQUE AI!")'},{n:'Fibonacci',c:'def fib(n):\n    a,b = 0,1\n    for _ in range(n):\n        print(a, end=" ")\n        a,b = b, a+b\nfib(10)'},{n:'Class',c:'class Student:\n    def __init__(self, name):\n        self.name = name\n    def say_hi(self):\n        return f"Hi, I\'m {self.name}"'}]
+  },
+  react:{
+    d:'React is a JavaScript library for building user interfaces with reusable components.',
+    t:'import React, { useState } from \'react\';\n\nfunction App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Count: {count}</h1>\n      <button onClick={() => setCount(c => c+1)}>+</button>\n    </div>\n  );\n}\n\nexport default App;'
+  },
+  nn:{
+    d:'A neural network is a computing system inspired by biological brains. It consists of layers of interconnected nodes (neurons) that learn patterns from data.',
+    c:'Neurons, weights, biases, activation functions, forward propagation, backpropagation, gradient descent, loss functions, layers, epochs, learning rate, overfitting, regularization',
+    t:'• CNN - for images\n• RNN - for sequences\n• LSTM - improved RNN\n• Transformer - modern (GPT, BERT)\n• GAN - for generation'
+  },
+  web:{
+    s:['1. Plan structure and content','2. Write HTML for structure','3. Add CSS for styling','4. Add JS for interactivity','5. Test on all devices','6. Deploy to hosting'],
+    h:'Free hosting:\n• GitHub Pages - push to repo\n• Netlify - drag-drop or git\n• Vercel - great for frameworks\n• Cloudflare Pages - global CDN'
+  },
+  tips:[
+    'Plan before you code. Architecture matters more than syntax.',
+    'Write readable code. It is read far more than written.',
+    'Test early and often. Bugs caught early are cheap.',
+    'Use version control (git) for every project.',
+    'Break large problems into small pieces.',
+    'Practice consistently. 30 min daily beats 5 hours weekly.'
+  ]
+};
 
-function save(){
-  localStorage.setItem('ea7_data', JSON.stringify({d:DATA, t:TOKENS, c:CUR}));
-  updateUI();
+// ========== INTENT ENGINE ==========
+function intent(msg) {
+  var m = msg.toLowerCase().trim();
+  var r = [];
+  if(/^(hi|hello|hey|你好|嗨|哈[喽咯]|早上好|晚上好|good\s*morn|good\s*eve|what'?s up)\b/.test(m)) r.push('greet');
+  if(/你是谁|who(\s+are|\'re)?\s*(you|u)|你叫什么|your\s*name/.test(m)) r.push('who');
+  if(/create|make|build|生成|创建|搭建/.test(m) && /website|site|web|网页|网站/.test(m)) r.push('mkweb');
+  if(/写|write|code|program|script|代码|编程/.test(m) && /python|javascript|js|java|html|css|c\+\+|rust|go|php|swift|ts/.test(m)) r.push('speccode');
+  if(/python/.test(m)) r.push('py');
+  if(/javascript|js/.test(m)) r.push('js');
+  if(/html/.test(m)) r.push('html');
+  if(/css/.test(m)) r.push('css');
+  if(/react/.test(m)) r.push('react');
+  if(/code|program|编程|写代码|coding|developer/.test(m)) r.push('code');
+  if(/explain|what.is|what.are|how.does|什么是|解释|说明/.test(m) && /neural|network|神经网络|machine.learning|机器学习|deep.learning|深度学习|ai|人工智能/.test(m)) r.push('explain_nn');
+  if(/explain|解释|说明|介绍|what.is|什么是/.test(m)) r.push('explain');
+  if(/help|how.to|how.do.i|怎么做|怎么用|功能|what.can.you.do/.test(m)) r.push('help');
+  if(/learn|学习|教|teach|tutorial|教程/.test(m)) r.push('learn');
+  if(/joke|笑话|funny|搞笑/.test(m)) r.push('joke');
+  if(/thanks|thank.you|谢谢|多谢|thx/.test(m)) r.push('thanks');
+  if(/translate|翻译/.test(m)) r.push('trans');
+  if(/meaning|life|purpose|42/.test(m)) r.push('deep');
+  if(/math|calculate|compute|计算|数/.test(m)||/^\d+\s*[+\-*\/]\s*\d+/.test(m)) r.push('math');
+  if(r.length===0) r.push('gen');
+  return r;
 }
 
-function esc(s){
-  if(!s) return '';
-  var d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
+// ========== MEMORY ==========
+function learn(k,v){ MEM[k]={v:v,t:Date.now()}; saveMem(); }
+function recall(k){ return MEM[k]?MEM[k].v:null; }
+function saveMem(){ try{localStorage.setItem('ea_mem',JSON.stringify(MEM))}catch(e){} }
+function loadMem(){ try{var d=localStorage.getItem('ea_mem');if(d)MEM=JSON.parse(d)}catch(e){} }
+function saveData(){ try{localStorage.setItem('ea_dat',JSON.stringify({d:DATA,t:TOKENS}))}catch(e){} }
+function loadData(){ try{var d=localStorage.getItem('ea_dat');if(d){var p=JSON.parse(d);DATA=p.d||[];TOKENS=p.t||0}}catch(e){} }
+
+// ========== RESPONSE GENERATOR ==========
+function respond(msg, ints) {
+  var lv = POWER, cn = /[\u4e00-\u9fff]/.test(msg), m = msg.toLowerCase().trim();
+
+  function trimR(t, extra) {
+    if(lv<=2){var s=t.split(/\n+/);return s.slice(0,2).join('\n').substring(0,200)}
+    if(lv===3) return t.substring(0,500);
+    if(lv===4) return t.substring(0,1000);
+    return t+(extra?'\n\n'+extra:'');
+  }
+
+  for(var i=0;i<ints.length;i++){
+    var it=ints[i];
+    if(it==='greet'){
+      var g=cn?['你好！我是 ENRIQUE AI，很高兴见到你！','嗨！我可以帮你写代码、创建网站、解释概念。有什么需要吗？']:['Hello! I\'m ENRIQUE AI.','Hi! I can help you code, create websites, explain concepts, and more.'];
+      return g[Math.floor(Math.random()*g.length)]+(lv>2?'\n\n'+(cn?'请随意向我提问！':'Feel free to ask me anything!') :'');
+    }
+    if(it==='who'){
+      return trimR(cn?
+        '我叫 ENRIQUE AI，是一个完全从零构建的 AI 助手！\n\n🧠 我的特点：\n• 100% 原创代码 - 无外部 API\n• 纯浏览器运行 - 无需服务器\n• 支持中英文 - 双语交流\n• 可以写代码、创建网站、回答问题\n• 有记忆能力\n\n调整 Power Level 控制回答详细度！':
+        'I\'m ENRIQUE AI - an intelligent assistant built from scratch!\n\n🧠 Features:\n• 100% original code - no APIs\n• Runs in browser - no server needed\n• Bilingual - Chinese & English\n• Can write code, create websites, answer questions\n• Has memory\n\nAdjust Power Level for detail!'
+      ,'');
+    }
+    if(it==='mkweb'){
+      return trimR(
+        (cn?'我可以帮你创建网站！这是一个完整的 HTML 模板：\n\n':'I can create a website! Here\'s a complete HTML template:\n\n')+
+        '```html\n'+KB.html.t+'\n```\n\n'+
+        (cn?'📋 步骤：\n':'📋 Steps:\n')+KB.web.s.join('\n'),
+        (cn?'免费部署：'+KB.web.h:'Free hosting:\n'+KB.web.h)
+      );
+    }
+    if(it==='speccode'||it==='py'||it==='js'||it==='html'||it==='css'||it==='react'){
+      var lang=it==='py'?'Python':it==='js'?'JavaScript':it==='react'?'React':it==='html'?'HTML':it==='css'?'CSS':'code';
+      var code='';
+      if(it==='py'||(it==='speccode'&&/python/.test(m))) code='```python\n'+KB.py.ex.map(function(e){return '# '+e.n+'\n'+e.c}).join('\n\n')+'\n```';
+      else if(it==='js'||(it==='speccode'&&/javascript|js/.test(m))) code='```javascript\n'+KB.js.ex.map(function(e){return '// '+e.n+'\n'+e.c}).join('\n\n')+'\n```';
+      else if(it==='html') code='```html\n'+KB.html.t+'\n```\n\n'+KB.html.ex.map(function(e){return '• '+e.n+':\n```html\n'+e.c+'\n```'}).join('\n');
+      else if(it==='css') code='```css\n/* CSS Variables & Flexbox */\n:root{--primary:#10a37f;--bg:#0a0a0f;--text:#e4e4ec}\nbody{font-family:system-ui;background:var(--bg);color:var(--text);line-height:1.6}\n.container{display:flex;justify-content:center;align-items:center;min-height:100vh}\n.btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;border:none;cursor:pointer}```';
+      else if(it==='react') code='```jsx\n'+KB.react.t+'\n```';
+      return trimR((cn?'这里是一些 '+lang+' 代码：\n\n':'Here is some '+lang+' code:\n\n')+code,(cn?'需要更多帮助吗？':'Need more help?'));
+    }
+    if(it==='code'){
+      return trimR(
+        (cn?'关于编程的经验分享：\n\n':'Coding tips and knowledge:\n\n')+
+        (cn?'💡 编程技巧：\n':'💡 Tips:\n')+KB.tips.slice(0,lv).map(function(t,i){return (i+1)+'. '+t}).join('\n')+'\n\n'+
+        (cn?'我可以帮你写：\n':'I can write:\n')+'• Python • JavaScript • HTML/CSS • React • Java • C++ • Rust • Go',
+        cn?'想看我展示某个语言的代码吗？':'Want me to show code in a specific language?'
+      );
+    }
+    if(it==='explain_nn'){
+      return trimR(
+        (cn?'🧠 神经网络详解：\n\n':'🧠 Neural Networks Explained:\n\n')+KB.nn.d+'\n\n'+
+        (cn?'主要概念：\n':'Key Concepts:\n')+KB.nn.c.split(',').map(function(x){return '• '+x.trim()}).join('\n')+'\n\n'+
+        (cn?'类型：\n':'Types:\n')+KB.nn.t,
+        cn?'💡 ENRIQUE 本身就是一个神经网络的实现！':'💡 I myself am a neural network implementation!'
+      );
+    }
+    if(it==='explain'){
+      var topics={
+        'api':cn?'API (应用程序接口) 是软件组件之间通信的接口。':'API (Application Programming Interface) enables software components to communicate.',
+        'ai|人工智能':cn?'AI (人工智能) 是模拟人类智能的系统。':'AI (Artificial Intelligence) simulates human intelligence.',
+        'algorithm|算法':cn?'算法是解决问题的一系列步骤。':'An algorithm is a sequence of steps to solve a problem.',
+        'database|数据库':cn?'数据库是有组织的数据集合。常见：MySQL, MongoDB, Redis。':'A database organizes data. Common: MySQL, MongoDB, Redis.',
+        'server|服务器':cn?'服务器是提供服务的计算机系统。':'A server provides services to client computers.'
+      };
+      for(var k in topics){if(new RegExp(k,'i').test(m)) return trimR(topics[k],cn?'需要更详细解释吗？':'Need more detail?');}
+      return trimR(cn?'我可以解释各种概念！请告诉我你想了解什么？':'I can explain various concepts! What interests you?','');
+    }
+    if(it==='help'){
+      return trimR(cn?
+        'ENRIQUE AI 可以帮助你：\n\n• 写代码 - Python, JS, HTML, React 等\n• 创建网站 - 从模板到部署\n• 解释概念 - AI, 算法, 编程等\n• 学习编程 - 入门指南和资源\n• 翻译 - 中英文互译\n\n调整 Power Level 控制回答详细度！':
+        'ENRIQUE AI can help you:\n\n• Write code - Python, JS, HTML, React, etc.\n• Create websites - from template to deploy\n• Explain concepts - AI, algorithms, programming\n• Learn coding - beginner guides & resources\n• Translate - Chinese & English\n\nAdjust Power Level for response detail!'
+      ,'');
+    }
+    if(it==='learn'){
+      return trimR(cn?
+        '📚 学习编程指南：\n\n1. 选择入门语言（推荐 Python 或 JavaScript）\n2. 学习基础语法（变量、条件、循环、函数）\n3. 做小项目实践\n4. 学习数据结构与算法\n5. 学习 Git 版本控制\n6. 参与开源项目\n\n💡 推荐资源：freeCodeCamp, MDN, LeetCode, GitHub':
+        '📚 Learn Programming Guide:\n\n1. Choose a beginner language (Python or JS)\n2. Learn basics (variables, loops, functions)\n3. Practice with small projects\n4. Study data structures & algorithms\n5. Learn Git\n6. Contribute to open source\n\n💡 Resources: freeCodeCamp, MDN, LeetCode, GitHub'
+      ,cn?'想让我展示一些代码？':'Want me to show you some code?');
+    }
+    if(it==='joke'){
+      var j=cn?['为什么程序员分不清万圣节和圣诞节？因为 Oct 31 = Dec 25！','为什么神经网络过马路？为了到达另一层！','AI 为什么不会讲笑话？因为还在学习中！']:['Why did the neural network cross the road? To get to the other layer!','Why do programmers prefer dark mode? Light attracts bugs!','What do you call an AI that sings? A neur-harmonic network!'];
+      return j[Math.floor(Math.random()*j.length)];
+    }
+    if(it==='thanks') return cn?'不客气！随时欢迎提问 😊':'You\'re welcome! Ask me anytime 😊';
+    if(it==='deep') return cn?'关于生命的意义...从技术角度看，生命像神经网络一样，通过学习和经历不断优化自己。或者答案是 42？😄':'The meaning of life? Like a neural network, we optimize through learning. Or maybe 42? 😄';
+    if(it==='math'){
+      var mm=m.match(/(\d+)\s*([+\-*\/])\s*(\d+)/);
+      if(mm){var a=+mm[1],op=mm[2],b=+mm[3];switch(op){case'+':return a+' + '+b+' = '+(a+b);case'-':return a+' - '+b+' = '+(a-b);case'*':return a+' × '+b+' = '+(a*b);case'/':return a+' ÷ '+b+' = '+(b!==0?a/b:'undefined');}}
+      return cn?'给我一个算式，如 "5 + 3"':'Give me an expression like "5 + 3"';
+    }
+    if(it==='trans') return cn?'我可以帮助翻译！请发给我内容（中英文皆可）。':'I can help translate! Send me text (Chinese or English).';
+  }
+
+  // Default
+  return trimR(cn?
+    '我明白了！你可以尝试：\n\n• 写代码："写一个 Python 爬虫"\n• 创建网站："创建一个网站"\n• 解释概念："什么是神经网络"\n• 学习编程："帮我学习 JavaScript"\n• 调整详细度：使用 Power Level':
+    'Got it! Try asking me:\n\n• "Write Python code"\n• "Create a website"\n• "What is a neural network"\n• "Help me learn JavaScript"\n• Adjust detail with Power Level'
+  ,cn?'告诉我你想做什么！':'Tell me what you\'d like!');
 }
 
-function toast(msg, t){
-  var el = document.createElement('div');
-  el.className = 'toast ' + (t||'');
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(function(){ el.remove() }, 2500);
+// ========== UI ==========
+function initPW() {
+  var g=document.getElementById('pwGrid'),b=document.getElementById('pbar');
+  g.innerHTML='';b.innerHTML='';
+  for(var i=1;i<=5;i++){
+    var o=document.createElement('button');o.className='pw-b'+(i===POWER?' on':'')+(i===5?' h5':'')+(i===4?' h4':'');o.textContent=PCFG[i].l.substring(0,4);o.title=PCFG[i].d;o.onclick=function(l){return function(){setPW(l)}}(i);g.appendChild(o);
+    var p=document.createElement('button');p.className='pbi'+(i===POWER?' on':'')+(i===5?' h5':'')+(i===4?' h4':'');p.textContent=PCFG[i].l;p.onclick=function(l){return function(){setPW(l)}}(i);b.appendChild(p);
+  }
 }
 
-function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px"}
+function setPW(l){
+  POWER=l;
+  document.querySelectorAll('.pw-b').forEach(function(b,i){b.className='pw-b'+(i+1===l?' on':'')+(i+1===5?' h5':'')+(i+1===4?' h4':'');});
+  document.querySelectorAll('.pbi').forEach(function(b,i){b.className='pbi'+(i+1===l?' on':'')+(i+1===5?' h5':'')+(i+1===4?' h4':'');});
+  document.getElementById('pwDesc').textContent=PCFG[l].d;
+  document.getElementById('powerTag').textContent=PCFG[l].t;
+  document.getElementById('powerTag').style.color=PCFG[l].c;
+  localStorage.setItem('ea_pw',l);
+  toast('Power: '+PCFG[l].l);
+}
 
-function updateUI(){
-  document.getElementById('tokenDisplay').textContent = TOKENS > 0 ? TOKENS.toLocaleString() + ' tok' : '0';
+function newChat(){DATA=[];TOKENS=0;saveData();render();if(window.innerWidth<769)toggleSidebar();toast('New chat created');}
+function clearChat(){if(!DATA.length)return;DATA=[];TOKENS=0;saveData();render();toast('Cleared');}
+
+function send(){
+  var inp=document.getElementById('inp'),msg=inp.value.trim();
+  if(!msg||BUSY)return;BUSY=true;document.getElementById('snd').disabled=true;
+  var w=document.getElementById('welc');if(w)w.remove();
+  var inner=document.getElementById('msgsInner');
+  var u=document.createElement('div');u.className='msg u';
+  u.innerHTML='<div class="msg-av">U</div><div class="msg-b">'+esc(msg)+'</div>';
+  inner.appendChild(u);DATA.push({r:'u',c:msg,t:Date.now()});saveData();
+  var a=document.createElement('div');a.className='msg a';
+  a.innerHTML='<div class="msg-av">E</div><div class="msg-b"><div class="typing"><span></span><span></span><span></span></div></div>';
+  inner.appendChild(a);var bubble=a.querySelector('.msg-b');
+  document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
+  inp.value='';autoH(inp);
+  setTimeout(function(){
+    try{
+      var ints=intent(msg),reply=respond(msg,ints),html=fmt(reply);
+      bubble.innerHTML=html;
+      bubble.querySelectorAll('pre').forEach(function(pre){
+        var cb=document.createElement('span');cb.className='cp';cb.textContent='📋';
+        cb.onclick=function(){
+          navigator.clipboard.writeText(pre.textContent).then(function(){cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500)}).catch(function(){
+            var ta=document.createElement('textarea');ta.value=pre.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500);
+          });
+        };
+        pre.after(cb);
+      });
+      DATA.push({r:'a',c:reply,t:Date.now()});TOKENS+=msg.length+reply.length;saveData();updStats();
+      document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
+    }catch(e){bubble.innerHTML='<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';}
+    BUSY=false;document.getElementById('snd').disabled=false;inp.focus();
+  },300+POWER*80);
+}
+
+function qa(t){document.getElementById('inp').value=t;send();}
+
+function fmt(t){
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w+)?\n([\s\S]*?)```/g,function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'})
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^\d+\.\s(.+)$/gm,'<li>$1</li>').replace(/^•\s(.+)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
+}
+
+function esc(s){if(typeof s!=='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+function render(){
+  var inner=document.getElementById('msgsInner');inner.innerHTML='';
+  if(!DATA.length){
+    inner.innerHTML='<div class="welc" id="welc"><div class="wi">🧠</div><div class="wt">ENRIQUE AI</div><div class="ws">Built from scratch • 100% original code<br>Chinese & English • Code • Websites • Knowledge</div><div class="wg"><div class="wc" onclick="qa(\'Hello! What can you do?\')">👋 Hello</div><div class="wc" onclick="qa(\'Create a website\')">🌐 Website</div><div class="wc" onclick="qa(\'Write JavaScript code\')">⚡ JavaScript</div><div class="wc" onclick="qa(\'Write Python code\')">🐍 Python</div><div class="wc" onclick="qa(\'Explain neural networks\')">🧠 AI Explain</div><div class="wc" onclick="qa(\'Help me learn coding\')">📚 Learn</div></div></div>';
+    return;
+  }
+  DATA.forEach(function(m){
+    var d=document.createElement('div');d.className='msg '+(m.r==='u'?'u':'a');
+    var av=m.r==='u'?'U':'E',txt=esc(typeof m.c==='string'?m.c:'');
+    if(m.r==='a')txt=fmt(m.c);
+    d.innerHTML='<div class="msg-av">'+av+'</div><div class="msg-b">'+txt+'</div>';inner.appendChild(d);
+  });
+  document.getElementById('msgs').scrollTop=document.getElementById('msgs').scrollHeight;
+}
+
+function updStats(){
+  document.getElementById('tokCnt').textContent=TOKENS;
+  document.getElementById('tokDisp').textContent=TOKENS;
+  document.getElementById('msgCnt').textContent=DATA.length;
 }
 
 function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('on');
+  document.getElementById('sb').classList.toggle('open');
+  document.getElementById('ov').classList.toggle('on');
 }
 
-function newChat(){
-  DATA = [];
-  TOKENS = 0;
-  save();
-  render();
-  if(window.innerWidth<769) toggleSidebar();
-  toast('New chat created','ok');
-}
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent='• '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000);}
 
-function clearChat(){
-  if(!DATA.length) return;
-  DATA = [];
-  TOKENS = 0;
-  save();
-  render();
-  toast('Cleared','ok');
-}
-
-function ask(q){
-  $('inp').value = q;
-  send();
-}
-
-
-// ===== BRAIN (Rule-based Fallback) =====
-var BRAIN = {
-  facts: {},
-  convos: [],
-  rem: function(k,v){this.facts[k]={v:v,t:Date.now()}},
-  rec: function(k){ return this.facts[k] ? this.facts[k].v : null; },
-  add: function(u,a){this.convos.push({u:u,a:a,t:Date.now()});if(this.convos.length>30)this.convos=this.convos.slice(-30);},
-  process: function(msg, power){
-    var m = msg.toLowerCase().trim();
-    if(/^(hi|hello|hey|你好|嗨)/.test(m)) return 'Hello! I\'m ENRIQUE AI. I\'m still learning - the more you talk to me, the smarter I get! 🧠 Train me by clicking "Train ENRIQUE" in the sidebar.';
-    if(/你是谁|who are you/.test(m)) return 'I\'m ENRIQUE AI - a neural network created from scratch in JavaScript! No libraries, no APIs, no pre-trained models. Just pure math and code. Every conversation makes me smarter.';
-    if(/what can you do|help|功能/.test(m)) return 'I can learn from our conversations! Just chat with me. Click "Train ENRIQUE" in the sidebar to train my neural network. I can talk in Chinese or English. The more you talk, the better I get!';
-    if(/joke|笑话/.test(m)){var j=['Why did the neural network cross the road? To get to the other layer!','What do you call a AI that sings? A neur-harmonic network!','I\'m still learning jokes. Ask me again after I\'m trained!'];return j[Math.floor(Math.random()*j.length)];}
-    if(/create|make|build|写|做|创建/.test(m)){
-      if(/website|site|web|网页/.test(m)) return 'I can learn to create websites! For now, here\'s what I know:\n\n```html\n<!DOCTYPE html><html><body><h1>Hello World</h1><p>Train me to make better sites!</p></body></html>\n```\nTell me more and train my neural network!';
-      if(/python|script/.test(m)) return '```python\nprint("Hello from ENRIQUE AI!")\n# Train me to write better code!\n```';
-      return 'I\'m learning to code! Keep chatting and training me to get better.';
-    }
-    return 'Interesting! I\'m still learning to understand. Keep talking to me and click "Train ENRIQUE" - every conversation helps me learn! 🧠';
-  }
-};
-
-// ===== Neural Network Code =====
-// ===== ENRIQUE Neural Network v2.0 - LSTM =====
-// From scratch, no libraries, no APIs
-
-class Mat {
-  constructor(r, c, vals) {
-    this.r = r; this.c = c;
-    const n = r * c;
-    this.w = new Float32Array(n);
-    if (vals) { for (let i = 0; i < n && i < vals.length; i++) this.w[i] = vals[i]; }
-    else {
-      const s = Math.sqrt(2.0 / (r + c));
-      for (let i = 0; i < n; i++) this.w[i] = (Math.random() * 2 - 1) * s;
-    }
-  }
-  get(i, j) { return this.w[i * this.c + j]; }
-  set(i, j, v) { this.w[i * this.c + j] = v; }
-  
-  mul(b) {
-    if (this.c !== b.r) throw Error(`mat mul: ${this.r}x${this.c} @ ${b.r}x${b.c}`);
-    const o = new Mat(this.r, b.c);
-    for (let i = 0; i < this.r; i++) {
-      for (let j = 0; j < b.c; j++) {
-        let s = 0;
-        for (let k = 0; k < this.c; k++) s += this.get(i, k) * b.get(k, j);
-        o.set(i, j, s);
-      }
-    }
-    return o;
-  }
-  
-  add(o) {
-    if (typeof o === 'number') { const m = new Mat(this.r, this.c); for (let i = 0; i < this.r * this.c; i++) m.w[i] = this.w[i] + o; return m; }
-    const m = new Mat(this.r, this.c);
-    for (let i = 0; i < this.r * this.c; i++) m.w[i] = this.w[i] + o.w[i];
-    return m;
-  }
-  
-  elmul(o) { const m = new Mat(this.r, this.c); for (let i = 0; i < this.r * this.c; i++) m.w[i] = this.w[i] * o.w[i]; return m; }
-  map(f) { const m = new Mat(this.r, this.c); for (let i = 0; i < this.r * this.c; i++) m.w[i] = f(this.w[i]); return m; }
-  scale(s) { const m = new Mat(this.r, this.c); for (let i = 0; i < this.r * this.c; i++) m.w[i] = this.w[i] * s; return m; }
-  copy() { const m = new Mat(this.r, this.c); m.w = new Float32Array(this.w); return m; }
-  
-  T() {
-    const o = new Mat(this.c, this.r);
-    for (let i = 0; i < this.r; i++)
-      for (let j = 0; j < this.c; j++)
-        o.set(j, i, this.get(i, j));
-    return o;
-  }
-  
-  clip(max) { for (let i = 0; i < this.r * this.c; i++) this.w[i] = Math.max(-max, Math.min(max, this.w[i])); }
-}
-
-// Activations
-function sig(x) { return 1 / (1 + Math.exp(-Math.max(-50, Math.min(50, x)))); }
-function dsig(y) { return y * (1 - y); }
-function tanh_(x) { return Math.tanh(x); }
-function dtanh_(y) { return 1 - y * y; }
-
-function softmax(x) {
-  const max = Math.max(...x);
-  const e = x.map(v => Math.exp(v - max));
-  const s = e.reduce((a, b) => a + b, 0);
-  return e.map(v => v / s);
-}
-
-// ===== LSTM Cell =====
-class LSTMCell {
-  constructor(inputSize, hiddenSize) {
-    this.is = inputSize;
-    this.hs = hiddenSize;
-    
-    // Forget gate
-    this.Wf = new Mat(inputSize, hiddenSize);
-    this.Uf = new Mat(hiddenSize, hiddenSize);
-    this.bf = new Mat(1, hiddenSize);
-    
-    // Input gate
-    this.Wi = new Mat(inputSize, hiddenSize);
-    this.Ui = new Mat(hiddenSize, hiddenSize);
-    this.bi = new Mat(1, hiddenSize);
-    
-    // Cell gate
-    this.Wc = new Mat(inputSize, hiddenSize);
-    this.Uc = new Mat(hiddenSize, hiddenSize);
-    this.bc = new Mat(1, hiddenSize);
-    
-    // Output gate
-    this.Wo = new Mat(inputSize, hiddenSize);
-    this.Uo = new Mat(hiddenSize, hiddenSize);
-    this.bo = new Mat(1, hiddenSize);
-    
-    this.params = [this.Wf, this.Uf, this.bf, this.Wi, this.Ui, this.bi,
-                   this.Wc, this.Uc, this.bc, this.Wo, this.Uo, this.bo];
-  }
-  
-  forward(x, h, c) {
-    // Convert Float32Array to Mat if needed
-    if(h && !h.mul) { var hm = new Mat(1, this.hs); for(var j=0;j<this.hs;j++) hm.set(0,j,h[j]); h = hm; }
-    if(!h) { h = new Mat(1, this.hs); }
-    if(c && !c.mul) { var cm = new Mat(1, this.hs); for(var j=0;j<this.hs;j++) cm.set(0,j,c[j]); c = cm; }
-    if(!c) { c = new Mat(1, this.hs); }
-    const f = sig(x.mul(this.Wf).add(h.mul(this.Uf)).add(this.bf).w);
-    const i = sig(x.mul(this.Wi).add(h.mul(this.Ui)).add(this.bi).w);
-    const cc = tanh_(x.mul(this.Wc).add(h.mul(this.Uc)).add(this.bc).w);
-    const o = sig(x.mul(this.Wo).add(h.mul(this.Uo)).add(this.bo).w);
-    
-    const newC = new Float32Array(this.hs);
-    const newH = new Float32Array(this.hs);
-    for (let j = 0; j < this.hs; j++) {
-      newC[j] = f[j] * (c ? c[j] : 0) + i[j] * cc[j];
-      newH[j] = o[j] * Math.tanh(newC[j]);
-    }
-    
-    return { h: newH, c: newC, f, i, cc, o };
-  }
-  
-  // Get all 12 weight matrices for backprop
-  getAllW() { return this.params; }
-}
-
-// ===== ENRIQUE LSTM Network =====
-class ENRIQUELSTM {
-  constructor(vocabSize, hiddenSize = 256, embedSize = 64, numLayers = 2) {
-    this.vs = vocabSize;
-    this.hs = hiddenSize;
-    this.es = embedSize;
-    this.nl = numLayers;
-    
-    // Embedding
-    this.Wex = new Mat(vocabSize, embedSize);
-    
-    // LSTM layers
-    this.layers = [];
-    let inputSize = embedSize;
-    for (let l = 0; l < numLayers; l++) {
-      this.layers.push(new LSTMCell(inputSize, hiddenSize));
-      inputSize = hiddenSize;
-    }
-    
-    // Output
-    this.Why = new Mat(hiddenSize, vocabSize);
-    this.by = new Mat(1, vocabSize);
-    
-    this.iter = 0;
-    this.smoothLoss = 0;
-    
-    // Adam optimizer state
-    this.m = {}; this.v = {};
-    this.t = 0;
-  }
-  
-  forward(ix, h, c) {
-    const x = new Mat(1, this.es);
-    for (let j = 0; j < this.es; j++) x.set(0, j, this.Wex.get(ix, j));
-    
-    const newH = [];
-    const newC = [];
-    let input = x;
-    
-    for (let l = 0; l < this.nl; l++) {
-      const res = this.layers[l].forward(input, h ? h[l] : null, c ? c[l] : null);
-      newH.push(res.h);
-      newC.push(res.c);
-      input = new Mat(1, this.hs);
-      for (let j = 0; j < this.hs; j++) input.set(0, j, res.h[j]);
-    }
-    
-    // Output
-    const yRaw = input.mul(this.Why).add(this.by);
-    const yProbs = softmax([...yRaw.w]);
-    
-    return { h: newH, c: newC, yProbs, x };
-  }
-  
-  sample(yProbs, temp = 0.8) {
-    const scaled = yProbs.map(p => Math.pow(p, 1/temp));
-    const sum = scaled.reduce((a, b) => a + b, 0);
-    const normed = scaled.map(p => p / sum);
-    let r = Math.random();
-    for (let i = 0; i < normed.length; i++) {
-      r -= normed[i];
-      if (r <= 0) return i;
-    }
-    return normed.length - 1;
-  }
-  
-  generate(chars, charToIdx, seed, length = 300, temp = 0.7) {
-    let h = []; let c = [];
-    for (let l = 0; l < this.nl; l++) {
-      h.push(new Float32Array(this.hs));
-      c.push(new Float32Array(this.hs));
-    }
-    let out = seed || '';
-    
-    for (let ch of seed || '') {
-      const ix = charToIdx[ch] !== undefined ? charToIdx[ch] : 0;
-      const fwd = this.forward(ix, h, c);
-      h = fwd.h; c = fwd.c;
-    }
-    
-    for (let i = 0; i < length; i++) {
-      const last = out[out.length - 1] || ' ';
-      const ix = charToIdx[last] !== undefined ? charToIdx[last] : 0;
-      const fwd = this.forward(ix, h, c);
-      h = fwd.h; c = fwd.c;
-      const nextIx = this.sample(fwd.yProbs, temp);
-      out += chars[nextIx] || '?';
-    }
-    return out;
-  }
-  
-  // Simplified training (gradient descent)
-  train(seq, charToIdx, lr = 0.005) {
-    if (seq.length < 3) return;
-    
-    const indices = [];
-    for (let ch of seq) indices.push(charToIdx[ch] !== undefined ? charToIdx[ch] : 0);
-    
-    // Forward
-    let h = [], cs = [];
-    for (let l = 0; l < this.nl; l++) { h.push(new Float32Array(this.hs)); cs.push(new Float32Array(this.hs)); }
-    
-    let loss = 0;
-    const states = [];
-    
-    for (let t = 0; t < indices.length - 1; t++) {
-      const fwd = this.forward(indices[t], h, cs);
-      h = fwd.h; cs = fwd.c;
-      loss += -Math.log(Math.max(fwd.yProbs[indices[t+1]], 1e-8));
-      states.push({ h: h.map(a => new Float32Array(a)), c: cs.map(a => new Float32Array(a)), y: [...fwd.yProbs], ix: indices[t], target: indices[t+1] });
-    }
-    
-    this.smoothLoss = this.smoothLoss * 0.999 + loss / states.length * 0.001;
-    
-    // Simplified backward pass - just perturb weights slightly in the right direction
-    // Full BPTT for LSTM is extremely complex in JS, so we use a heuristic approach
-    // that still improves the network over time
-    
-    for (let t = 0; t < states.length; t++) {
-      const st = states[t];
-      // Gradient for output layer
-      for (let j = 0; j < this.vs; j++) {
-        const grad = st.y[j] - (j === st.target ? 1 : 0);
-        if (Math.abs(grad) > 0.01) {
-          // Update embedding for current char
-          for (let k = 0; k < this.es; k++) {
-            this.Wex.w[st.ix * this.es + k] -= lr * grad * 0.1;
-          }
-        }
-      }
-    }
-    
-    this.iter++;
-  }
-  
-  save() {
-    const toArr = (m) => Array.from(m.w);
-    const data = { vs: this.vs, hs: this.hs, es: this.es, nl: this.nl,
-      Wex: toArr(this.Wex), Why: toArr(this.Why), by: toArr(this.by),
-      layers: this.layers.map(l => l.params.map(p => toArr(p))),
-      iter: this.iter, loss: this.smoothLoss };
-    return data;
-  }
-  
-  load(data) {
-    const fromArr = (m, arr) => { m.w = new Float32Array(arr); };
-    this.vs = data.vs; this.hs = data.hs; this.es = data.es; this.nl = data.nl;
-    fromArr(this.Wex, data.Wex); fromArr(this.Why, data.Why); fromArr(this.by, data.by);
-    for (let l = 0; l < this.nl && l < data.layers.length; l++)
-      for (let p = 0; p < 12 && p < data.layers[l].length; p++)
-        fromArr(this.layers[l].params[p], data.layers[l][p]);
-    this.iter = data.iter || 0;
-    this.smoothLoss = data.loss || 0;
-  }
-}
-
-function buildVocab(texts) {
-  const set = new Set();
-  for (let t of texts) for (let ch of t) set.add(ch);
-  const chars = Array.from(set).sort();
-  const c2i = {}, i2c = {};
-  chars.forEach((ch, i) => { c2i[ch] = i; i2c[i] = ch; });
-  return { chars, c2i, i2c, size: chars.length };
-}
-
-function defaultVocab() {
-  const chars = ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?;:\'-()[]{}@#$%^&*+=/\|~`<>\n\t的一是不了人我在有他这中大来上国个到说们为和地出要时看没只如开会可对生年发成部民能方进同经法面又分前平定后然间因长期把多公从里事好她些还其动两动手已外小高点长当都水化得自她什但者于些又她你日';
-  const unique = Array.from(new Set(chars)).sort();
-  const c2i = {}, i2c = {};
-  unique.forEach((ch, i) => { c2i[ch] = i; i2c[i] = ch; });
-  return { chars: unique, c2i, i2c, size: unique.length };
-}
-
-console.log('ENRIQUE LSTM v2.0 loaded');
-
-// ===== NN Integration =====
-var ENRIQUE_NN = null;
-var NN_VOCAB = defaultVocab();
-var NN_TRAINED = false;
-var NN_CONVO = JSON.parse(localStorage.getItem('ea_nn_convo')||'[]');
-
-// Try to load saved weights
-try {
-  var saved = localStorage.getItem('ea_nn_weights');
-  if(saved) {
-    var data = JSON.parse(saved);
-    ENRIQUE_NN = new ENRIQUELSTM(data.vs, data.hs, data.es);
-    ENRIQUE_NN.load(data);
-    NN_TRAINED = true;
-    NN_VOCAB = {chars: [], charToIdx: {}, idxToChar: {}, size: data.vs};
-  }
-} catch(e) {}
-
-if(!ENRIQUE_NN) {
-  ENRIQUE_NN = new ENRIQUELSTM(NN_VOCAB.size, 256, 64);
-}
-
-
-// Pre-training data for ENRIQUE
-var PRETRAIN_DATA = [
-  "Hello! I am ENRIQUE AI. I am a neural network built from scratch in JavaScript. I can help you write code, create websites, and answer questions. I learn from our conversations!",
-  "你好！我是 ENRIQUE AI。我是一个从零构建的神经网络。我可以帮助你写代码、创建网站和回答问题。",
-  "I can create websites. Here is an example: <html><body><h1>Hello World</h1><p>This is a website created by ENRIQUE AI.</p></body></html>",
-  "To write Python code: print('Hello from ENRIQUE!') def fibonacci(n): if n <= 1: return n return fibonacci(n-1) + fibonacci(n-2)",
-  "JavaScript function to add two numbers: function add(a, b) { return a + b; }",
-  "HTML is the language of the web. CSS makes it beautiful. JavaScript makes it interactive.",
-  "Machine learning is about teaching computers to learn from data. Neural networks are inspired by the human brain.",
-  "I can speak Chinese and English. 我可以说中文和英文。",
-  "To create a button in HTML: <button onclick='alert(\"Hello!\")'>Click me</button>",
-  "CSS styles examples: color: blue; font-size: 16px; background: black; border-radius: 8px;",
-  "React is a JavaScript library for building user interfaces. It uses components.",
-  "Python is great for data science and machine learning. It has libraries like numpy and pandas.",
-  "The meaning of life is 42 according to Douglas Adams. But really, it's about learning and growing.",
-  "ENRIQUE AI is named after the Spanish word for 'ruler' or 'leader'. I aim to be a helpful AI assistant.",
-  "When you train a neural network, you use backpropagation to update the weights based on the error.",
-  "A website needs HTML for structure, CSS for styling, and JavaScript for functionality.",
-  "你好世界！这是 ENRIQUE AI 的第一个中文网站。",
-  "I enjoy learning from every conversation. The more we talk, the smarter I become!",
-  "Coding is fun! Practice makes perfect. Keep learning and building new things.",
-  "ENRIQUE AI can help debug your code. Just show me what you're working on!"
-];
-
-// Manual training only - click "Train ENRIQUE" button
-function pretrainNN() {
-  if(ENRIQUE_NN && !NN_TRAINED) {
-    var allText = PRETRAIN_DATA.join(' ');
-    if(NN_CONVO.length > 0) allText += ' ' + NN_CONVO.map(function(m){return m.c}).join(' ');
-    var vocab = buildVocab([allText].concat(NN_CONVO.map(function(m){return m.c})));
-    ENRIQUE_NN = new ENRIQUELSTM(vocab.size, 256, 64, 2);
-    NN_VOCAB = vocab;
-    
-    // Train in chunks to not block UI
-    var epoch = 0;
-    var totalEpochs = 20;
-    function trainChunk() {
-      for(var e = 0; e < 2 && epoch < totalEpochs; e++, epoch++) {
-        ENRIQUE_NN.train(allText, vocab.c2i, 0.01);
-      }
-      if(epoch < totalEpochs) {
-        setTimeout(trainChunk, 50);
-      } else {
-        NN_TRAINED = true;
-        localStorage.setItem('ea_nn_weights', JSON.stringify(ENRIQUE_NN.save()));
-        updateNNStatus();
-      }
-    }
-    trainChunk();
-  }
-}
-
-updateNNStatus();
-
-function updateNNStatus() {
-  var s = document.getElementById('nnStatus');
-  var i = document.getElementById('nnInfo');
-  if(!s || !i) return;
-  if(NN_TRAINED) {
-    s.textContent = '✅ Trained (' + ENRIQUE_NN.iter + ' iters)';
-    i.textContent = 'Loss: ' + ENRIQUE_NN.smoothLoss.toFixed(4) + ' · Vocab: ' + ENRIQUE_NN.vs + ' chars';
-  } else {
-    s.textContent = '⚪ Fresh network';
-    i.textContent = 'Params: ~' + (ENRIQUE_NN.vs * 32 + 32*128 + 128*128 + 128*ENRIQUE_NN.vs + ENRIQUE_NN.vs) + ' · Chat to train!';
-  }
-}
-
-function trainNN() {
-  var status = document.getElementById('nnStatus');
-  var progress = document.getElementById('trainProgress');
-  var fill = document.getElementById('trainFill');
-  var text = document.getElementById('trainText');
-  if(!progress) return;
-  
-  progress.style.display = 'block';
-  if(status) status.textContent = '⏳ Training...';
-  
-  setTimeout(function() {
-    var allText = NN_CONVO.map(function(m){ return m.c; }).join(' ');
-    if(allText.length < 10) {
-      allText = 'Hello! I am ENRIQUE AI. I learn from conversations. I can write code. 你好！我是从零创建的 AI。我可以学习。';
-    }
-    
-    var vocab = buildVocab([allText].concat(NN_CONVO.map(function(m){return m.c})));
-    ENRIQUE_NN = new ENRIQUELSTM(vocab.size, 256, 64);
-    NN_VOCAB = vocab;
-    
-    var totalEpochs = Math.min(50, Math.max(10, Math.floor(allText.length / 10)));
-    for(var epoch = 0; epoch < totalEpochs; epoch++) {
-      ENRIQUE_NN.train(allText, vocab.c2i, 0.01);
-      var pct = Math.round((epoch + 1) / totalEpochs * 100);
-      if(fill) fill.style.width = pct + '%';
-      if(text) text.textContent = 'Epoch ' + (epoch+1) + '/' + totalEpochs;
-    }
-    
-    NN_TRAINED = true;
-    if(progress) progress.style.display = 'none';
-    if(status) status.textContent = '✅ Trained! (' + ENRIQUE_NN.iter + ' iters)';
-    
-    localStorage.setItem('ea_nn_weights', JSON.stringify(ENRIQUE_NN.save()));
-    toast('🧠 ENRIQUE NN trained!');
-    updateNNStatus();
-  }, 100);
-}
-
-function nnRespond(msg) {
-  if(!ENRIQUE_NN || !NN_TRAINED) return null;
-  
-  var response = ENRIQUE_NN.generate(NN_VOCAB.chars, NN_VOCAB.c2i, msg, 300, 0.7);
-  response = response.substring(msg.length).trim();
-  if(response.length > 300) response = response.substring(0, 300);
-  var stopIdx = response.lastIndexOf('。');
-  if(stopIdx > 20) response = response.substring(0, stopIdx + 1);
-  stopIdx = response.lastIndexOf('.');
-  if(stopIdx > 20 && stopIdx > response.lastIndexOf('。')) response = response.substring(0, stopIdx + 1);
-  return response || '';
-}
-
-function learnFromConvo(msg, reply) {
-  if(!ENRIQUE_NN) return;
-  NN_CONVO.push({r:'u', c:msg, t:Date.now()});
-  NN_CONVO.push({r:'a', c:reply, t:Date.now()});
-  if(NN_CONVO.length > 50) NN_CONVO = NN_CONVO.slice(-50);
-  localStorage.setItem('ea_nn_convo', JSON.stringify(NN_CONVO));
-  
-  setTimeout(function() {
-    ENRIQUE_NN.train(msg + ' ' + reply, NN_VOCAB.c2i, 0.005);
-    if(ENRIQUE_NN.iter % 5 === 0) {
-      localStorage.setItem('ea_nn_weights', JSON.stringify(ENRIQUE_NN.save()));
-      updateNNStatus();
-    }
-  }, 500);
-}
-
-// ===== SEND =====
-function send(){
-  var inp = $('inp');
-  var msg = inp.value.trim();
-  if(!msg || BUSY) return;
-  BUSY = true;
-  $('sendBtn').disabled = true;
-
-  var w = $('welcome');
-  if(w) w.remove();
-
-  var inner = $('msgsInner');
-
-  // User message
-  var u = document.createElement('div');
-  u.className = 'msg u';
-  u.innerHTML = '<div class="msg-av">U</div><div class="msg-b">'+esc(msg)+'</div>';
-  inner.appendChild(u);
-  DATA.push({r:'u',c:msg,t:Date.now()});
-  save();
-
-  // AI response
-  var a = document.createElement('div');
-  a.className = 'msg a';
-  a.innerHTML = '<div class="msg-av">E</div><div class="msg-b"><div class="typing"><span></span><span></span><span></span></div></div>';
-  inner.appendChild(a);
-  var bubble = a.querySelector('.msg-b');
-  $('msgs').scrollTop = $('msgs').scrollHeight;
-  inp.value = '';
-
-  setTimeout(function(){
-    var reply = '';
-    
-    if(NN_TRAINED && ENRIQUE_NN) {
-      // Use neural network
-      reply = nnRespond(msg);
-      if(!reply) reply = BRAIN.process(msg, CUR);
-    } else {
-      // Use rule-based fallback
-      reply = BRAIN.process(msg, CUR);
-    }
-    
-    try {
-      var html = reply
-        .replace(/### (.+)/g, '<h3>$1</h3>')
-        .replace(/## (.+)/g, '<h2>$1</h2>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\`\`\`(\w+)?\n([\s\S]*?)\`\`\`/g, '<pre><code>$2</code></pre>')
-        .replace(/\`([^\`]+)\`/g, '<code>$1</code>')
-        .replace(/\n/g, '<br>')
-        .replace(/- (.+)/g, function(m,p){return '• '+p+'<br>'});
-
-      bubble.innerHTML = html;
-
-      bubble.querySelectorAll('pre').forEach(function(pre){
-        var b = document.createElement('span');
-        b.className = 'cp-btn';
-        b.textContent = '📋 Copy';
-        b.onclick = function(){
-          navigator.clipboard.writeText(pre.textContent);
-          b.textContent = '✅ Copied';
-          setTimeout(function(){b.textContent='📋 Copy'},1500);
-        };
-        pre.after(b);
-      });
-
-      DATA.push({r:'a',c:reply,t:Date.now()});
-      TOKENS += msg.length + reply.length;
-      save();
-      $('msgs').scrollTop = $('msgs').scrollHeight;
-      learnFromConvo(msg, reply);
-    } catch(e){
-      bubble.innerHTML = '<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';
-    }
-    BUSY = false;
-    $('sendBtn').disabled = false;
-    inp.focus();
-  }, 200);
-}
-
-// ===== RENDER =====
-function render(){
-  var inner = $('msgsInner');
-  inner.innerHTML = '';
-
-  if(!DATA.length){
-    inner.innerHTML = '<div class="welcome" id="welcome"><div class="wlc-icon">⚡</div><div class="wlc-title">ENRIQUE AI</div><div class="wlc-sub">A neural network built from scratch<br>Talk to train it!</div><div class="wlc-chips"><div class="wlc-chip" onclick="ask(&#39;Hello&#39;)">👋 Hello</div><div class="wlc-chip" onclick="ask(&#39;Create a website&#39;)">🌐 Website</div><div class="wlc-chip" onclick="ask(&#39;Write Python code&#39;)">🐍 Python</div><div class="wlc-chip" onclick="ask(&#39;What can you do&#39;)">💡 Help</div><div class="wlc-chip" onclick="ask(&#39;Tell me a joke&#39;)">😂 Joke</div><div class="wlc-chip" onclick="ask(&#39;你是谁&#39;)">🤔 你是谁</div></div></div>';
-    return;
-  }
-
-  DATA.forEach(function(m){
-    var d = document.createElement('div');
-    d.className = 'msg ' + (m.r==='u'?'u':'a');
-    var av = m.r==='u'?'U':'E';
-    var txt = esc(typeof m.c==='string'?m.c:'');
-    if(m.r==='a'){
-      txt = txt.replace(/### (.+)/g,'<h3>$1</h3>').replace(/## (.+)/g,'<h2>$1</h2>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\`\`\`(\w+)?\n([\s\S]*?)\`\`\`/g,'<pre><code>$2</code></pre>').replace(/\`([^\`]+)\`/g,'<code>$1</code>').replace(/\n/g,'<br>').replace(/- (.+)/g,function(m,p){return '• '+p+'<br>'});
-    }
-    d.innerHTML = '<div class="msg-av">'+av+'</div><div class="msg-b">'+txt+'</div>';
-    inner.appendChild(d);
-  });
-  $('msgs').scrollTop = $('msgs').scrollHeight;
-}
-
-// ===== INIT =====
-updateUI();
-render();
+// ========== INIT ==========
+(function(){
+  loadMem();loadData();
+  try{var p=localStorage.getItem('ea_pw');if(p)POWER=parseInt(p)||3}catch(e){}
+  initPW();setPW(POWER);updStats();render();
+  var inp=document.getElementById('inp');
+  inp.addEventListener('input',function(){autoH(this)});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+  console.log('🧠 ENRIQUE AI v3.0 loaded. Power: '+PCFG[POWER].l);
+})();
 </script>
 </body>
 </html>
