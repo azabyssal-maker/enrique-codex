@@ -1,132 +1,98 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0f">
-<title>ENRIQUE AI - Neural Network</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
-button,input,textarea{font-family:inherit}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#0a0a0f"><title>ENRIQUE AI</title><style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}textarea,button,input{font-family:inherit}::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
-.sb{width:260px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
-.sb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
-.sb-t{font-size:15px;font-weight:800;flex:1}
-.acts{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
-.btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;justify-content:center}
-.btn:hover{border-color:var(--primary);background:var(--primary-l)}
-.btn:disabled{opacity:.4;cursor:default}
-.sec{padding:8px 14px;border-bottom:1px solid var(--border)}
-.sl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.st{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
-.st em{color:var(--muted)}
-.sf{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
-.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
-.top .mu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
-.top .br{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
-.ms{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
-.mi{max-width:680px;margin:0 auto}
-.msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.u{justify-content:flex-end}
-.av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
-.msg.u .av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
-.msg.a .av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
-.mb{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto;white-space:pre-wrap}
-.msg.u .mb{background:var(--card);border:1px solid var(--border)}
-.msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
-.ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
-.iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
-.iw:focus-within{border-color:var(--primary)}
-.iw textarea{flex:1;border:none;background:transparent;padding:8px 10px;color:var(--text);font-size:14px;line-height:1.4;resize:none;outline:none;max-height:120px;min-height:24px;font-family:var(--font)}
-.iw textarea::placeholder{color:var(--muted2)}
-.iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
+.sb{width:200px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .2s}
+.sb-h{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.sb-i{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff}
+.sb-t{font-size:13px;font-weight:700}.acts{padding:6px 10px;display:flex;flex-direction:column;gap:4px}
+.btn{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:11px;font-weight:600;cursor:pointer;width:100%;justify-content:center}
+.btn:hover{border-color:#10a37f;background:#0d2e23}
+.sec{padding:5px 10px;border-bottom:1px solid var(--border)}
+.sl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.st{font-size:9px;color:var(--muted2);line-height:1.5}.st em{color:var(--muted)}
+.sf{padding:6px 10px;border-top:1px solid var(--border);font-size:8px;color:var(--muted2);text-align:center;margin-top:auto}
+.mn{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.top{display:flex;align-items:center;padding:5px 10px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:6px;min-height:38px}
+.top .mu{width:24px;height:24px;border:1px solid var(--border);border-radius:5px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
+.top .br{font-size:13px;font-weight:700;flex:1}
+.ms{flex:1;overflow-y:auto;padding:10px 8px 4px;scroll-behavior:smooth}
+.mi{max-width:600px;margin:0 auto}
+.msg{margin-bottom:10px;display:flex;gap:8px;animation:up .2s ease}@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{justify-content:flex-end}.av{width:26px;height:26px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.msg.u .av{background:var(--card);border:1px solid var(--border);color:var(--muted);order:1}.msg.a .av{background:linear-gradient(135deg,#10a37f,#34d399);color:#fff}
+.mb{max-width:85%;padding:7px 10px;border-radius:8px;font-size:13px;line-height:1.5;color:var(--text2);word-wrap:break-word;white-space:pre-wrap}
+.msg.u .mb{background:var(--card);border:1px solid var(--border)}.msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
+.ia{border-top:1px solid var(--border);padding:5px 8px 8px;background:var(--bg2);flex-shrink:0}
+.iw{display:flex;gap:6px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:3px}
+.iw:focus-within{border-color:#10a37f}.iw textarea{flex:1;border:none;background:transparent;padding:5px 6px;color:var(--text);font-size:13px;line-height:1.4;resize:none;outline:none;max-height:100px;min-height:20px}
+.iw textarea::placeholder{color:var(--muted2)}.iw button{width:30px;height:30px;border:none;border-radius:6px;background:#10a37f;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 .iw button:disabled{opacity:.4;cursor:default}
-.ty{display:flex;gap:4px;align-items:center;padding:4px 0}
-.ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
-.ty span:nth-child(2){animation-delay:.2s}
-.ty span:nth-child(3){animation-delay:.4s}
+.ty{display:flex;gap:3px;align-items:center;padding:2px 0}.ty span{width:5px;height:5px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
+.ty span:nth-child(2){animation-delay:.2s}.ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
-#trainProg{margin-top:8px;display:none}
-#trainBar{height:4px;background:var(--card2);border-radius:2px;overflow:hidden}
-#trainFill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;transition:width .3s}
-#trainLabel{font-size:8px;color:var(--muted2);margin-top:2px}
-@media(max-width:768px){.sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.ov.on{display:block}.mb{max-width:92%;font-size:13px}.av{width:28px;height:28px;font-size:10px}}
-</style>
-</head>
-<body>
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none}.ov.on{display:block}
+@media(max-width:640px){.sb{position:fixed;inset:0;right:auto;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.mb{font-size:12px}}
+#ld{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#ld .sp{width:36px;height:36px;border:3px solid var(--border2);border-top-color:#10a37f;border-radius:50%;animation:sp .7s linear infinite;margin-bottom:10px}
+@keyframes sp{to{transform:rotate(360deg)}}#ld h2{font-size:16px;font-weight:700;margin-bottom:2px}#ld p{font-size:11px;color:var(--muted);margin-bottom:10px}
+#lb{width:160px;height:3px;background:var(--card2);border-radius:2px;overflow:hidden}
+#lf{height:100%;width:0%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:2px;transition:width .3s}
+#ll{font-size:9px;color:var(--muted2);margin-top:4px}</style></head><body>
+<div id="ld"><div class="sp"></div><h2>ENRIQUE AI</h2><p>Training in browser...</p><div id="lb"><div id="lf"></div></div><div id="ll">Loading...</div></div>
 <div class="app"><div class="sb" id="sb">
 <div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE AI</div></div>
-<div class="acts"><button class="btn" onclick="newChat()">+ New Chat</button><button class="btn" onclick="clearChat()">x Clear</button></div>
-<div class="sec"><div class="sl">Neural Network</div>
-<div class="st"><em>Status:</em> <span id="nnStat" style="color:var(--orange)">Loading...</span><br><em>Params:</em> <span id="nnParams">10,947</span><br><em>Loss:</em> <span id="nnLoss">-</span><br><em>Iters:</em> <span id="nnIter">0</span><br><em>Vocab:</em> <span id="nnVocab">58</span> chars</div>
-<button class="btn" onclick="trainMore()" id="trainBtn">🧠 Train More</button>
-<div id="trainProg"><div id="trainBar"><div id="trainFill"></div></div><div id="trainLabel"></div></div>
-</div>
-<div class="sec"><div class="sl">Stats</div><div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span></div></div>
-<div class="sf">ENRIQUE AI • RNN from Scratch</div>
-</div>
-<div class="mn">
-<div class="top"><button class="mu" onclick="toggleSb()">☰</button><div class="br">ENRIQUE AI</div><div class="tk" id="tokDisp">0 tokens</div></div>
+<div class="acts"><button class="btn" onclick="nw()">+ New</button><button class="btn" onclick="cl()">x Clear</button></div>
+<div class="sec"><div class="sl">Status</div><div class="st"><em>Loss:</em> <span id="ls">-</span><br><em>Iters:</em> <span id="it">0</span></div></div>
+<div class="sf">ENRIQUE AI</div></div>
+<div class="mn"><div class="top"><button class="mu" onclick="tb()">☰</button><div class="br">ENRIQUE AI</div></div>
 <div class="ms" id="ms"></div>
-<div class="ia"><div class="iw"><textarea id="inp" placeholder="输入消息..." rows="1"></textarea><button onclick="send()" id="sendBtn">➤</button></div></div>
-</div></div>
-<div class="ov" id="ov" onclick="toggleSb()"></div>
+<div class="ia"><div class="iw"><textarea id="inp" placeholder="Type a message..." rows="1"></textarea><button onclick="sd()" id="sbtn">➤</button></div></div></div></div>
+<div class="ov" id="ov" onclick="tb()"></div>
 <script>
-class ENRIQUE_RNN {
-  constructor(vs,hs,es){this.vs=vs;this.hs=hs;this.es=es;this.Wex=new Float32Array(vs*es);this.Wxh=new Float32Array(es*hs);this.Whh=new Float32Array(hs*hs);this.Bh=new Float32Array(hs);this.Why=new Float32Array(hs*vs);this.By=new Float32Array(vs);this.chars=[];this.c2i={};this.iter=0;this.loss=0;}
-  initR(){const{vs,hs,es}=this;for(let i=0;i<vs*es;i++)this.Wex[i]=(Math.random()*2-1)*Math.sqrt(1/(vs+es));for(let i=0;i<es*hs;i++)this.Wxh[i]=(Math.random()*2-1)*Math.sqrt(1/(es+hs));for(let i=0;i<hs*hs;i++)this.Whh[i]=(Math.random()*2-1)*Math.sqrt(2/(hs+hs));for(let i=0;i<hs;i++)this.Bh[i]=0;for(let i=0;i<hs*vs;i++)this.Why[i]=(Math.random()*2-1)*Math.sqrt(2/(hs+vs));for(let i=0;i<vs;i++)this.By[i]=0;}
-  emb(ix){const o=new Float32Array(this.es);for(let j=0;j<this.es;j++)o[j]=this.Wex[ix*this.es+j];return o;}
-  sm(x){let mx=x[0];for(let i=1;i<x.length;i++)if(x[i]>mx)mx=x[i];let s=0;for(let i=0;i<x.length;i++)s+=Math.exp(x[i]-mx);const o=new Float32Array(x.length);for(let i=0;i<x.length;i++)o[i]=Math.exp(x[i]-mx)/s;return o;}
-  fwd(x,h){const pre=new Float32Array(this.hs);for(let j=0;j<this.hs;j++){let s=this.Bh[j];for(let i=0;i<this.es;i++)s+=x[i]*this.Wxh[i*this.hs+j];for(let i=0;i<this.hs;i++)s+=h[i]*this.Whh[i*this.hs+j];pre[j]=s;}
-  const hn=pre.map(v=>Math.tanh(v));const lg=new Float32Array(this.vs);for(let j=0;j<this.vs;j++){let s=this.By[j];for(let i=0;i<this.hs;i++)s+=hn[i]*this.Why[i*this.vs+j];lg[j]=s;}return{h:hn,y:this.sm(lg)};}
-  spl(yp,temp){const s=yp.map(p=>Math.pow(Math.max(p,1e-10),1/temp));const sum=s.reduce((a,b)=>a+b,0);const n=s.map(p=>p/sum);let r=Math.random(),i=0;for(;i<n.length;i++){r-=n[i];if(r<=0)break;}return Math.min(i,this.vs-1);}
-  gen(prompt,len,temp){temp=temp||0.5;len=len||100;let h=new Float32Array(this.hs),out=prompt;for(const c of out){const ix=this.c2i[c];if(ix===undefined)continue;const r=this.fwd(this.emb(ix),h);h=r.h;}
-  for(let i=0;i<len;i++){const ix=this.c2i[out[out.length-1]];if(ix===undefined)break;const r=this.fwd(this.emb(ix),h);h=r.h;out+=this.chars[this.spl(r.y,temp)];}return out;}
-  load(d){if(d.Wex)this.Wex.set(d.Wex);if(d.Wxh)this.Wxh.set(d.Wxh);if(d.Whh)this.Whh.set(d.Whh);if(d.Bh)this.Bh.set(d.Bh);if(d.Why)this.Why.set(d.Why);if(d.By)this.By.set(d.By);if(d.chars){this.chars=d.chars.split('');this.c2i={};this.chars.forEach((c,i)=>this.c2i[c]=i);}this.iter=d.iter||0;this.loss=d.loss||0;this.vs=d.vs||this.chars.length;this.hs=d.hs||this.hs;this.es=d.es||this.es;}
-  train(corpus,iters,cb){const ai=[];for(const c of corpus){const ix=this.c2i[c];if(ix!==undefined)ai.push(ix);}
-  const SL=20;let done=0;sml=this.loss||Math.log(this.vs);h=new Float32Array(this.hs);
-  const st=()=>{for(let b=0;b<50;b++){const si=Math.floor(Math.random()*(ai.length-SL-1));const seg=ai.slice(si,si+SL);
-  let h2=new Float32Array(this.hs),loss=0,states2=[];
-  for(let t=0;t<seg.length-1;t++){const r=this.fwd(this.emb(seg[t]),h2);h2=r.h;loss+=-Math.log(Math.max(r.y[seg[t+1]],1e-15));states2.push({h:new Float32Array(r.h),y:new Float32Array(r.y),tgt:seg[t+1]});}
-  loss/=seg.length;if(!isNaN(loss)&&loss>0&&loss<10)sml=sml*0.999+loss*0.001;
-  this.loss=sml;done++;
-  if(done%500===0&&cb)cb(done/iters,sml,this.iter+done);}
-  this.iter+=50;if(done<iters)setTimeout(st,5);else{if(cb)cb(1,sml,this.iter);}};st();}
-}
-const nn=new ENRIQUE_RNN(58,64,24);nn.initR();nn.chars=" .,AEINPRabcdefghijklmnopqrstuvwxyz你我越聪神明编络网脑语程".split('');nn.chars.forEach((c,i)=>nn.c2i[c]=i);
-let loaded=false;
-function initAI(){const d=localStorage.getItem('e_model');if(d){try{nn.load(JSON.parse(d));ok();return;}catch(e){}}
-  fetch('/enrique_model.json?v='+Date.now()).then(r=>r.json()).then(d=>{nn.load(d);try{localStorage.setItem('e_model',JSON.stringify(d));}catch(e){}ok();}).catch(()=>{nn.initR();addMsg('ai','Hello! I am ENRIQUE AI. Click "Train More" to make me smarter!');loaded=true;stat();});
-  function ok(){document.getElementById('nnStat').textContent='Trained ('+nn.iter+' iters)';document.getElementById('nnLoss').textContent=nn.loss.toFixed(4);document.getElementById('nnIter').textContent=nn.iter;loaded=true;stat();addMsg('ai','ENRIQUE AI ready! '+nn.iter+' iters, loss: '+nn.loss.toFixed(4)+'. Ask me anything!');}
-  function stat(){document.getElementById('nnStat').textContent=nn.iter>0?'Trained ('+nn.iter+' iters)':'Ready';document.getElementById('nnLoss').textContent=nn.loss?nn.loss.toFixed(4):'-';document.getElementById('nnIter').textContent=nn.iter;}
-}
-function addMsg(r,c){const d=document.getElementById('ms');const m=document.createElement('div');m.className='mi';const g=document.createElement('div');g.className='msg '+(r==='user'?'u':'a');const a=document.createElement('div');a.className='av';a.textContent=r==='user'?'U':'E';const b=document.createElement('div');b.className='mb';b.appendChild(document.createTextNode(c));g.appendChild(a);g.appendChild(b);m.appendChild(g);d.appendChild(m);d.scrollTop=d.scrollHeight;}
-function send(){if(!loaded)return;const i=document.getElementById('inp');const t=i.value.trim();if(!t)return;i.value='';addMsg('user',t);document.getElementById('sendBtn').disabled=true;
-  const d=document.getElementById('ms');const ti=document.createElement('div');ti.className='mi';ti.id='ty';const td=document.createElement('div');td.className='msg a';const ta=document.createElement('div');ta.className='av';ta.textContent='E';const tb=document.createElement('div');tb.className='mb';tb.innerHTML='<div class="ty"><span></span><span></span><span></span></div>';
+const V=58,H=64,E=24;
+class M{constructor(r,c,w){this.r=r;this.c=c;this.w=w?new Float32Array(w):new Float32Array(r*c);if(!w){const s=Math.sqrt(2/(r+c));for(let i=0;i<r*c;i++)this.w[i]=(Math.random()*2-1)*s;}}}
+function sm(x){let m=x[0];for(let i=1;i<x.length;i++)if(x[i]>m)m=x[i];let s=0;for(let i=0;i<x.length;i++)s+=Math.exp(x[i]-m);const o=new Float32Array(x.length);for(let i=0;i<x.length;i++)o[i]=Math.exp(x[i]-m)/s;return o;}
+const we=new M(V,E),wx=new M(E,H),wh=new M(H,H),bh=new Float32Array(H),wy=new M(H,V),by=new Float32Array(V);
+const ch=" .,AEINPRabcdefghijklmnopqrstuvwxyz你我越聪神明编络网脑语程".split('');const c2={};ch.forEach((c,i)=>c2[c]=i);
+function fw(x,h){const p=new Float32Array(H);for(let j=0;j<H;j++){let s=bh[j];for(let i=0;i<E;i++)s+=x[i]*wx.w[i*H+j];for(let i=0;i<H;i++)s+=h[i]*wh.w[i*H+j];p[j]=s;}
+  const hn=[];for(let i=0;i<H;i++)hn[i]=Math.tanh(p[i]);const lg=[];for(let j=0;j<V;j++){let s=by[j];for(let i=0;i<H;i++)s+=hn[i]*wy.w[i*V+j];lg[j]=s;}return{h:hn,y:sm(lg)};}
+function ge(p,l,t){let h=[],o=p;for(let i=0;i<H;i++)h[i]=0;
+  for(const c of o){const x=[];for(let j=0;j<E;j++)x[j]=we.w[(c2[c]||0)*E+j];const r=fw(x,h);h=r.h;}
+  for(let i=0;i<l;i++){const x=[];for(let j=0;j<E;j++)x[j]=we.w[(c2[o[o.length-1]]||0)*E+j];const r=fw(x,h);h=r.h;
+    const s=r.y.map(p=>Math.pow(Math.max(p,1e-10),1/t));const su=s.reduce((a,b)=>a+b,0);const n=s.map(p=>p/su);
+    let ri=Math.random(),ci=0;for(;ci<n.length;ci++){ri-=n[ci];if(ri<=0)break;}o+=ch[Math.min(ci,ch.length-1)];}return o;}
+const cp="Hello I am ENRIQUE AI. Python is for coding. JavaScript for web. Neural networks learn. Machine learning is AI. 你好我是ENRIQUE AI。Python是编程语言。神经网络学习数据。AI越来越聪明。ENRIQUE speaks Chinese and English. I help you code websites.";
+const ai=[];for(const c of cp)ai.push(c2[c]||0);const sl=20;let it=0,sm=Math.log(V);
+function tr(se,lr){lr=lr||0.02;const st=[];let h=[];for(let i=0;i<H;i++)h[i]=0;
+  for(let t=0;t<se.length-1;t++){const x=[];for(let j=0;j<E;j++)x[j]=we.w[se[t]*E+j];const r=fw(x,h);h=r.h;st.push({h:[...r.h],y:[...r.y],t:se[t+1]});}
+  let l=0;for(const s of st)l+=-Math.log(Math.max(s.y[s.t],1e-15));l/=se.length;
+  for(let t=st.length-1;t>=0;t--){const s=st[t];const d=[];for(let j=0;j<V;j++)d[j]=Math.max(-3,Math.min(3,(s.y[j]-(j===s.t?1:0))*0.5));
+    for(let i=0;i<H;i++)for(let j=0;j<V;j++)wy.w[i*V+j]-=lr*0.5*d[j]*s.h[i];for(let j=0;j<V;j++)by[j]-=lr*0.5*d[j];}return l;}
+function at(cb){let d=0;const fn=()=>{for(let b=0;b<100;b++,d++){const si=Math.floor(Math.random()*(ai.length-sl-1));const l=tr(ai.slice(si,si+sl),0.03);if(!isNaN(l)&&l>0&&l<10)sm=sm*0.999+l*0.001;it++;}cb(d/8000,sm);if(d<8000)setTimeout(fn,10);};fn();}
+let rd=false;
+function ad(r,c){const d=document.getElementById('ms');const m=document.createElement('div');m.className='mi';const g=document.createElement('div');g.className='msg '+(r==='u'?'u':'a');
+  const a=document.createElement('div');a.className='av';a.textContent=r==='u'?'U':'E';const b=document.createElement('div');b.className='mb';b.textContent=c;
+  g.appendChild(a);g.appendChild(b);m.appendChild(g);d.appendChild(m);d.scrollTop=d.scrollHeight;}
+function sd(){if(!rd)return;const i=document.getElementById('inp');const t=i.value.trim();if(!t)return;i.value='';ad('u',t);document.getElementById('sbtn').disabled=true;
+  const d=document.getElementById('ms');const ti=document.createElement('div');ti.className='mi';ti.id='ty_';
+  const td=document.createElement('div');td.className='msg a';const ta=document.createElement('div');ta.className='av';ta.textContent='E';
+  const tb=document.createElement('div');tb.className='mb';tb.innerHTML='<div class="ty"><span></span><span></span><span></span></div>';
   td.appendChild(ta);td.appendChild(tb);ti.appendChild(td);d.appendChild(ti);d.scrollTop=d.scrollHeight;
-  setTimeout(()=>{const e=document.getElementById('ty');if(e)e.remove();try{let p=t.substring(0,20);let r=nn.gen(p,120,0.6);r=r.substring(p.length).trim();const stops=['.','。','!','！'];let cut=-1;for(const s of stops){const idx=r.indexOf(s);if(idx>5&&(cut===-1||idx<cut))cut=idx+1;}if(cut>0)r=r.substring(0,cut);if(r.length<3)r="I am ENRIQUE AI. Ask me anything!";addMsg('ai',r);}catch(e){addMsg('ai','Error');}document.getElementById('sendBtn').disabled=false;i.focus();},300+Math.random()*800);
-}
-function newChat(){document.getElementById('ms').innerHTML='';addMsg('ai','New chat!');}
-function clearChat(){document.getElementById('ms').innerHTML='';}
-function toggleSb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on');}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){const i=document.getElementById('inp');if(document.activeElement===i){e.preventDefault();send();}}});
-document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-function trainMore(){const btn=document.getElementById('trainBtn');btn.disabled=true;btn.textContent='⏳ Training...';document.getElementById('trainProg').style.display='block';document.getElementById('nnStat').textContent='Training...';
-  const crp="Hello I am ENRIQUE AI. Python is for coding. JavaScript for web. Neural networks learn. Machine learning is AI. 你好我是ENRIQUE AI。Python是编程语言。神经网络学习数据。AI越来越聪明。ENRIQUE speaks Chinese and English. I help you code websites.";
-  nn.train(crp,5000,(pct,loss)=>{document.getElementById('trainFill').style.width=(pct*100)+'%';document.getElementById('trainLabel').textContent=Math.round(pct*100)+'% loss='+loss.toFixed(4);document.getElementById('nnLoss').textContent=loss.toFixed(4);document.getElementById('nnIter').textContent=nn.iter;});
-  setTimeout(()=>{const iv=setInterval(()=>{if(!btn.disabled){clearInterval(iv);document.getElementById('trainProg').style.display='none';document.getElementById('nnStat').textContent='Trained!';try{localStorage.setItem('e_model',JSON.stringify({Wex:Array.from(nn.Wex),Wxh:Array.from(nn.Wxh),Whh:Array.from(nn.Whh),Bh:Array.from(nn.Bh),Why:Array.from(nn.Why),By:Array.from(nn.By),chars:nn.chars.join(''),vs:nn.vs,hs:nn.hs,es:nn.es,iter:nn.iter,loss:nn.loss}));}catch(e){}addMsg('ai','Training done! Loss: '+nn.loss.toFixed(4));}},1000);},100);
-}
-window.addEventListener('DOMContentLoaded',initAI);
-</script>
-</body>
-</html>
+  setTimeout(()=>{const e=document.getElementById('ty_');if(e)e.remove();
+    try{let p=t.substring(0,15);let r=ge(p,60,0.6);r=r.substring(p.length).trim();const x=['.','。','!','！'];let cut=-1;for(const s of x){const i=r.indexOf(s);if(i>3&&(cut===-1||i<cut))cut=i+1;}if(cut>0)r=r.substring(0,cut);if(r.length<2)r="Hello! I am ENRIQUE AI.";ad('ai',r);}catch(e){ad('ai','Error');}
+    document.getElementById('sbtn').disabled=false;i.focus();},200+Math.random()*500);}
+function nw(){document.getElementById('ms').innerHTML='';ad('ai','New chat!');}
+function cl(){document.getElementById('ms').innerHTML='';}
+function tb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){const i=document.getElementById('inp');if(document.activeElement===i){e.preventDefault();sd();}}});
+document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sd();}});
+window.addEventListener('DOMContentLoaded',()=>{
+  const sv=localStorage.getItem('e_m');
+  if(sv){try{const d=JSON.parse(sv);if(d.we){we.w.set(d.we);wx.w.set(d.wx);wh.w.set(d.wh);bh.set(d.bh);wy.w.set(d.wy);by.set(d.by);it=d.it||0;sm=d.sm||sm;}
+    document.getElementById('ls').textContent=sm.toFixed(4);document.getElementById('it').textContent=it;
+    document.getElementById('ld').style.display='none';rd=true;ad('ai','你好！ENRIQUE AI ready! '+it+' iters, loss: '+sm.toFixed(4));return;}catch(e){}}
+  document.getElementById('lf').style.width='5%';document.getElementById('ll').textContent='Training...';
+  at((p,l)=>{document.getElementById('lf').style.width=(5+p*90)+'%';document.getElementById('ll').textContent='Training... loss='+l.toFixed(4);
+    document.getElementById('ls').textContent=l.toFixed(4);document.getElementById('it').textContent=it;});
+  setTimeout(()=>{document.getElementById('lf').style.width='100%';document.getElementById('ll').textContent='Ready!';
+    setTimeout(()=>{document.getElementById('ld').style.display='none';try{localStorage.setItem('e_m',JSON.stringify({we:Array.from(we.w),wx:Array.from(wx.w),wh:Array.from(wh.w),bh:Array.from(bh),wy:Array.from(wy.w),by:Array.from(by),it:it,sm:sm}));}catch(e){}rd=true;ad('ai','你好！我是 ENRIQUE AI。训练 '+it+' 次，损失 '+sm.toFixed(4)+'。');},400);},12000);});
+</script></body></html>
