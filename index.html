@@ -4,19 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>ENRIQUE AI - 智能引擎</title>
+<title>ENRIQUE GPT - Browser AI</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--pink:#f778ba;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
+:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--primary-d:#0d7a5f;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 button,input,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
-
-/* SIDEBAR */
 .sb{width:270px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
 .sb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
 .sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
@@ -26,33 +23,15 @@ button,input,textarea{font-family:inherit}
 .btn:hover{border-color:var(--primary);background:var(--primary-l)}.btn:active{transform:scale(.98)}
 .sec{padding:8px 14px;border-bottom:1px solid var(--border)}
 .sl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.pb{padding:6px 0;border:1.5px solid var(--border);border-radius:6px;background:var(--card);color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
-.pb:hover{border-color:var(--blue);color:var(--blue)}
-.pb.on{border-color:var(--primary);background:var(--primary-l);color:var(--primary)}
-.pb.h5.on{border-color:var(--purple);background:#1a1140;color:var(--purple)}
-.pb.h4.on{border-color:var(--blue);background:#0c1e3a;color:var(--blue)}
-.pd{font-size:9px;color:var(--muted2);margin-top:4px}
 .st{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
 .st em{color:var(--muted)}
 .sf{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
-
-/* MAIN */
 .mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
 .top .mu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
 .top .br{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.top .br .ta{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(210,153,34,.15);color:var(--orange)}
-.top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border);white-space:nowrap}
-
-/* POWER BAR */
-.pbar{display:flex;gap:4px;padding:4px 14px;background:var(--bg2);border-bottom:1px solid var(--border)}
-.pbi{flex:1;padding:4px 0;border:none;border-radius:4px;background:transparent;color:var(--muted2);font-size:9px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
-.pbi:hover{color:var(--muted)}.pbi.on{color:var(--primary);background:var(--primary-l)}
-.pbi.h5.on{color:var(--purple);background:#1a1140}
-.pbi.h4.on{color:var(--blue);background:#0c1e3a}
-
-/* MESSAGES */
+.top .br .ta{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(58,106,255,.15);color:var(--blue)}
+.top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
 .ms{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
 .mi{max-width:720px;margin:0 auto}
 .msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
@@ -60,7 +39,7 @@ button,input,textarea{font-family:inherit}
 .msg.u{justify-content:flex-end}
 .av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
 .msg.u .av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
-.msg.a .av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
+.msg.a .av{background:linear-gradient(135deg,var(--blue),#58a6ff);color:#fff}
 .mb{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
 .msg.u .mb{background:var(--card);border:1px solid var(--border)}
 .msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
@@ -73,17 +52,13 @@ button,input,textarea{font-family:inherit}
 .mb .cp{float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
 .mb ul{padding-left:18px;margin:4px 0}
 .mb li{margin:2px 0}
-
-/* WELCOME */
-.wc{text-align:center;padding:30px 20px}
-.wi{width:60px;height:60px;margin:0 auto 14px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.wt{font-size:22px;font-weight:900;color:var(--text);margin-bottom:4px}
+.wc{text-align:center;padding:40px 20px}
+.wi{width:64px;height:64px;margin:0 auto 14px;background:linear-gradient(135deg,var(--blue),#58a6ff);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.wt{font-size:24px;font-weight:900;color:var(--text);margin-bottom:4px}
 .ws{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 .wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:480px;margin:0 auto}
 .gc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
 .gc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
-
-/* INPUT */
 .ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
 .iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
 .iw:focus-within{border-color:var(--primary)}
@@ -92,467 +67,231 @@ button,input,textarea{font-family:inherit}
 .iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
 .iw button:hover{background:var(--primary-d)}
 .iw button:disabled{opacity:.4;cursor:default}
-
-/* TYPING */
 .ty{display:flex;gap:4px;align-items:center;padding:4px 0}
 .ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
 .ty span:nth-child(2){animation-delay:.2s}
 .ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
-
-/* TOAST */
 .ts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
 @keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
-
-@media(max-width:768px){
-  .sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}
-  .sb.open{transform:translateX(0)}.ov.on{display:block}
-  .pbar{overflow-x:auto}.pbi{font-size:8px;flex:none;min-width:50px}
-  .wg{grid-template-columns:repeat(2,1fr)}
-  .mb{max-width:92%;font-size:13px}
-  .av{width:28px;height:28px;font-size:10px}
-}
-</style></head><body>
-<div class="app">
-<div class="sb" id="sb">
-<div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE AI</div></div>
+@media(max-width:768px){.sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.ov.on{display:block}.mb{max-width:92%;font-size:13px}.av{width:28px;height:28px;font-size:10px}}
+</style>
+</head>
+<body>
+<div class="app"><div class="sb" id="sb">
+<div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE GPT</div></div>
 <div class="acts">
 <button class="btn" onclick="nw()"><span style="font-size:14px">+</span> New Chat</button>
 <button class="btn" onclick="cl()"><span style="font-size:14px">x</span> Clear</button>
 </div>
-<div class="sec"><div class="sl">Power Level</div>
-<div class="pg" id="pg"></div><div class="pd" id="pd">Balanced</div></div>
+<div class="sec"><div class="sl">AI Engine</div>
+<div class="st" id="aiStatus"><em>Status:</em> Loading WebLLM...<br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Downloading ~1GB on first load</span></div>
+<div class="btn" id="loadBtn" onclick="loadModel()" style="display:none">Load AI Model</div>
+<div style="margin-top:6px;height:4px;background:var(--card2);border-radius:2px;overflow:hidden"><div id="progBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--primary));border-radius:2px;transition:width .3s"></div></div>
+<div id="progText" style="font-size:8px;color:var(--muted2);margin-top:2px;text-align:center"></div>
+</div>
 <div class="sec"><div class="sl">Stats</div>
-<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Version:</em> ENRIQUE v4.0<br><em>Messages:</em> <span id="mc">0</span><br><em>Status:</em> <span id="as" style="color:var(--primary)">Ready</span></div></div>
-<div class="sf">ENRIQUE AI v4 • Built from Scratch</div>
-</div>
+<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span></div></div>
+<div class="sf">ENRIQUE GPT • Powered by WebLLM</div></div>
 <div class="mn">
-<div class="top">
-<button class="mu" onclick="tsb()">=</button>
-<div class="br"><span>ENRIQUE AI</span><span class="ta" id="pt">BALANCED</span></div>
-<div class="tk"><span id="td">0</span></div>
-</div>
-<div class="pbar" id="pbar"></div>
+<div class="top"><button class="mu" onclick="tsb()">=</button>
+<div class="br"><span>ENRIQUE GPT</span><span class="ta" id="modeTag">LOCAL AI</span></div>
+<div class="tk">⚡ <span id="td">0</span></div></div>
 <div class="ms" id="ms"><div class="mi" id="mi"></div></div>
 <div class="ia"><div class="iw">
-<textarea id="inp" rows="1" placeholder="Type your message..."></textarea>
+<textarea id="inp" rows="1" placeholder="Ask me anything..."></textarea>
 <button id="snd" onclick="sd()">></button>
-</div></div>
-</div></div>
+</div></div></div></div>
 <div class="ov" id="ov" onclick="tsb()"></div>
 
-<script>
-// ====================================================================
-// ENRIQUE AI v4.0 - Ultimate Intelligence Engine
-// 100% Original JavaScript • Zero Dependencies • No APIs
-// ====================================================================
-
-var D = []; var T = 0; var P = 3; var B = false; var M = {};
-
-var PC = {
-  1:{l:'MINIMAL',d:'Shortest replies',c:'#7d7d90'},
-  2:{l:'SIMPLE',d:'Brief answers',c:'#58a6ff'},
-  3:{l:'BALANCED',d:'Moderate depth',c:'#10a37f'},
-  4:{l:'DEEP',d:'Detailed answers',c:'#d29922'},
-  5:{l:'MAXIMUM',d:'Full depth',c:'#a371f7'}
-};
-
-// ===== KNOWLEDGE ENGINE =====
-// Structured as: topic -> { desc, examples, concepts }
-var K = {
-  py: {
-    n:'Python', d:'High-level, interpreted. Used for web, data science, AI, automation.',
-    e:[
-      'print("Hello World")',
-      'def fib(n): a,b=0,1\\n for _ in range(n): print(a,end=" "); a,b=b,a+b',
-      'class Dog:\\n def __init__(self,n): self.name=n\\n def bark(self): return f"{self.name} says woof!"',
-      'nums = [1,2,3,4,5]\\nsq = [x*x for x in nums]\\nprint(sum(nums), list(reversed(nums)))',
-      'with open("file.txt","r") as f:\\n content = f.read()\\n print(content)'
-    ],
-    c:'types,functions,classes,list comprehension,file I/O,modules,pip,decorators,generators'
-  },
-  js: {
-    n:'JavaScript', d:'Web language. Runs in browsers and Node.js. Event-driven, functional.',
-    e:[
-      'function greet(n){return `Hello ${n}!`}',
-      'const nums=[1,2,3,4,5]; nums.map(x=>x*2).filter(x=>x>5)',
-      'fetch("/api/data").then(r=>r.json()).then(console.log)',
-      'class Animal{constructor(n){this.n=n} speak(){return this.n}}}',
-      'document.querySelector("button").addEventListener("click",()=>alert("Hi!"))'
-    ],
-    c:'closures,promises,async/await,DOM,events,prototypes,modules,arrow functions'
-  },
-  html: {
-    n:'HTML', d:'Structure of web pages. Uses tags for content.',
-    t:'<!DOCTYPE html>\\n<html>\\n<head><title>Page</title></head>\\n<body>\\n <h1>Hello</h1>\\n <p>Content</p>\\n</body>\\n</html>',
-    e:['<a href="https://x.com">Link</a>','<img src="pic.jpg" alt="Photo">','<ul><li>Item</li><li>Item</li></ul>'],
-    c:'tags,attributes,forms,semantic HTML,accessibility,SEO'
-  },
-  css: {
-    n:'CSS', d:'Styles web pages. Controls layout, colors, fonts, animations.',
-    t:'*{margin:0;padding:0;box-sizing:border-box}\\n:root{--p:#10a37f}\\nbody{font-family:system-ui;background:#0a0a0f;color:#fff}\\n.flex{display:flex;gap:10px}',
-    c:'flexbox,grid,animations,variables,responsive,selectors,box model'
-  },
-  react: {
-    n:'React', d:'JS library for UI components. Virtual DOM, one-way data flow.',
-    e:['function App(){const[c,s]=useState(0);return <div><h1>{c}</h1><button onClick={()=>s(c+1)}>+</button></div>}'],
-    c:'components,props,state,hooks,JSX,effects,context,router'
-  },
-  nn: {
-    n:'Neural Network', d:'Computing system inspired by brain. Learns patterns from data via layered neurons.',
-    e:['Layer: input -> weights -> activation -> output','Training: forward pass -> loss calc -> backpropagation -> weight update'],
-    c:'neurons,weights,biases,activation(ReLU,sigmoid,tanh),backpropagation,gradient descent,CNN,RNN,Transformer,epochs,learning rate'
-  },
-  ml: {
-    n:'Machine Learning', d:'AI subset where systems learn from data without explicit programming.',
-    e:['Supervised: labeled data -> predict labels','Unsupervised: unlabeled data -> find patterns','Reinforcement: agent + environment -> maximize reward'],
-    c:'regression,classification,clustering,overfitting,train/test split,cross-validation,feature engineering'
-  },
-  git: {
-    n:'Git', d:'Version control system. Tracks code changes, enables collaboration.',
-    e:['git init','git add .','git commit -m "msg"','git push origin main','git pull','git branch feature','git merge feature'],
-    c:'commit,branch,merge,rebase,push,pull,clone,stash,log,diff,conflict'
-  },
-  sql: {
-    n:'SQL', d:'Language for managing databases. CRUD operations on relational data.',
-    e:['SELECT * FROM users WHERE age > 18','INSERT INTO users(name,age) VALUES("Alice",25)','UPDATE users SET age=26 WHERE name="Alice"','DELETE FROM users WHERE id=1'],
-    c:'SELECT,INSERT,UPDATE,DELETE,JOIN,GROUP BY,ORDER BY,indexes,transactions,normalization'
-  },
-  linux: {
-    n:'Linux', d:'Open-source OS. Popular for servers, development, and embedded systems.',
-    e:['ls -la','cd /home/user','grep "text" file.txt','chmod 755 script.sh','ps aux | grep python','sudo apt install package'],
-    c:'filesystem,permissions,processes,packages,shell,pipe,redirection,cron'
-  },
-  docker: {
-    n:'Docker', d:'Container platform. Packages apps with dependencies for consistent deployment.',
-    e:['docker build -t myapp .','docker run -p 8080:80 myapp','docker-compose up','docker ps','docker stop container_id'],
-    c:'images,containers,Dockerfile,volumes,networks,docker-compose,registry'
-  },
-  api: {
-    n:'API', d:'Interface between software components. Enables communication between services.',
-    e:['GET /api/users -> list users','POST /api/users -> create user','fetch("/api").then(r=>r.json())'],
-    c:'REST,GraphQL,HTTP methods,status codes,authentication,rate limiting,versioning'
-  },
-  ds: {
-    n:'Data Structures', d:'Ways to organize data for efficient access and modification.',
-    e:['Array: contiguous memory, O(1) index','LinkedList: nodes+pointers, O(1) insert','HashMap: key-value, O(1) lookup','Tree: hierarchical, O(log n) search'],
-    c:'array,linked list,stack,queue,hashmap,tree,graph,heap,trie,complexity'
-  },
-  algo: {
-    n:'Algorithms', d:'Step-by-step procedures for solving problems.',
-    e:['Binary Search: O(log n) sorted search','QuickSort: O(n log n) divide-conquer sort','BFS: level-order graph traversal','Dijkstra: shortest path in weighted graph'],
-    c:'sorting,searching,dynamic programming,greedy,divide-conquer,graph,complexity(Big O)'
+<script type="importmap">
+{
+  "imports": {
+    "@mlc-ai/web-llm": "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.73/+esm"
   }
-};
-
-// ===== INTENT ANALYZER v4 =====
-function IA(m) {
-  var s = m.toLowerCase().trim(); var r = [];
-  var c = /[\\u4e00-\\u9fff]/.test(m);
-  
-  // Basic detection
-  if(/^(hi|hello|hey|你好|您好|嗨|哈[喽罗]|喂|早上好|晚上好|下午好|good\\s*morn|good\\s*eve|whats?\\s*up)/.test(s)) r.push('hi');
-  if(/(你是谁|who\\s*are.*(you|u)|你叫什么|your\\s*name|介绍[你一下]|tell.*about.*your)/.test(s)) r.push('who');
-  if(/再见|bye|goodbye|see\\s*ya|拜拜|回头聊|later/.test(s)) r.push('bye');
-  
-  // Code detection
-  if(/python/.test(s) || /^py\\b/.test(s)) r.push('py');
-  if(/javascript|js/.test(s) && !/java\\b/.test(s)) r.push('js');
-  if(/html/.test(s) && !/python|js/.test(s)) r.push('html');
-  if(/css/.test(s)) r.push('css');
-  if(/react/.test(s)) r.push('react');
-  if(/sql/.test(s)) r.push('sql');
-  if(/git/.test(s)) r.push('git');
-  if(/docker/.test(s)) r.push('docker');
-  if(/linux|bash|终端|命令/.test(s)) r.push('linux');
-  
-  // Code general
-  if(/code|program|编程|写代码|代码|developer|程序员/.test(s)) r.push('code');
-  
-  // Website
-  if(/(create|make|build|生成|创建|搭建|做).*(website|site|web|网页|网站|页面)/.test(s)) r.push('web');
-  
-  // Learning
-  if(/learn|学习|教|teach|tutorial|教程|怎么学|如何学|入门/.test(s)) r.push('learn');
-  
-  // Concepts
-  if(/explain|what\\s*is|what\\s*are|how\\s*does|什么是|解释|说明|介绍/.test(s) && /neural|network|神经网络|machine.learning|机器学习|deep.learning|深度学习|ai|人工智能/.test(s)) r.push('nn');
-  if(/explain|解释|说明|介绍|什么是/.test(s)) r.push('explain');
-  
-  // APIs
-  if(/api|rest|graphql|endpoint/.test(s)) r.push('api');
-  if(/datastruct|数据结构|array|linked.list|stack|queue|tree|hashmap|哈希/.test(s)) r.push('ds');
-  if(/algorithm|算法|sort|search|排序|搜索|复杂度/.test(s)) r.push('algo');
-  
-  // General
-  if(/help|how\\s*to|how\\s*do|怎么做|怎么用|功能|what\\s*can.you|你能做什么|help/.test(s)) r.push('help');
-  if(/joke|笑话|funny|搞笑|讲.*笑话|笑[话一].*个/.test(s)) r.push('jk');
-  if(/thanks|thank|谢谢|多谢|thx|感谢/.test(s)) r.push('thx');
-  if(/translate|翻译/.test(s)) r.push('tr');
-  if(/math|计算|算式|\\d+\\s*[+*\/-]\\s*\\d+/.test(s)) r.push('math');
-  if(/bored|无聊|没事|闷/.test(s)) r.push('br');
-  if(/sad|难过|不开心|伤心|depress|cry|哭/.test(s)) r.push('sd');
-  if(/good|great|nice|棒|厉害|牛|awesome/.test(s) && /you|你/.test(s)) r.push('pr');
-  
-  if(r.length==0) r.push('gen');
-  return r;
 }
+</script>
+<script type="module">
+// ===== ENRIQUE GPT - Powered by WebLLM =====
+import { CreateMLCEngine } from "@mlc-ai/web-llm";
 
-// ===== RESPONSE ENGINE v4 =====
-function RE(m, ints) {
-  var lv = P, cn = /[\\u4e00-\\u9fff]/.test(m), s = m.toLowerCase().trim();
-  function pk(a){return a[Math.floor(Math.random()*a.length)]}
-  function tr(t,e){if(lv<=1) return t.split(/\\n/)[0].substring(0,120); if(lv<=2) return t.split(/\\n/).slice(0,2).join('\\n').substring(0,250); if(lv===3) return t.substring(0,500); if(lv===4) return t.substring(0,900); return t+(e?'\\n\\n'+e:'');}
-  function sec(title,items){ var r='\\n'+title+'\\n'; for(var i=0;i<items.length;i++) r+= (i+1)+'. '+items[i]+'\\n'; return r; }
-  function getLang(n){ return K[n]?K[n].n:n.toUpperCase(); }
+var D = [], T = 0, B = false, ENGINE = null, ENGINE_LOADING = false;
+var MODEL_ID = "Qwen2.5-1.5B-Instruct-q4f16_1-MLC";
+
+// ===== WebLLM Engine =====
+async function loadModel() {
+  if (ENGINE || ENGINE_LOADING) return;
+  ENGINE_LOADING = true;
+  document.getElementById('loadBtn').style.display = 'none';
+  document.getElementById('progText').textContent = 'Loading model... (this may take a few minutes on first load)';
   
-  for(var i=0;i<ints.length;i++){
-    var it=ints[i];
+  try {
+    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> Downloading model...<br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">First load downloads ~1GB</span>';
     
-    if(it==='hi'){
-      return cn?pk(['你好！我是 ENRIQUE AI，很高兴见到你！有什么可以帮你的吗？','嗨！你好！欢迎来到 ENRIQUE AI。我可以帮你写代码、做网站、解答问题，请随意提问！','你好你好！我是 ENRIQUE，一个从零构建的 AI 助手。有什么需要尽管说！','嗨！欢迎！我是 ENRIQUE AI，你可以问我任何关于编程、技术、学习的问题！']):
-      pk(['Hello! I\'m ENRIQUE AI, nice to meet you! How can I help?','Hi there! Welcome to ENRIQUE AI. I can write code, create websites, explain concepts, and more!','Hey! Great to see you! I\'m ENRIQUE, your AI assistant. What can I do for you?']);
-    }
-    
-    if(it==='who'){
-      return tr(cn?'我叫 ENRIQUE AI，是一个完全从零构建的智能助手！\\n\\n🧠 核心能力：\\n• 写代码 - Python, JavaScript, C++, Rust 等多种语言\\n• 创建网站 - 从 HTML 到 React 完整项目\\n• 解释概念 - AI、算法、数据结构、框架\\n• 技术支持 - Git、Docker、Linux、数据库\\n• 双语交流 - 中文 & 英文\\n\\n📊 知识库：包含 15+ 技术领域的深度知识\\n⚡ Power Level 控制回答详细度（1-5）\\n💾 记忆系统 - 我能记住我们的对话':'I\'m ENRIQUE AI - an intelligence engine built entirely from scratch!\\n\\n🧠 Core Abilities:\\n• Write code in 10+ languages\\n• Create websites & full projects\\n• Explain AI, algorithms, data structures\\n• Tech support - Git, Docker, Linux, DB\\n• Bilingual - Chinese & English\\n\\n📊 Knowledge: 15+ tech domains\\n⚡ Power Level controls depth (1-5)\\n💾 Memory system - remembers conversations','');
-    }
-    
-    if(it==='bye') return cn?'再见！下次有需要随时来找我！😊':'Bye! Come back anytime! 😊';
-    if(it==='pr') return cn?'谢谢你的夸奖！我会继续努力进步的！有什么需要帮忙的吗？':'Thanks! I really appreciate that! Need any help?';
-    if(it==='sd') return cn?'没事的，我在这里陪你。想聊聊什么吗？或者我可以教你点有趣的东西！':'I\'m here for you. Want to chat? Or I can teach you something fun!';
-    if(it==='br') return cn?'无聊的话，试试这些：\\n\\n• "教我 Python" - 学习编程\\n• "创建网站" - 做个网站\\n• "讲个笑话" - 开心一下\\n• "什么是 AI" - 学习知识':'Bored? Try:\\n\\n• "Teach me Python"\\n• "Create a website"\\n• "Tell me a joke"\\n• "What is AI"';
-    if(it==='thx') return cn?pk(['不客气！随时欢迎！😊','不用谢！有需要就找我！']):pk(['You\'re welcome! 😊','Anytime! Glad to help!']);
-    if(it==='jk') return cn?pk(['为什么程序员分不清万圣节和圣诞节？因为 Oct 31 = Dec 25！😂','为什么神经网络过马路？为了到达另一层！🧠','程序员为什么喜欢黑暗模式？因为 light 吸引 bug！','0 和 255 争论谁更酷，255 说"我颜色多"，0 说"但我才是真黑！"']):
-      pk(['Why did the neural network cross the road? To get to the other layer!','Why do programmers prefer dark mode? Light attracts bugs!','How many programmers to change a light bulb? None, that\'s hardware!']);
-    
-    if(it==='tr') return cn?'我可以帮中英文翻译！发给我需要翻译的内容。':'I can help with translation! Send me the text.';
-    
-    if(it==='math'){
-      var mm=s.match(/(\\d+)\\s*([+*\/x-])\\s*(\\d+)/);
-      if(mm){var a=+mm[1],op=mm[2],b=+mm[3];if(op==='x')op='*';
-        switch(op){case'+':return a+' + '+b+' = '+(a+b);case'-':return a+' - '+b+' = '+(a-b);case'*':return a+' × '+b+' = '+(a*b);case'/':return a+' ÷ '+b+' = '+(b!==0?a/b:'不能除以零');}}
-      return cn?'给我一个算式，如 "5 + 3" 或 "10 * 20"':'Give me an expression like "5 + 3"';
-    }
-    
-    // Specific language knowledge
-    if(K[it] && K[it].e){
-      var lang = K[it].n;
-      var ex = K[it].e.slice(0, Math.min(lv+1, K[it].e.length));
-      var r = cn?'📌 '+lang+' 代码示例：\\n\\n':'📌 '+lang+' Code Examples:\\n\\n';
-      for(var j=0;j<ex.length;j++){
-        r += '```'+it+'\\n'+ex[j]+'\\n```\\n\\n';
+    ENGINE = await CreateMLCEngine(MODEL_ID, {
+      initProgressCallback: function(progress) {
+        var pct = Math.round(progress.progress * 100);
+        document.getElementById('progBar').style.width = pct + '%';
+        document.getElementById('progText').textContent = progress.text || 'Loading ' + pct + '%';
+        if (pct >= 100) {
+          document.getElementById('progText').textContent = 'Model ready!';
+          document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--primary)">Running locally</span><br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Running in browser via WebGPU</span>';
+        }
       }
-      if(K[it].c && lv>=4){
-        r += (cn?'📚 关键概念：\\n':'📚 Key Concepts:\\n')+K[it].c.split(',').map(function(x){return '• '+x.trim()}).join('\\n');
+    });
+    
+    document.getElementById('progBar').style.width = '100%';
+    document.getElementById('progText').textContent = 'AI Ready!';
+    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--primary)">Running locally</span><br><em>Model:</em> Qwen2.5-1.5B<br><span style="font-size:9px;color:var(--muted2)">Running in browser via WebGPU</span>';
+    document.getElementById('modeTag').textContent = 'LOCAL AI';
+    ts('AI model loaded! You can now chat.');
+  } catch(e) {
+    document.getElementById('progText').textContent = 'Error: ' + e.message;
+    document.getElementById('aiStatus').innerHTML = '<em>Status:</em> <span style="color:var(--red)">Failed to load</span><br><span style="font-size:9px;color:var(--muted2)">Using fallback engine</span>';
+    document.getElementById('loadBtn').style.display = 'block';
+    document.getElementById('loadBtn').textContent = 'Retry Load Model';
+  }
+  ENGINE_LOADING = false;
+}
+
+async function askAI(msg) {
+  // If WebLLM is loaded, use it
+  if (ENGINE) {
+    try {
+      var msgs = [
+        { role: "system", content: "You are ENRIQUE GPT, a helpful AI assistant running in the browser via WebLLM. You can write code, create websites, explain concepts, and answer questions. Be concise but thorough. Support Chinese and English." }
+      ];
+      // Add recent conversation context
+      var ctx = D.slice(-6);
+      for (var i = 0; i < ctx.length; i++) {
+        msgs.push({ role: ctx[i].r === 'u' ? 'user' : 'assistant', content: ctx[i].c });
       }
-      return r;
-    }
-    
-    if(it==='code'){
-      var langs = Object.keys(K).filter(function(k){return K[k].e}).map(function(k){return K[k].n});
-      return tr(
-        (cn?'💻 编程知识库：\\n\\n我可以帮你写以下语言的代码：\\n':'💻 Programming Knowledge:\\n\\nI can write code in:\\n')+langs.join(', ')+'\\n\\n'+
-        (cn?'🎯 试试说具体语言名，如 "Python"、"JavaScript" 等':'🎯 Say a language name for examples!'),
-        cn?'需要我展示哪个语言的代码？':'Which language?'
-      );
-    }
-    
-    if(it==='web'){
-      var t = K.html.t || '<html>\\n<body>\\n<h1>Website</h1>\\n</body>\\n</html>';
-      return tr(
-        (cn?'🌐 网站创建指南：\\n\\n完整的 HTML 模板：\\n':'🌐 Website Creation Guide:\\n\\nComplete HTML template:\\n')+
-        '```html\\n'+t+'\\n```\\n\\n'+
-        (cn?'📋 开发步骤：\\n1. 规划结构\\n2. 编写 HTML\\n3. 添加 CSS\\n4. 增加 JavaScript\\n5. 测试\\n6. 部署':'📋 Steps:\\n1. Plan structure\\n2. Write HTML\\n3. Add CSS\\n4. Add JS\\n5. Test\\n6. Deploy')+'\\n\\n'+
-        (cn?'📦 免费部署：GitHub Pages、Netlify、Vercel':'📦 Free hosting: GitHub Pages, Netlify, Vercel'),
-        cn?'需要更详细的指导？告诉我你想做什么类型的网站！':'Need more detail? Tell me what kind of site!'
-      );
-    }
-    
-    if(it==='nn'){
-      var dd = K.nn;
-      return tr(
-        (cn?'🧠 神经网络详解：\\n\\n':'🧠 Neural Networks Explained:\\n\\n')+dd.d+'\\n\\n'+
-        (cn?'关键概念：\\n':'Key Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n')+'\\n\\n'+
-        (cn?'🔬 ENRIQUE AI 本身就是一个神经网络实现！我的代码是完全原创的。':'🔬 I am implemented as a neural network!'),
-        cn?'想了解某个概念的具体细节？':'Want details on a specific concept?'
-      );
-    }
-    
-    if(it==='learn'){
-      return tr(
-        (cn?'📚 编程学习路线：\\n\\n1. 选语言 - Python 或 JavaScript\\n2. 学基础 - 变量、循环、函数\\n3. 做项目 - 从小开始\\n4. 数据结构 - 数组、链表、树\\n5. Git 版本控制\\n6. 参与开源\\n\\n💡 免费资源：freeCodeCamp、MDN、LeetCode、GitHub':
-         '📚 Learning Roadmap:\\n\\n1. Choose language (Python/JS)\\n2. Learn basics\\n3. Build projects\\n4. Data structures\\n5. Git\\n6. Open source\\n\\n💡 Resources: freeCodeCamp, MDN, LeetCode, GitHub'),
-        cn?'想让我展示代码？告诉我语言！':'Want me to show code? Tell me a language!'
-      );
-    }
-    
-    if(it==='api'){
-      var dd = K.api;
-      return tr(
-        (cn?'🔗 API 详解：\\n\\n':'🔗 API Explained:\\n\\n')+dd.d+'\\n\\n'+
-        (cn?'示例：\\n':'Examples:\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
-        (cn?'关键概念：\\n':'Key Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
-        cn?'REST API 和 GraphQL 有什么区别？需要例子吗？':'Need examples of REST vs GraphQL?'
-      );
-    }
-    
-    if(it==='ds'){
-      var dd = K.ds;
-      return tr(
-        (cn?'📊 数据结构详解：\\n\\n':'📊 Data Structures:\\n\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
-        (cn?'关键概念：\\n':'Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
-        cn?'想了解具体某个数据结构的实现？':'Want implementation details?'
-      );
-    }
-    
-    if(it==='algo'){
-      var dd = K.algo;
-      return tr(
-        (cn?'🔢 算法详解：\\n\\n':'🔢 Algorithms:\\n\\n')+dd.e.map(function(x){return '• '+x}).join('\\n')+'\\n\\n'+
-        (cn?'关键概念：\\n':'Concepts:\\n')+dd.c.split(',').map(function(x){return '• '+x.trim()}).join('\\n'),
-        cn?'想了解某个算法的具体实现？':'Want to see an algorithm implementation?'
-      );
-    }
-    
-    if(it==='explain'){
-      var topics = {
-        'api':K.api?K.api.d:'',
-        'ai|artificial intelligence|人工智能':K.nn?K.nn.d:'',
-        'neural|network|神经网络':K.nn?K.nn.d:'',
-        'machine learning|机器学习':K.ml?K.ml.d:'',
-        'git':K.git?K.git.d:'',
-        'docker':K.docker?K.docker.d:'',
-        'sql|database|数据库':K.sql?K.sql.d:'',
-        'linux':K.linux?K.linux.d:'',
-        'algorithm|算法':K.algo?K.algo.d:'',
-        'data struct|数据结构':K.ds?K.ds.d:''
-      };
-      for(var k in topics){if(new RegExp(k,'i').test(s) && topics[k]) return tr(topics[k],cn?'需要更详细解释吗？':'Need more detail?');}
-      return cn?'我可以解释很多概念！如 AI、神经网络、API、Git、Docker、Linux、算法、数据结构等。你想了解什么？':'I can explain AI, neural networks, APIs, Git, Docker, Linux, algorithms, data structures, and more! What interests you?';
-    }
-    
-    if(it==='help'){
-      return tr(cn?
-        'ENRIQUE AI 能帮你做这些：\\n\\n💻 写代码 - Python, JS, HTML, CSS, React, SQL...\\n🌐 创建网站 - 完整模板+部署指南\\n🧠 解释概念 - AI, 神经网络, 算法...\\n📚 学习编程 - 路线图+资源推荐\\n📊 数据结构与算法 - 详解+示例\\n🔗 API 开发 - REST, GraphQL\\n🐳 Docker & Linux - 运维知识\\n🔤 中英翻译\\n\\n💡 使用 Power Level 控制详细度！':
-        'ENRIQUE AI can:\\n\\n💻 Write code in 10+ languages\\n🌐 Create websites\\n🧠 Explain AI/ML concepts\\n📚 Teach programming\\n📊 Data structures & algorithms\\n🔗 API development\\n🐳 Docker & Linux\\n💡 Power Level controls detail!'
-      ,'');
+      msgs.push({ role: "user", content: msg });
+      
+      var reply = await ENGINE.chat.completions.create({
+        messages: msgs,
+        max_tokens: 1024,
+        temperature: 0.7,
+        top_p: 0.95
+      });
+      
+      return reply.choices[0].message.content;
+    } catch(e) {
+      console.error('WebLLM error:', e);
+      return fallbackResponse(msg);
     }
   }
+  return fallbackResponse(msg);
+}
+
+// ===== Fallback Engine (when WebLLM not loaded) =====
+function fallbackResponse(msg) {
+  var m = msg.toLowerCase().trim();
+  var cn = /[\u4e00-\u9fff]/.test(msg);
   
-  // Default
-  if(cn){
-    return pk([
-      '我明白你的意思了！你可以试试让我：\\n\\n• "写 Python 代码" - 生成代码示例\\n• "创建网站" - 获取网站模板\\n• "什么是 API" - 解释概念\\n• "帮我学编程" - 学习路线\\n• "讲个笑话" - 轻松一下',
-      '好的！需要我做什么？可以试试：\\n\\n• 写代码 - "写一个 JavaScript 函数"\\n• 做网站 - "帮我创建一个网页"\\n• 解释 - "什么是指针"\\n• 教学 - "教我 Python"',
-      '收到！以下是你可以让我做的事情：\\n\\n💻 写代码\\n🌐 做网站\\n🧠 解释概念\\n📚 教学\\n😄 讲笑话\\n\\n直接告诉我就好！'
-    ]);
-  } else {
-    return pk([
-      'I understand! Try asking me to:\\n\\n• Write Python code\\n• Create a website\\n• Explain APIs\\n• Teach programming\\n• Tell a joke',
-      'Got it! I can help with:\\n\\n• Code in any language\\n• Website creation\\n• Tech explanations\\n• Programming lessons\\nJust tell me what!'
-    ]);
+  function pk(a){return a[Math.random()*a.length|0]}
+  
+  if (/^(hi|hello|hey|你好|您好|嗨|哈[喽罗]|喂|早上好|晚上好|下午好)$/.test(m)) {
+    return cn ? pk(['你好！我是 ENRIQUE GPT！请先在侧边栏加载 AI 模型，我就能用真正的 AI 回答你！','嗨！加载模型后我能回答任何问题！']) : pk(['Hello! I\'m ENRIQUE GPT! Load the AI model in the sidebar for real AI responses!','Hi! After loading the model I can answer anything!']);
   }
+  if (/python/.test(m)) return cn?'Python 是一种高级编程语言。加载 AI 模型后我可以生成代码示例！':'Python is a high-level language. Load the AI model and I can generate code examples!';
+  if (/(create|make|build).*(website|site|web|网站)/.test(m)) return cn?'我可以帮你创建网站！不过需要先加载 AI 模型才能生成完整的代码。请点击侧边栏的"Load AI Model"。':'I can help create websites! Please load the AI model first for complete code generation.';
+  
+  return cn ? '请先在侧边栏点击 "Load AI Model" 加载真正的 AI！加载后我可以回答任何问题、写代码、做网站。' : 'Please click "Load AI Model" in the sidebar first! After loading, I can answer anything, write code, and create websites.';
 }
 
-// ===== UI FUNCTIONS =====
-function initPW() {
-  var g=document.getElementById('pg'),b=document.getElementById('pbar');
-  g.innerHTML='';b.innerHTML='';
-  for(var i=1;i<=5;i++){
-    var o=document.createElement('button');
-    o.className='pb'+(i==P?' on':'')+(i==5?' h5':'')+(i==4?' h4':'');
-    o.textContent=PC[i].l.substring(0,4);o.title=PC[i].d;
-    o.onclick=function(l){return function(){sp(l)}}(i);g.appendChild(o);
-    var p=document.createElement('button');
-    p.className='pbi'+(i==P?' on':'')+(i==5?' h5':'')+(i==4?' h4':'');
-    p.textContent=PC[i].l;p.onclick=function(l){return function(){sp(l)}}(i);b.appendChild(p);
-  }
-}
-function sp(l){P=l;
-  document.querySelectorAll('.pb').forEach(function(b,i){b.className='pb'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
-  document.querySelectorAll('.pbi').forEach(function(b,i){b.className='pbi'+(i+1==l?' on':'')+(i+1==5?' h5':'')+(i+1==4?' h4':'')});
-  document.getElementById('pd').textContent=PC[l].d;document.getElementById('pt').textContent=PC[l].l;
-  document.getElementById('pt').style.color=PC[l].c;localStorage.setItem('ep',l);ts('Power: '+PC[l].l);
-}
-function nw(){D=[];T=0;sv();rd();if(window.innerWidth<769)tsb();ts('New chat');}
-function cl(){if(!D.length)return;D=[];T=0;sv();rd();ts('Cleared');}
-
+// ===== UI =====
 function sd(){
-  var inp=document.getElementById('inp'),msg=inp.value.trim();
-  if(!msg||B)return;B=true;document.getElementById('snd').disabled=true;
-  var w=document.getElementById('welc');if(w)w.remove();
-  var mi=document.getElementById('mi');
-  var u=document.createElement('div');u.className='msg u';
-  u.innerHTML='<div class="av">U</div><div class="mb">'+esc(msg)+'</div>';
-  mi.appendChild(u);D.push({r:'u',c:msg,t:Date.now()});sv();
-  var a=document.createElement('div');a.className='msg a';
-  a.innerHTML='<div class="av">E</div><div class="mb"><div class="ty"><span></span><span></span><span></span></div></div>';
-  mi.appendChild(a);var b=a.querySelector('.mb');
-  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
-  inp.value='';ah(inp);
-  setTimeout(function(){
-    try{
-      var ints=IA(msg),reply=RE(msg,ints),html=fm(reply);
-      b.innerHTML=html;
-      b.querySelectorAll('pre').forEach(function(pre){
-        var cb=document.createElement('span');cb.className='cp';cb.textContent='📋';
-        cb.onclick=function(){
-          try{navigator.clipboard.writeText(pre.textContent).then(function(){cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500)}).catch(function(){
-            var ta=document.createElement('textarea');ta.value=pre.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);cb.textContent='✅';setTimeout(function(){cb.textContent='📋'},1500);
-          })}catch(e){}
+  var inp = document.getElementById('inp'), msg = inp.value.trim();
+  if (!msg || B) return; B = true;
+  document.getElementById('snd').disabled = true;
+  
+  var w = document.getElementById('welc'); if (w) w.remove();
+  var mi = document.getElementById('mi');
+  
+  var u = document.createElement('div'); u.className = 'msg u';
+  u.innerHTML = '<div class="av">U</div><div class="mb">' + esc(msg) + '</div>';
+  mi.appendChild(u); D.push({r:'u', c:msg, t:Date.now()}); sv();
+  
+  var a = document.createElement('div'); a.className = 'msg a';
+  a.innerHTML = '<div class="av">E</div><div class="mb"><div class="ty"><span></span><span></span><span></span></div></div>';
+  mi.appendChild(a); var bubble = a.querySelector('.mb');
+  document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
+  inp.value = ''; ah(inp);
+  
+  setTimeout(async function(){
+    try {
+      var reply = await askAI(msg);
+      var html = fmt(reply);
+      bubble.innerHTML = html;
+      bubble.querySelectorAll('pre').forEach(function(pre){
+        var cb = document.createElement('span'); cb.className = 'cp'; cb.textContent = 'Copy';
+        cb.onclick = function(){
+          try { navigator.clipboard.writeText(pre.textContent).then(function(){ cb.textContent = 'Copied!'; setTimeout(function(){ cb.textContent = 'Copy'; }, 1500); }); } catch(e) {}
         };
         pre.after(cb);
       });
-      D.push({r:'a',c:reply,t:Date.now()});T+=msg.length+reply.length;sv();us();
-      document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
-    }catch(e){b.innerHTML='<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';}
-    B=false;document.getElementById('snd').disabled=false;inp.focus();
-  },300+P*80);
+      D.push({r:'a', c:reply, t:Date.now()}); T += msg.length + reply.length; sv(); us();
+      document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
+    } catch(e) {
+      bubble.innerHTML = '<span style="color:var(--red)">Error: ' + esc(e.message) + '</span>';
+    }
+    B = false; document.getElementById('snd').disabled = false; inp.focus();
+  }, 200);
 }
 
-function qa(t){document.getElementById('inp').value=t;sd();}
-function fm(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\\w+)?\\n([\\s\\S]*?)```/g,function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'}).replace(/\\*\\*(.+?)\\*\\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^\\d+\\.\\s(.+)$/gm,'<li>$1</li>').replace(/^•\\s(.+)$/gm,'<li>$1</li>').replace(/\\n\\n/g,'</p><p>').replace(/\\n/g,'<br>')}
-function esc(s){if(typeof s!=='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function qa(t){document.getElementById('inp').value = t; sd();}
+function nw(){D=[];T=0;sv();rd();if(window.innerWidth<769)tsb();ts('New chat');}
+function cl(){if(!D.length)return;D=[];T=0;sv();rd();ts('Cleared');}
+function fmt(t){
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w+)?\n([\s\S]*?)```/g, function(m,l,c){return '<pre><code>'+c.trim()+'</code></pre>'})
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^\d+\.\s(.+)$/gm,'<li>$1</li>').replace(/^[•\-]\s(.+)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
+}
+function esc(s){if(typeof s!='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function ah(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
-
 function rd(){
-  var mi=document.getElementById('mi');mi.innerHTML='';
-  if(!D.length){
-    mi.innerHTML='<div class="wc" id="welc"><div class="wi">🧠</div><div class="wt">ENRIQUE AI v4</div><div class="ws">Ultimate Intelligence Engine<br>15+ Knowledge Domains • Code • Websites • AI</div><div class="wg">'+
-      '<div class="gc" onclick="qa(\'Hello!\')">👋 Hello</div>'+
-      '<div class="gc" onclick="qa(\'Create a website\')">🌐 Website</div>'+
+  var mi=document.getElementById('mi'); mi.innerHTML = '';
+  if (!D.length) {
+    mi.innerHTML = '<div class="wc" id="welc"><div class="wi">E</div><div class="wt">ENRIQUE GPT</div><div class="ws">Real AI running in your browser via WebLLM<br>Load the model once for GPT-level intelligence</div><div class="wg">'+
+      '<div class="gc" onclick="qa(\'Hello\')">👋 Hello</div>'+
       '<div class="gc" onclick="qa(\'Write Python code\')">🐍 Python</div>'+
-      '<div class="gc" onclick="qa(\'Explain neural networks\')">🧠 AI</div>'+
-      '<div class="gc" onclick="qa(\'Teach me Git\')">📚 Git</div>'+
-      '<div class="gc" onclick="qa(\'What is Docker\')">🐳 Docker</div>'+
-      '<div class="gc" onclick="qa(\'SQL examples\')">🗄️ SQL</div>'+
-      '<div class="gc" onclick="qa(\'Tell me a joke\')">😂 Joke</div>'+
-    '</div></div>';return;
+      '<div class="gc" onclick="qa(\'Create a website\')">🌐 Website</div>'+
+      '<div class="gc" onclick="qa(\'Explain AI\')">🧠 Explain AI</div>'+
+      '<div class="gc" onclick="qa(\'Tell me a joke\')">😄 Joke</div>'+
+      '<div class="gc" onclick="qa(\'Help me study\')">📚 Study</div>'+
+    '</div><div style="margin-top:16px;font-size:11px;color:var(--muted2);line-height:1.5">⚠️ First time? Click "Load AI Model" in the sidebar<br>Downloads ~1GB model (one-time), then runs 100% offline</div></div>';
+    return;
   }
   D.forEach(function(m){
-    var d=document.createElement('div');d.className='msg '+(m.r==='u'?'u':'a');
-    var av=m.r==='u'?'U':'E',txt=esc(typeof m.c==='string'?m.c:'');
-    if(m.r==='a')txt=fm(m.c);
-    d.innerHTML='<div class="av">'+av+'</div><div class="mb">'+txt+'</div>';mi.appendChild(d);
+    var d = document.createElement('div'); d.className = 'msg ' + (m.r == 'u' ? 'u' : 'a');
+    var av = m.r == 'u' ? 'U' : 'E', txt = esc(m.c || '');
+    if (m.r == 'a') txt = fmt(m.c);
+    d.innerHTML = '<div class="av">'+av+'</div><div class="mb">'+txt+'</div>'; mi.appendChild(d);
   });
-  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
+  document.getElementById('ms').scrollTop = document.getElementById('ms').scrollHeight;
 }
-function us(){document.getElementById('tc').textContent=T;document.getElementById('td').textContent=T;document.getElementById('mc').textContent=D.length}
-function tsb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on')}
-function ts(m){var t=document.createElement('div');t.className='ts';t.textContent='• '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
-function sv(){try{localStorage.setItem('e4',JSON.stringify({d:D,t:T}))}catch(e){}}
-function ld(){try{var d=localStorage.getItem('e4');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}}
-function lm(){try{var d=localStorage.getItem('em');if(d)M=JSON.parse(d)}catch(e){}}
-function lw(){try{var p=localStorage.getItem('ep');if(p)P=parseInt(p)||3}catch(e){}}
-
-// ===== INIT =====
-(function(){lm();ld();lw();initPW();sp(P);us();rd();
-  var inp=document.getElementById('inp');
-  inp.addEventListener('input',function(){ah(this)});
-  inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sd()}});
-  console.log('🧠 ENRIQUE AI v4.0 loaded');
+function us(){document.getElementById('tc').innerHTML = T; document.getElementById('td').innerHTML = T; document.getElementById('mc').innerHTML = D.length}
+function tsb(){document.getElementById('sb').classList.toggle('open'); document.getElementById('ov').classList.toggle('on')}
+function ts(m){var t=document.createElement('div');t.className='ts';t.textContent=' '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
+function sv(){try{localStorage.setItem('eg',JSON.stringify({d:D,t:T}))}catch(e){}}
+(function(){
+  try{var d=localStorage.getItem('eg');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}
+  us(); rd();
+  var inp = document.getElementById('inp');
+  inp.addEventListener('input', function(){ah(this)});
+  inp.addEventListener('keydown', function(e){if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();sd()}});
+  // Show load button if no engine
+  setTimeout(function(){
+    if(!ENGINE) {
+      document.getElementById('loadBtn').style.display = 'block';
+    }
+  }, 1000);
+  console.log('ENRIQUE GPT loaded');
 })();
-</script></body></html>
+</script>
+</body></html>
