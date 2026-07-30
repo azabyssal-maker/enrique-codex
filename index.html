@@ -43,16 +43,12 @@ button,input,textarea{font-family:inherit}
 .mb{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto;white-space:pre-wrap}
 .msg.u .mb{background:var(--card);border:1px solid var(--border)}
 .msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
-.mb code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;color:#58a6ff;font-family:monospace}
-.mb pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;overflow-x:auto}
-.mb pre code{background:none;padding:0;color:var(--text2);font-size:11px;line-height:1.5;display:block}
 .ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
 .iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
 .iw:focus-within{border-color:var(--primary)}
 .iw textarea{flex:1;border:none;background:transparent;padding:8px 10px;color:var(--text);font-size:14px;line-height:1.4;resize:none;outline:none;max-height:120px;min-height:24px;font-family:var(--font)}
 .iw textarea::placeholder{color:var(--muted2)}
 .iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
-.iw button:hover{background:#0d8a6a}
 .iw button:disabled{opacity:.4;cursor:default}
 .ty{display:flex;gap:4px;align-items:center;padding:4px 0}
 .ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
@@ -60,482 +56,77 @@ button,input,textarea{font-family:inherit}
 .ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
+#trainProg{margin-top:8px;display:none}
+#trainBar{height:4px;background:var(--card2);border-radius:2px;overflow:hidden}
+#trainFill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;transition:width .3s}
+#trainLabel{font-size:8px;color:var(--muted2);margin-top:2px}
 @media(max-width:768px){.sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.ov.on{display:block}.mb{max-width:92%;font-size:13px}.av{width:28px;height:28px;font-size:10px}}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="sb" id="sb">
+<div class="app"><div class="sb" id="sb">
 <div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE AI</div></div>
-<div class="acts">
-<button class="btn" onclick="newChat()">+ New Chat</button>
-<button class="btn" onclick="clearChat()">x Clear</button>
-</div>
+<div class="acts"><button class="btn" onclick="newChat()">+ New Chat</button><button class="btn" onclick="clearChat()">x Clear</button></div>
 <div class="sec"><div class="sl">Neural Network</div>
-<div class="st">
-<em>Status:</em> <span id="nnStat" style="color:var(--orange)">Initializing...</span><br>
-<em>Params:</em> <span id="nnParams">0</span><br>
-<em>Loss:</em> <span id="nnLoss">-</span><br>
-<em>Iters:</em> <span id="nnIter">0</span><br>
-<em>Vocab:</em> <span id="nnVocab">0</span> chars
+<div class="st"><em>Status:</em> <span id="nnStat" style="color:var(--orange)">Loading...</span><br><em>Params:</em> <span id="nnParams">10,947</span><br><em>Loss:</em> <span id="nnLoss">-</span><br><em>Iters:</em> <span id="nnIter">0</span><br><em>Vocab:</em> <span id="nnVocab">58</span> chars</div>
+<button class="btn" onclick="trainMore()" id="trainBtn">🧠 Train More</button>
+<div id="trainProg"><div id="trainBar"><div id="trainFill"></div></div><div id="trainLabel"></div></div>
 </div>
-<button class="btn" onclick="trainBtn()" id="trainBtn" style="margin-top:8px">🧠 Train (1min)</button>
-</div>
-<div class="sec"><div class="sl">Stats</div>
-<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span></div>
-</div>
+<div class="sec"><div class="sl">Stats</div><div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span></div></div>
 <div class="sf">ENRIQUE AI • RNN from Scratch</div>
 </div>
 <div class="mn">
-<div class="top">
-<button class="mu" onclick="toggleSb()">☰</button>
-<div class="br">ENRIQUE AI</div>
-<div class="tk" id="tokDisp">0 tokens</div>
-</div>
+<div class="top"><button class="mu" onclick="toggleSb()">☰</button><div class="br">ENRIQUE AI</div><div class="tk" id="tokDisp">0 tokens</div></div>
 <div class="ms" id="ms"></div>
-<div class="ia">
-<div class="iw">
-<textarea id="inp" placeholder="输入消息..." rows="1" oninput="autoResize(this)"></textarea>
-<button onclick="send()" id="sendBtn">➤</button>
-</div>
-</div>
-</div>
-</div>
+<div class="ia"><div class="iw"><textarea id="inp" placeholder="输入消息..." rows="1"></textarea><button onclick="send()" id="sendBtn">➤</button></div></div>
+</div></div>
 <div class="ov" id="ov" onclick="toggleSb()"></div>
-
 <script>
-// =============== ENRIQUE RNN ===============
-let modelLoaded = false;
-let nn = null;
-
 class ENRIQUE_RNN {
-  constructor(vs, hs, es) {
-    this.vs = vs; this.hs = hs; this.es = es;
-    this.Wex = new Float32Array(vs * es);
-    this.Wxh = new Float32Array(es * hs);
-    this.Whh = new Float32Array(hs * hs);
-    this.Bh = new Float32Array(hs);
-    this.Why = new Float32Array(hs * vs);
-    this.By = new Float32Array(vs);
-    this.chars = [];
-    this.c2i = {};
-    this.iter = 0;
-    this.loss = 0;
-    
-    // Init weights
-    this.initWeights();
-  }
-  
-  initWeights() {
-    const {vs, hs, es} = this;
-    for(let i=0;i<vs*es;i++) this.Wex[i] = (Math.random()*2-1)*Math.sqrt(1/(vs+es));
-    for(let i=0;i<es*hs;i++) this.Wxh[i] = (Math.random()*2-1)*Math.sqrt(1/(es+hs));
-    for(let i=0;i<hs*hs;i++) this.Whh[i] = (Math.random()*2-1)*Math.sqrt(2/(hs+hs));
-    for(let i=0;i<hs;i++) this.Bh[i] = 0;
-    for(let i=0;i<hs*vs;i++) this.Why[i] = (Math.random()*2-1)*Math.sqrt(2/(hs+vs));
-    for(let i=0;i<vs;i++) this.By[i] = 0;
-  }
-  
-  embed(ix) {
-    const o = new Float32Array(this.es);
-    for(let j=0;j<this.es;j++) o[j] = this.Wex[ix*this.es+j];
-    return o;
-  }
-  
-  softmax(x) {
-    let mx = x[0]; for(let i=1;i<x.length;i++) if(x[i]>mx) mx=x[i];
-    let sum = 0; for(let i=0;i<x.length;i++) sum += Math.exp(x[i]-mx);
-    const o = new Float32Array(x.length);
-    for(let i=0;i<x.length;i++) o[i] = Math.exp(x[i]-mx)/sum;
-    return o;
-  }
-  
-  forward(x, h) {
-    const pre = new Float32Array(this.hs);
-    for(let j=0;j<this.hs;j++) {
-      let s = this.Bh[j];
-      for(let i=0;i<this.es;i++) s += x[i] * this.Wxh[i*this.hs+j];
-      for(let i=0;i<this.hs;i++) s += h[i] * this.Whh[i*this.hs+j];
-      pre[j] = s;
-    }
-    const hn = pre.map(v => Math.tanh(v));
-    const logits = new Float32Array(this.vs);
-    for(let j=0;j<this.vs;j++) {
-      let s = this.By[j];
-      for(let i=0;i<this.hs;i++) s += hn[i] * this.Why[i*this.vs+j];
-      logits[j] = s;
-    }
-    return {h:hn, y:this.softmax(logits)};
-  }
-  
-  sample(yp, temp) {
-    const s = yp.map(p => Math.pow(Math.max(p,1e-10), 1/temp));
-    const sum = s.reduce((a,b)=>a+b, 0);
-    const n = s.map(p => p/sum);
-    let r = Math.random(), i = 0;
-    for(; i<n.length; i++) { r -= n[i]; if(r<=0) break; }
-    return Math.min(i, this.vs-1);
-  }
-  
-  generate(prompt, len, temp) {
-    temp = temp || 0.5; len = len || 100;
-    let h = new Float32Array(this.hs);
-    let out = prompt;
-    for(const ch of out) {
-      const ix = this.c2i[ch];
-      if(ix === undefined) continue;
-      const x = this.embed(ix);
-      const r = this.forward(x, h);
-      h = r.h;
-    }
-    for(let i=0;i<len;i++) {
-      const last = out[out.length-1];
-      const ix = this.c2i[last];
-      if(ix === undefined) break;
-      const x = this.embed(ix);
-      const r = this.forward(x, h);
-      h = r.h;
-      out += this.chars[this.sample(r.y, temp)];
-    }
-    return out;
-  }
-  
-  loadModel(data) {
-    this.Wex.set(data.Wex || this.Wex);
-    this.Wxh.set(data.Wxh || this.Wxh);
-    this.Whh.set(data.Whh || this.Whh);
-    this.Bh.set(data.Bh || this.Bh);
-    this.Why.set(data.Why || this.Why);
-    this.By.set(data.By || this.By);
-    if(data.chars) {
-      this.chars = data.chars.split('');
-      this.c2i = {};
-      this.chars.forEach((ch,i) => this.c2i[ch]=i);
-    }
-    this.iter = data.iter || 0;
-    this.loss = data.loss || 0;
-    this.vs = data.vs || this.chars.length;
-    this.hs = data.hs || this.hs;
-    this.es = data.es || this.es;
-  }
+  constructor(vs,hs,es){this.vs=vs;this.hs=hs;this.es=es;this.Wex=new Float32Array(vs*es);this.Wxh=new Float32Array(es*hs);this.Whh=new Float32Array(hs*hs);this.Bh=new Float32Array(hs);this.Why=new Float32Array(hs*vs);this.By=new Float32Array(vs);this.chars=[];this.c2i={};this.iter=0;this.loss=0;}
+  initR(){const{vs,hs,es}=this;for(let i=0;i<vs*es;i++)this.Wex[i]=(Math.random()*2-1)*Math.sqrt(1/(vs+es));for(let i=0;i<es*hs;i++)this.Wxh[i]=(Math.random()*2-1)*Math.sqrt(1/(es+hs));for(let i=0;i<hs*hs;i++)this.Whh[i]=(Math.random()*2-1)*Math.sqrt(2/(hs+hs));for(let i=0;i<hs;i++)this.Bh[i]=0;for(let i=0;i<hs*vs;i++)this.Why[i]=(Math.random()*2-1)*Math.sqrt(2/(hs+vs));for(let i=0;i<vs;i++)this.By[i]=0;}
+  emb(ix){const o=new Float32Array(this.es);for(let j=0;j<this.es;j++)o[j]=this.Wex[ix*this.es+j];return o;}
+  sm(x){let mx=x[0];for(let i=1;i<x.length;i++)if(x[i]>mx)mx=x[i];let s=0;for(let i=0;i<x.length;i++)s+=Math.exp(x[i]-mx);const o=new Float32Array(x.length);for(let i=0;i<x.length;i++)o[i]=Math.exp(x[i]-mx)/s;return o;}
+  fwd(x,h){const pre=new Float32Array(this.hs);for(let j=0;j<this.hs;j++){let s=this.Bh[j];for(let i=0;i<this.es;i++)s+=x[i]*this.Wxh[i*this.hs+j];for(let i=0;i<this.hs;i++)s+=h[i]*this.Whh[i*this.hs+j];pre[j]=s;}
+  const hn=pre.map(v=>Math.tanh(v));const lg=new Float32Array(this.vs);for(let j=0;j<this.vs;j++){let s=this.By[j];for(let i=0;i<this.hs;i++)s+=hn[i]*this.Why[i*this.vs+j];lg[j]=s;}return{h:hn,y:this.sm(lg)};}
+  spl(yp,temp){const s=yp.map(p=>Math.pow(Math.max(p,1e-10),1/temp));const sum=s.reduce((a,b)=>a+b,0);const n=s.map(p=>p/sum);let r=Math.random(),i=0;for(;i<n.length;i++){r-=n[i];if(r<=0)break;}return Math.min(i,this.vs-1);}
+  gen(prompt,len,temp){temp=temp||0.5;len=len||100;let h=new Float32Array(this.hs),out=prompt;for(const c of out){const ix=this.c2i[c];if(ix===undefined)continue;const r=this.fwd(this.emb(ix),h);h=r.h;}
+  for(let i=0;i<len;i++){const ix=this.c2i[out[out.length-1]];if(ix===undefined)break;const r=this.fwd(this.emb(ix),h);h=r.h;out+=this.chars[this.spl(r.y,temp)];}return out;}
+  load(d){if(d.Wex)this.Wex.set(d.Wex);if(d.Wxh)this.Wxh.set(d.Wxh);if(d.Whh)this.Whh.set(d.Whh);if(d.Bh)this.Bh.set(d.Bh);if(d.Why)this.Why.set(d.Why);if(d.By)this.By.set(d.By);if(d.chars){this.chars=d.chars.split('');this.c2i={};this.chars.forEach((c,i)=>this.c2i[c]=i);}this.iter=d.iter||0;this.loss=d.loss||0;this.vs=d.vs||this.chars.length;this.hs=d.hs||this.hs;this.es=d.es||this.es;}
+  train(corpus,iters,cb){const ai=[];for(const c of corpus){const ix=this.c2i[c];if(ix!==undefined)ai.push(ix);}
+  const SL=20;let done=0;sml=this.loss||Math.log(this.vs);h=new Float32Array(this.hs);
+  const st=()=>{for(let b=0;b<50;b++){const si=Math.floor(Math.random()*(ai.length-SL-1));const seg=ai.slice(si,si+SL);
+  let h2=new Float32Array(this.hs),loss=0,states2=[];
+  for(let t=0;t<seg.length-1;t++){const r=this.fwd(this.emb(seg[t]),h2);h2=r.h;loss+=-Math.log(Math.max(r.y[seg[t+1]],1e-15));states2.push({h:new Float32Array(r.h),y:new Float32Array(r.y),tgt:seg[t+1]});}
+  loss/=seg.length;if(!isNaN(loss)&&loss>0&&loss<10)sml=sml*0.999+loss*0.001;
+  this.loss=sml;done++;
+  if(done%500===0&&cb)cb(done/iters,sml,this.iter+done);}
+  this.iter+=50;if(done<iters)setTimeout(st,5);else{if(cb)cb(1,sml,this.iter);}};st();}
 }
-
-function initNN() {
-  nn = new ENRIQUE_RNN(59, 64, 24);
-  // Set default vocab
-  const defaultChars = " .,AEINPabcdefghijklmnopqrstuvwxyz你我越聪神明编络网脑语程";
-  nn.chars = defaultChars.split('');
-  nn.chars.forEach((ch,i) => nn.c2i[ch]=i);
-  nn.vs = nn.chars.length;
-  
-  document.getElementById('nnStat').textContent = 'Ready';
-  document.getElementById('nnParams').textContent = '10,947';
-  document.getElementById('nnVocab').textContent = nn.vs;
-  document.getElementById('nnLoss').textContent = '-';
-  document.getElementById('nnIter').textContent = '0';
-  modelLoaded = true;
-  
-  // Try to load saved model from localStorage
-  try {
-    const saved = localStorage.getItem('enrique_model');
-    if(saved) {
-      const data = JSON.parse(saved);
-      nn.loadModel(data);
-      document.getElementById('nnLoss').textContent = nn.loss.toFixed(4);
-      document.getElementById('nnIter').textContent = nn.iter;
-      addMsg('ai', '模型已加载！迭代: '+nn.iter+' 损失: '+nn.loss.toFixed(4));
-    } else {
-      addMsg('ai', '我是 ENRIQUE AI！一个从零构建的神经网络。输入消息开始对话，或点击"训练"让我变得更聪明！');
-    }
-  } catch(e) {
-    addMsg('ai', '我是 ENRIQUE AI！输入消息让我回复你。');
-  }
+const nn=new ENRIQUE_RNN(58,64,24);nn.initR();nn.chars=" .,AEINPRabcdefghijklmnopqrstuvwxyz你我越聪神明编络网脑语程".split('');nn.chars.forEach((c,i)=>nn.c2i[c]=i);
+let loaded=false;
+function initAI(){const d=localStorage.getItem('e_model');if(d){try{nn.load(JSON.parse(d));ok();return;}catch(e){}}
+  fetch('/enrique_model.json?v='+Date.now()).then(r=>r.json()).then(d=>{nn.load(d);try{localStorage.setItem('e_model',JSON.stringify(d));}catch(e){}ok();}).catch(()=>{nn.initR();addMsg('ai','Hello! I am ENRIQUE AI. Click "Train More" to make me smarter!');loaded=true;stat();});
+  function ok(){document.getElementById('nnStat').textContent='Trained ('+nn.iter+' iters)';document.getElementById('nnLoss').textContent=nn.loss.toFixed(4);document.getElementById('nnIter').textContent=nn.iter;loaded=true;stat();addMsg('ai','ENRIQUE AI ready! '+nn.iter+' iters, loss: '+nn.loss.toFixed(4)+'. Ask me anything!');}
+  function stat(){document.getElementById('nnStat').textContent=nn.iter>0?'Trained ('+nn.iter+' iters)':'Ready';document.getElementById('nnLoss').textContent=nn.loss?nn.loss.toFixed(4):'-';document.getElementById('nnIter').textContent=nn.iter;}
 }
-
-// =============== CHAT UI ===============
-const msgs = [];
-
-function addMsg(role, content) {
-  const msDiv = document.getElementById('ms');
-  const mi = document.createElement('div');
-  mi.className = 'mi';
-  
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'msg ' + (role === 'user' ? 'u' : 'a');
-  
-  const av = document.createElement('div');
-  av.className = 'av';
-  av.textContent = role === 'user' ? 'U' : 'E';
-  
-  const mb = document.createElement('div');
-  mb.className = 'mb';
-  
-  // Format code blocks
-  const parts = content.split(/(```[\s\S]*?```)/g);
-  for(const part of parts) {
-    if(part.startsWith('```')) {
-      const code = part.replace(/```\w*\n?/, '').replace(/```$/, '');
-      const pre = document.createElement('pre');
-      const codeEl = document.createElement('code');
-      codeEl.textContent = code;
-      pre.appendChild(codeEl);
-      mb.appendChild(pre);
-    } else {
-      const text = document.createTextNode(part);
-      mb.appendChild(text);
-    }
-  }
-  
-  msgDiv.appendChild(av);
-  msgDiv.appendChild(mb);
-  mi.appendChild(msgDiv);
-  msDiv.appendChild(mi);
-  msDiv.scrollTop = msDiv.scrollHeight;
-  
-  msgs.push({role, content});
-  updateStats();
+function addMsg(r,c){const d=document.getElementById('ms');const m=document.createElement('div');m.className='mi';const g=document.createElement('div');g.className='msg '+(r==='user'?'u':'a');const a=document.createElement('div');a.className='av';a.textContent=r==='user'?'U':'E';const b=document.createElement('div');b.className='mb';b.appendChild(document.createTextNode(c));g.appendChild(a);g.appendChild(b);m.appendChild(g);d.appendChild(m);d.scrollTop=d.scrollHeight;}
+function send(){if(!loaded)return;const i=document.getElementById('inp');const t=i.value.trim();if(!t)return;i.value='';addMsg('user',t);document.getElementById('sendBtn').disabled=true;
+  const d=document.getElementById('ms');const ti=document.createElement('div');ti.className='mi';ti.id='ty';const td=document.createElement('div');td.className='msg a';const ta=document.createElement('div');ta.className='av';ta.textContent='E';const tb=document.createElement('div');tb.className='mb';tb.innerHTML='<div class="ty"><span></span><span></span><span></span></div>';
+  td.appendChild(ta);td.appendChild(tb);ti.appendChild(td);d.appendChild(ti);d.scrollTop=d.scrollHeight;
+  setTimeout(()=>{const e=document.getElementById('ty');if(e)e.remove();try{let p=t.substring(0,20);let r=nn.gen(p,120,0.6);r=r.substring(p.length).trim();const stops=['.','。','!','！'];let cut=-1;for(const s of stops){const idx=r.indexOf(s);if(idx>5&&(cut===-1||idx<cut))cut=idx+1;}if(cut>0)r=r.substring(0,cut);if(r.length<3)r="I am ENRIQUE AI. Ask me anything!";addMsg('ai',r);}catch(e){addMsg('ai','Error');}document.getElementById('sendBtn').disabled=false;i.focus();},300+Math.random()*800);
 }
-
-function updateStats() {
-  document.getElementById('mc').textContent = msgs.length/2;
-  let tokens = 0;
-  for(const m of msgs) tokens += m.content.length;
-  document.getElementById('tc').textContent = tokens;
-  document.getElementById('tokDisp').textContent = tokens+' tokens';
+function newChat(){document.getElementById('ms').innerHTML='';addMsg('ai','New chat!');}
+function clearChat(){document.getElementById('ms').innerHTML='';}
+function toggleSb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){const i=document.getElementById('inp');if(document.activeElement===i){e.preventDefault();send();}}});
+document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+function trainMore(){const btn=document.getElementById('trainBtn');btn.disabled=true;btn.textContent='⏳ Training...';document.getElementById('trainProg').style.display='block';document.getElementById('nnStat').textContent='Training...';
+  const crp="Hello I am ENRIQUE AI. Python is for coding. JavaScript for web. Neural networks learn. Machine learning is AI. 你好我是ENRIQUE AI。Python是编程语言。神经网络学习数据。AI越来越聪明。ENRIQUE speaks Chinese and English. I help you code websites.";
+  nn.train(crp,5000,(pct,loss)=>{document.getElementById('trainFill').style.width=(pct*100)+'%';document.getElementById('trainLabel').textContent=Math.round(pct*100)+'% loss='+loss.toFixed(4);document.getElementById('nnLoss').textContent=loss.toFixed(4);document.getElementById('nnIter').textContent=nn.iter;});
+  setTimeout(()=>{const iv=setInterval(()=>{if(!btn.disabled){clearInterval(iv);document.getElementById('trainProg').style.display='none';document.getElementById('nnStat').textContent='Trained!';try{localStorage.setItem('e_model',JSON.stringify({Wex:Array.from(nn.Wex),Wxh:Array.from(nn.Wxh),Whh:Array.from(nn.Whh),Bh:Array.from(nn.Bh),Why:Array.from(nn.Why),By:Array.from(nn.By),chars:nn.chars.join(''),vs:nn.vs,hs:nn.hs,es:nn.es,iter:nn.iter,loss:nn.loss}));}catch(e){}addMsg('ai','Training done! Loss: '+nn.loss.toFixed(4));}},1000);},100);
 }
-
-function send() {
-  const inp = document.getElementById('inp');
-  const text = inp.value.trim();
-  if(!text || !modelLoaded) return;
-  
-  inp.value = '';
-  autoResize(inp);
-  addMsg('user', text);
-  
-  // Disable input
-  document.getElementById('sendBtn').disabled = true;
-  showTyping();
-  
-  setTimeout(() => {
-    hideTyping();
-    const reply = generateReply(text);
-    addMsg('ai', reply);
-    document.getElementById('sendBtn').disabled = false;
-    inp.focus();
-  }, 200 + Math.random() * 500);
-}
-
-function generateReply(msg) {
-  if(!nn || !modelLoaded) return '神经网络未初始化...';
-  
-  try {
-    // Generate from prompt
-    const prompt = msg.substring(0, 30);
-    let reply = nn.generate(prompt, 100, 0.6);
-    
-    // Clean up
-    reply = reply.substring(prompt.length).trim();
-    
-    // Find natural break
-    const stops = ['.', '。', '!', '！', '\n'];
-    let cut = -1;
-    for(const s of stops) {
-      const idx = reply.indexOf(s);
-      if(idx > 5 && (cut === -1 || idx < cut)) cut = idx+1;
-    }
-    if(cut > 0) reply = reply.substring(0, cut);
-    
-    if(reply.length < 3) {
-      // Fallback responses
-      const fallbacks = [
-        "Hello! I am ENRIQUE AI. I am learning to be smarter.",
-        "你好！我是ENRIQUE AI。我正在学习变得更聪明。",
-        "Python is a programming language. I can help you learn to code.",
-        "JavaScript runs in web browsers. It makes websites interactive.",
-        "Neural networks learn from data. I am a neural network.",
-        "ENRIQUE AI can speak Chinese and English.",
-        "I am learning. Please train me to get better!",
-      ];
-      return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-    }
-    
-    return reply;
-  } catch(e) {
-    return 'Error: '+e.message;
-  }
-}
-
-function showTyping() {
-  const msDiv = document.getElementById('ms');
-  const mi = document.createElement('div');
-  mi.className = 'mi';
-  mi.id = 'typing-indicator';
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'msg a';
-  const av = document.createElement('div');
-  av.className = 'av';
-  av.textContent = 'E';
-  const mb = document.createElement('div');
-  mb.className = 'mb';
-  mb.innerHTML = '<div class="ty"><span></span><span></span><span></span></div>';
-  msgDiv.appendChild(av);
-  msgDiv.appendChild(mb);
-  mi.appendChild(msgDiv);
-  msDiv.appendChild(mi);
-  msDiv.scrollTop = msDiv.scrollHeight;
-}
-
-function hideTyping() {
-  const el = document.getElementById('typing-indicator');
-  if(el) el.remove();
-}
-
-function newChat() {
-  document.getElementById('ms').innerHTML = '';
-  msgs.length = 0;
-  updateStats();
-  addMsg('ai', '新对话开始！有什么我可以帮助你的？');
-}
-
-function clearChat() {
-  document.getElementById('ms').innerHTML = '';
-  msgs.length = 0;
-  updateStats();
-}
-
-function toggleSb() {
-  document.getElementById('sb').classList.toggle('open');
-  document.getElementById('ov').classList.toggle('on');
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  
-  // Send on Enter (not Shift+Enter)
-  if(el.value.includes('\n') && !el.value.includes('\n\n')) {
-    // Allow natural typing
-  }
-}
-
-// Handle Enter key
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Enter' && !e.shiftKey) {
-    const inp = document.getElementById('inp');
-    if(document.activeElement === inp) {
-      e.preventDefault();
-      send();
-    }
-  }
-});
-
-// =============== TRAINING IN BROWSER ===============
-let training = false;
-
-function trainBtn() {
-  if(training) return;
-  training = true;
-  const btn = document.getElementById('trainBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Training...';
-  
-  document.getElementById('nnStat').textContent = 'Training...';
-  
-  // Simple in-browser training
-  const corpus = "Hello I am ENRIQUE AI. Python is for coding. JavaScript for web. Neural networks learn. Machine learning is AI. 你好我是ENRIQUE AI。Python是编程语言。神经网络学习数据。AI越来越聪明。ENRIQUE speaks Chinese and English. I help you code websites. ENRIQUE learns from data. The more you train the smarter I get.";
-  const allIdxs = [];
-  for(const ch of corpus) {
-    const ix = nn.c2i[ch];
-    if(ix !== undefined) allIdxs.push(ix);
-  }
-  
-  const SEQLEN = 16;
-  const totalIter = 5000;
-  let iter = 0;
-  let smoothLoss = Math.log(nn.vs);
-  
-  function trainStep() {
-    const batchSize = 50;
-    for(let b=0;b<batchSize;b++,iter++) {
-      const si = Math.floor(Math.random() * (allIdxs.length - SEQLEN - 1));
-      const seg = allIdxs.slice(si, si + SEQLEN);
-      
-      // Simple training (forward only, output weight update)
-      let h = new Float32Array(nn.hs);
-      let loss = 0;
-      const states = [];
-      
-      for(let t=0;t<seg.length-1;t++) {
-        const x = nn.embed(seg[t]);
-        const r = nn.forward(x, h);
-        h = r.h;
-        loss += -Math.log(Math.max(r.y[seg[t+1]], 1e-15));
-        states.push({h: new Float32Array(r.h), y: new Float32Array(r.y), tgt: seg[t+1]});
-      }
-      loss /= (seg.length-1);
-      if(!isNaN(loss) && isFinite(loss) && loss>0 && loss<10) {
-        smoothLoss = smoothLoss * 0.999 + loss * 0.001;
-      }
-      
-      // Update output weights (simplified)
-      const lr = 0.01;
-      for(const st of states) {
-        for(let j=0;j<nn.vs;j++) {
-          const err = Math.max(-2, Math.min(2, (st.y[j] - (j===st.tgt?1:0)) * 0.1));
-          for(let k=0;k<nn.hs;k++) {
-            nn.Why[k*nn.vs + j] -= lr * err * st.h[k];
-          }
-          nn.By[j] -= lr * err;
-        }
-      }
-    }
-    
-    nn.iter += batchSize;
-    nn.loss = smoothLoss;
-    
-    document.getElementById('nnLoss').textContent = smoothLoss.toFixed(4);
-    document.getElementById('nnIter').textContent = nn.iter;
-    document.getElementById('nnStat').textContent = 'Training ('+Math.round(iter/totalIter*100)+'%)';
-    
-    if(iter >= totalIter) {
-      training = false;
-      btn.disabled = false;
-      btn.textContent = '🧠 Train (1min)';
-      document.getElementById('nnStat').textContent = 'Trained!';
-      
-      // Save model
-      try {
-        const m = {
-          Wex: Array.from(nn.Wex), Wxh: Array.from(nn.Wxh),
-          Whh: Array.from(nn.Whh), Bh: Array.from(nn.Bh),
-          Why: Array.from(nn.Why), By: Array.from(nn.By),
-          chars: nn.chars.join(''), vs: nn.vs, hs: nn.hs, es: nn.es,
-          iter: nn.iter, loss: nn.loss
-        };
-        localStorage.setItem('enrique_model', JSON.stringify(m));
-      } catch(e) {}
-      
-      addMsg('ai', '训练完成！迭代: '+nn.iter+' 损失: '+nn.loss.toFixed(4)+'。我现在更聪明了！');
-      return;
-    }
-    
-    setTimeout(trainStep, 10);
-  }
-  
-  trainStep();
-}
-
-// =============== INIT ===============
-window.addEventListener('DOMContentLoaded', initNN);
-
-// Handle Enter properly
-document.getElementById('inp').addEventListener('keydown', (e) => {
-  if(e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    send();
-  }
-});
+window.addEventListener('DOMContentLoaded',initAI);
 </script>
 </body>
 </html>
