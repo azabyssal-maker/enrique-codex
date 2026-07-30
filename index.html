@@ -1,469 +1,98 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0f">
-<title>ENRIQUE - Neural Network</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--border2:#3a3a4e;--primary:#10a37f;--primary-l:#0d2e23;--red:#f85149;--orange:#d29922;--blue:#58a6ff;--purple:#a371f7;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
-button,input,textarea{font-family:inherit}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#0a0a0f"><title>ENRIQUE AI</title><style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}:root{--bg:#0a0a0f;--bg2:#111118;--card:#181825;--card2:#20202e;--border:#2a2a3a;--text:#e4e4ec;--text2:#c8c8d4;--muted:#7d7d90;--muted2:#4a4a5e;--font:system-ui,-apple-system,sans-serif}html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}textarea,button,input{font-family:inherit}::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
-.sb{width:260px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
-.sb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
-.sb-t{font-size:15px;font-weight:800;flex:1}
-.acts{padding:10px 14px;display:flex;flex-direction:column;gap:6px}
-.btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
-.btn:hover{border-color:var(--primary);background:var(--primary-l)}
-.sec{padding:8px 14px;border-bottom:1px solid var(--border)}
-.sl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.st{font-size:10px;color:var(--muted2);line-height:1.6;padding:2px 0}
-.st em{color:var(--muted)}
-.sf{padding:10px 14px;border-top:1px solid var(--border);font-size:9px;color:var(--muted2);text-align:center;margin-top:auto}
-.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.top{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:10px;min-height:48px}
-.top .mu{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
-.top .br{font-size:14px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.top .tk{font-size:10px;color:var(--muted);background:var(--card);padding:3px 8px;border-radius:5px;border:1px solid var(--border)}
-.ms{flex:1;overflow-y:auto;padding:16px 14px 8px;scroll-behavior:smooth}
-.mi{max-width:680px;margin:0 auto}
-.msg{margin-bottom:16px;display:flex;gap:10px;animation:up .25s ease}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.u{justify-content:flex-end}
-.av{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
-.msg.u .av{background:var(--card2);border:1px solid var(--border);color:var(--muted);order:1}
-.msg.a .av{background:linear-gradient(135deg,var(--primary),#34d399);color:#fff}
-.mb{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;color:var(--text2);word-wrap:break-word;overflow-x:auto}
-.msg.u .mb{background:var(--card);border:1px solid var(--border)}
-.msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
-.mb code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--blue);font-family:monospace}
-.mb pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;overflow-x:auto}
-.mb pre code{background:none;padding:0;color:var(--text2);font-size:11px;line-height:1.5;display:block}
-.mb .cp{float:right;margin-top:-32px;margin-right:4px;padding:2px 8px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-size:9px;color:var(--muted);cursor:pointer;z-index:1}
-.ia{border-top:1px solid var(--border);padding:8px 14px 12px;background:var(--bg2);flex-shrink:0}
-.iw{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:4px;transition:border-color .2s}
-.iw:focus-within{border-color:var(--primary)}
-.iw textarea{flex:1;border:none;background:transparent;padding:8px 10px;color:var(--text);font-size:14px;line-height:1.4;resize:none;outline:none;max-height:120px;min-height:24px;font-family:var(--font)}
-.iw textarea::placeholder{color:var(--muted2)}
-.iw button{width:36px;height:36px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
-.iw button:hover{background:var(--primary-d)}
+.sb{width:200px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .2s}
+.sb-h{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.sb-i{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#10a37f,#34d399);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff}
+.sb-t{font-size:13px;font-weight:700}.acts{padding:6px 10px;display:flex;flex-direction:column;gap:4px}
+.btn{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:11px;font-weight:600;cursor:pointer;width:100%;justify-content:center}
+.btn:hover{border-color:#10a37f;background:#0d2e23}
+.sec{padding:5px 10px;border-bottom:1px solid var(--border)}
+.sl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.st{font-size:9px;color:var(--muted2);line-height:1.5}.st em{color:var(--muted)}
+.sf{padding:6px 10px;border-top:1px solid var(--border);font-size:8px;color:var(--muted2);text-align:center;margin-top:auto}
+.mn{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.top{display:flex;align-items:center;padding:5px 10px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;gap:6px;min-height:38px}
+.top .mu{width:24px;height:24px;border:1px solid var(--border);border-radius:5px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted)}
+.top .br{font-size:13px;font-weight:700;flex:1}
+.ms{flex:1;overflow-y:auto;padding:10px 8px 4px;scroll-behavior:smooth}
+.mi{max-width:600px;margin:0 auto}
+.msg{margin-bottom:10px;display:flex;gap:8px;animation:up .2s ease}@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{justify-content:flex-end}.av{width:26px;height:26px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.msg.u .av{background:var(--card);border:1px solid var(--border);color:var(--muted);order:1}.msg.a .av{background:linear-gradient(135deg,#10a37f,#34d399);color:#fff}
+.mb{max-width:85%;padding:7px 10px;border-radius:8px;font-size:13px;line-height:1.5;color:var(--text2);word-wrap:break-word;white-space:pre-wrap}
+.msg.u .mb{background:var(--card);border:1px solid var(--border)}.msg.a .mb{background:var(--card2);border:1px solid var(--border2)}
+.ia{border-top:1px solid var(--border);padding:5px 8px 8px;background:var(--bg2);flex-shrink:0}
+.iw{display:flex;gap:6px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:3px}
+.iw:focus-within{border-color:#10a37f}.iw textarea{flex:1;border:none;background:transparent;padding:5px 6px;color:var(--text);font-size:13px;line-height:1.4;resize:none;outline:none;max-height:100px;min-height:20px}
+.iw textarea::placeholder{color:var(--muted2)}.iw button{width:30px;height:30px;border:none;border-radius:6px;background:#10a37f;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 .iw button:disabled{opacity:.4;cursor:default}
-.ty{display:flex;gap:4px;align-items:center;padding:4px 0}
-.ty span{width:6px;height:6px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
-.ty span:nth-child(2){animation-delay:.2s}
-.ty span:nth-child(3){animation-delay:.4s}
+.ty{display:flex;gap:3px;align-items:center;padding:2px 0}.ty span{width:5px;height:5px;border-radius:50%;background:var(--muted2);animation:tp 1.2s infinite}
+.ty span:nth-child(2){animation-delay:.2s}.ty span:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
-.ts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:8px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--text);z-index:200;animation:ti .25s ease;pointer-events:none}
-@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;display:none}.ov.on{display:block}
-.wc{text-align:center;padding:30px 20px}
-.wi{width:60px;height:60px;margin:0 auto 14px;background:linear-gradient(135deg,var(--primary),#34d399);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.wt{font-size:22px;font-weight:900;color:var(--text);margin-bottom:4px}
-.ws{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
-.wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:450px;margin:0 auto}
-.gc{padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .2s;font-size:12px;color:var(--muted)}
-.gc:hover{border-color:var(--primary);background:var(--primary-l);color:var(--text)}
-@media(max-width:768px){.sb{position:fixed;inset:0;right:auto;z-index:100;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.ov.on{display:block}.mb{max-width:92%;font-size:13px}.av{width:28px;height:28px;font-size:10px}}
-</style>
-</head>
-<body>
-<div class="app">
-<div class="sb" id="sb">
-<div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE NN</div></div>
-<div class="acts">
-<button class="btn" onclick="nw()"><span style="font-size:14px">+</span> New Chat</button>
-<button class="btn" onclick="cl()"><span style="font-size:14px">x</span> Clear</button>
-<button class="btn" onclick="train()" id="trainBtn">🧠 Train Network</button>
-</div>
-<div class="sec"><div class="sl">Neural Network</div>
-<div class="st">
-<em>Status:</em> <span id="nnStat" style="color:var(--orange)">Initializing...</span><br>
-<em>Params:</em> <span id="nnParams">0</span><br>
-<em>Loss:</em> <span id="nnLoss">-</span><br>
-<em>Iters:</em> <span id="nnIter">0</span><br>
-<em>Vocab:</em> <span id="nnVocab">0</span> chars
-</div>
-<div id="progArea" style="display:none;margin-top:6px">
-<div style="height:4px;background:var(--card2);border-radius:2px;overflow:hidden"><div id="progBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:2px;transition:width .3s"></div></div>
-<div id="progText" style="font-size:8px;color:var(--muted2);margin-top:2px"></div>
-</div>
-</div>
-<div class="sec"><div class="sl">Stats</div>
-<div class="st"><em>Tokens:</em> <span id="tc">0</span><br><em>Messages:</em> <span id="mc">0</span><br><em>Memory:</em> <span id="memSz">0</span> KB</div>
-</div>
-<div class="sf">ENRIQUE • LSTM from Scratch</div>
-</div>
-<div class="mn">
-<div class="top">
-<button class="mu" onclick="tsb()">=</button>
-<div class="br"><span>ENRIQUE NN</span></div>
-<div class="tk">⚡ <span id="td">0</span></div>
-</div>
-<div class="ms" id="ms"><div class="mi" id="mi"></div></div>
-<div class="ia"><div class="iw">
-<textarea id="inp" rows="1" placeholder="Talk to ENRIQUE..."></textarea>
-<button id="snd" onclick="sd()">></button>
-</div></div>
-</div>
-</div>
-<div class="ov" id="ov" onclick="tsb()"></div>
-
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:none}.ov.on{display:block}
+@media(max-width:640px){.sb{position:fixed;inset:0;right:auto;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.mb{font-size:12px}}
+#ld{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#ld .sp{width:36px;height:36px;border:3px solid var(--border2);border-top-color:#10a37f;border-radius:50%;animation:sp .7s linear infinite;margin-bottom:10px}
+@keyframes sp{to{transform:rotate(360deg)}}#ld h2{font-size:16px;font-weight:700;margin-bottom:2px}#ld p{font-size:11px;color:var(--muted);margin-bottom:10px}
+#lb{width:160px;height:3px;background:var(--card2);border-radius:2px;overflow:hidden}
+#lf{height:100%;width:0%;background:linear-gradient(90deg,#10a37f,#34d399);border-radius:2px;transition:width .3s}
+#ll{font-size:9px;color:var(--muted2);margin-top:4px}</style></head><body>
+<div id="ld"><div class="sp"></div><h2>ENRIQUE AI</h2><p>Training in browser...</p><div id="lb"><div id="lf"></div></div><div id="ll">Loading...</div></div>
+<div class="app"><div class="sb" id="sb">
+<div class="sb-h"><div class="sb-i">E</div><div class="sb-t">ENRIQUE AI</div></div>
+<div class="acts"><button class="btn" onclick="nw()">+ New</button><button class="btn" onclick="cl()">x Clear</button></div>
+<div class="sec"><div class="sl">Status</div><div class="st"><em>Loss:</em> <span id="ls">-</span><br><em>Iters:</em> <span id="it">0</span></div></div>
+<div class="sf">ENRIQUE AI</div></div>
+<div class="mn"><div class="top"><button class="mu" onclick="tb()">☰</button><div class="br">ENRIQUE AI</div></div>
+<div class="ms" id="ms"></div>
+<div class="ia"><div class="iw"><textarea id="inp" placeholder="Type a message..." rows="1"></textarea><button onclick="sd()" id="sbtn">➤</button></div></div></div></div>
+<div class="ov" id="ov" onclick="tb()"></div>
 <script>
-// ================================================================
-// ENRIQUE Neural Network v3 - LSTM from Scratch
-// 100% Original JavaScript • No Libraries • No APIs
-// ================================================================
-
-var D = [], T = 0, B = 0;
-var NN = null, VOCAB = null;
-var CNV = []; // conversation memory
-
-// ===== Matrix Operations =====
-class Mat {
-  constructor(r, c, v) {
-    this.r = r; this.c = c; this.w = new Float32Array(r * c);
-    if (v) { for (var i = 0; i < v.length && i < r*c; i++) this.w[i] = v[i]; }
-    else { var s = Math.sqrt(2.0 / (r + c)); for (var i = 0; i < r*c; i++) this.w[i] = (Math.random() * 2 - 1) * s; }
-  }
-  get(i,j){return this.w[i*this.c+j]}
-  set(i,j,v){this.w[i*this.c+j]=v}
-  mul(b){
-    if(this.c!==b.r) throw Error('mat dims');
-    var o=new Mat(this.r,b.c); var n=this.r*b.c;
-    for(var i=0;i<this.r;i++) for(var j=0;j<b.c;j++){var s=0; for(var k=0;k<this.c;k++) s+=this.get(i,k)*b.get(k,j); o.set(i,j,s);}
-    return o;
-  }
-  add(o){
-    if(typeof o==='number'){var m=new Mat(this.r,this.c);for(var i=0;i<this.r*this.c;i++)m.w[i]=this.w[i]+o;return m;}
-    var m=new Mat(this.r,this.c);for(var i=0;i<this.r*this.c;i++)m.w[i]=this.w[i]+o.w[i];return m;
-  }
-  elmul(o){var m=new Mat(this.r,this.c);for(var i=0;i<this.r*this.c;i++)m.w[i]=this.w[i]*o.w[i];return m;}
-  map(f){var m=new Mat(this.r,this.c);for(var i=0;i<this.r*this.c;i++)m.w[i]=f(this.w[i]);return m;}
-  scale(s){var m=new Mat(this.r,this.c);for(var i=0;i<this.r*this.c;i++)m.w[i]=this.w[i]*s;return m;}
-  copy(){var m=new Mat(this.r,this.c);m.w=new Float32Array(this.w);return m;}
-  T(){var o=new Mat(this.c,this.r);for(var i=0;i<this.r;i++)for(var j=0;j<this.c;j++)o.set(j,i,this.get(i,j));return o;}
-  clip(m){for(var i=0;i<this.r*this.c;i++)this.w[i]=Math.max(-m,Math.min(m,this.w[i]));}
-}
-
-function sig(x){return 1/(1+Math.exp(-Math.max(-50,Math.min(50,x))))}
-function dsig(y){return y*(1-y)}
-function tanh_(x){return Math.tanh(x)}
-function dtanh_(y){return 1-y*y}
-function softmax(x){
-  var mx=Math.max.apply(null,x), ex=x.map(function(v){return Math.exp(v-mx)}), s=ex.reduce(function(a,b){return a+b},0);
-  return ex.map(function(v){return v/s});
-}
-function randn(){var u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
-
-// ===== LSTM Cell =====
-class LSTMC {
-  constructor(is, hs) {
-    this.is=is; this.hs=hs;
-    this.Wf=new Mat(is,hs); this.Uf=new Mat(hs,hs); this.bf=new Mat(1,hs);
-    this.Wi=new Mat(is,hs); this.Ui=new Mat(hs,hs); this.bi=new Mat(1,hs);
-    this.Wc=new Mat(is,hs); this.Uc=new Mat(hs,hs); this.bc=new Mat(1,hs);
-    this.Wo=new Mat(is,hs); this.Uo=new Mat(hs,hs); this.bo=new Mat(1,hs);
-    this.p=[this.Wf,this.Uf,this.bf,this.Wi,this.Ui,this.bi,this.Wc,this.Uc,this.bc,this.Wo,this.Uo,this.bo];
-  }
-  fwd(x, h, c) {
-    var f = sig(x.mul(this.Wf).add(h.mul(this.Uf)).add(this.bf).w);
-    var i = sig(x.mul(this.Wi).add(h.mul(this.Ui)).add(this.bi).w);
-    var cc = tanh_(x.mul(this.Wc).add(h.mul(this.Uc)).add(this.bc).w);
-    var o = sig(x.mul(this.Wo).add(h.mul(this.Uo)).add(this.bo).w);
-    var cn = new Float32Array(this.hs);
-    var hn = new Float32Array(this.hs);
-    for (var j=0; j<this.hs; j++) { cn[j] = f[j]*c[j] + i[j]*cc[j]; hn[j] = o[j] * tanh_(cn[j]); }
-    return {h:hn, c:cn, f:f, i:i, cc:cc, o:o};
-  }
-}
-
-// ===== ENRIQUE LSTM =====
-class ENRIQUE {
-  constructor(vs, hs, es, nl) {
-    this.vs=vs; this.hs=hs; this.es=es; this.nl=nl||2;
-    this.Wex=new Mat(vs,es);
-    this.layers=[]; for(var l=0;l<this.nl;l++) this.layers.push(new LSTMC(l===0?es:hs,hs));
-    this.Why=new Mat(hs,vs); this.by=new Mat(1,vs);
-    this.iter=0; this.smL=10;
-  }
-  
-  fwd(ix, hs, cs) {
-    var x=new Mat(1,this.es);
-    for(var j=0;j<this.es;j++) x.set(0,j,this.Wex.get(ix,j));
-    var nh=[], nc=[];
-    for(var l=0;l<this.nl;l++) {
-      var r=this.layers[l].fwd(l===0?x:(new Mat(1,this.hs)).map(function(_,i){return nh[l-1][i]}), 
-          hs[l]?new Float32Array(hs[l]):new Float32Array(this.hs), 
-          cs[l]?new Float32Array(cs[l]):new Float32Array(this.hs));
-      nh.push(r.h); nc.push(r.c);
-    }
-    var y=this.Why.mul((new Mat(1,this.hs)).map(function(_,i){return nh[this.nl-1][i]})).add(this.by);
-    var yp=softmax(y.w);
-    return {h:nh, c:nc, y:yp};
-  }
-  
-  sample(yp, temp) {
-    var sc=yp.map(function(p){return Math.pow(p,1/temp)});
-    var sum=sc.reduce(function(a,b){return a+b},0), norm=sc.map(function(p){return p/sum});
-    var r=Math.random();
-    for(var i=0;i<norm.length;i++){r-=norm[i];if(r<=0)return i;}
-    return norm.length-1;
-  }
-  
-  gen(chars, c2i, prompt, len, temp) {
-    temp=temp||0.7; len=len||200;
-    var out=prompt||'', hs=[], cs=[];
-    for(var l=0;l<this.nl;l++){hs.push(new Float32Array(this.hs));cs.push(new Float32Array(this.hs));}
-    for(var i=0;i<out.length;i++){
-      var ix=c2i[out[i]]!==undefined?c2i[out[i]]:0;
-      var f=this.fwd(ix,hs,cs); hs=f.h; cs=f.c;
-    }
-    for(var i=0;i<len;i++){
-      var last=out[out.length-1]||' ';
-      var ix=c2i[last]!==undefined?c2i[last]:0;
-      var f=this.fwd(ix,hs,cs); hs=f.h; cs=f.c;
-      var ni=this.sample(f.y,temp);
-      out+=chars[ni]||'?';
-      if(chars[ni]==='.'||chars[ni]==='。'||chars[ni]==='!'||chars[ni]==='？') break;
-    }
-    return out;
-  }
-  
-  train(seq, c2i, lr) {
-    lr=lr||0.002;
-    if(seq.length<5) return;
-    var idxs=[]; for(var ch of seq) idxs.push(c2i[ch]!==undefined?c2i[ch]:0);
-    var hs=[],cs=[]; for(var l=0;l<this.nl;l++){hs.push(new Float32Array(this.hs));cs.push(new Float32Array(this.hs));}
-    var loss=0, states=[];
-    for(var t=0;t<idxs.length-1;t++){
-      var f=this.fwd(idxs[t],hs,cs); hs=f.h; cs=f.c;
-      loss+=-Math.log(Math.max(f.y[idxs[t+1]],1e-10));
-      states.push({h:hs.map(function(a){return new Float32Array(a)}), c:cs.map(function(a){return new Float32Array(a)}), y:[].concat(f.y), ix:idxs[t], tgt:idxs[t+1]});
-    }
-    this.smL=this.smL*0.999+loss/states.length*0.001;
-    
-    // Simplified gradient update with gradient clipping
-    for(var t=0;t<states.length;t++){
-      var st=states[t];
-      for(var j=0;j<this.vs;j++){
-        var grad=st.y[j]-(j===st.tgt?1:0);
-        if(Math.abs(grad)>0.05){
-          grad=Math.max(-5,Math.min(5,grad))*0.1; // clip gradient
-          for(var k=0;k<this.es;k++){
-            this.Wex.w[st.ix*this.es+k]-=lr*grad;
-          }
-          for(var k=0;k<this.hs;k++){
-            this.Why.w[k*this.vs+j]-=lr*grad*st.h[this.nl-1][k]*0.1;
-            this.by.w[j]-=lr*grad*0.1;
-          }
-        }
-      }
-    }
-    this.iter++;
-  }
-  
-  save(){
-    var d={vs:this.vs,hs:this.hs,es:this.es,nl:this.nl,iter:this.iter,loss:this.smL};
-    d.Wex=Array.from(this.Wex.w);
-    d.layers=this.layers.map(function(l){return l.p.map(function(p){return Array.from(p.w)})});
-    d.Why=Array.from(this.Why.w); d.by=Array.from(this.by.w);
-    return d;
-  }
-  
-  load(d){
-    this.vs=d.vs;this.hs=d.hs;this.es=d.es;this.nl=d.nl||2;
-    this.Wex=new Mat(this.vs,this.es,d.Wex);
-    this.layers=[]; for(var l=0;l<this.nl&&l<d.layers.length;l++){var lc=new LSTMC(l===0?this.es:this.hs,this.hs); for(var p=0;p<12&&p<d.layers[l].length;p++)lc.p[p]=new Mat(lc.p[p].r,lc.p[p].c,d.layers[l][p]); this.layers.push(lc);}
-    this.Why=new Mat(this.hs,this.vs,d.Why);this.by=new Mat(1,this.vs,d.by);
-    this.iter=d.iter||0;this.smL=d.loss||10;
-  }
-}
-
-// ===== Vocabulary =====
-function buildVocab(texts){
-  var s=new Set(); texts.forEach(function(t){for(var ch of t)s.add(ch)});
-  var chars=Array.from(s).sort(), c2i={}, i2c={};
-  chars.forEach(function(ch,i){c2i[ch]=i;i2c[i]=ch});
-  return {chars:chars,c2i:c2i,i2c:i2c,size:chars.length};
-}
-
-function defaultVocab(){
-  var chars=' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?;:\'\"-()[]{}@#$%^&*+=/\\|~`<>的一是不了人我在有他这中大来上国个到说们为和地出要时看没只如开会可对生年发成部民能方进同经法面又分前平定后然间因长期把多公从里事好她些还其动两动手已外小高点长当都水化得自她什但者于些又她你日';
-  var u=Array.from(new Set(chars)).sort(), c2i={}, i2c={};
-  u.forEach(function(ch,i){c2i[ch]=i;i2c[i]=ch});
-  return {chars:u,c2i:c2i,i2c:i2c,size:u.length};
-}
-
-// ===== Training Data =====
-var PRETRAIN = [
-  "Hello! I am ENRIQUE AI. I am a neural network built from scratch in JavaScript. I can help you write code, create websites, and answer questions.",
-  "你好！我是 ENRIQUE AI。我是一个从零构建的神经网络。我可以帮助你写代码、创建网站和回答问题。",
-  "I can create websites. Here is an example: html body h1 Hello World h1 p This is a website created by ENRIQUE AI. p body html",
-  "To write Python code: print Hello from ENRIQUE def fibonacci n if n 1 return n return fibonacci n-1 fibonacci n-2",
-  "JavaScript function to add two numbers: function add a b return a b",
-  "HTML is the language of the web. CSS makes it beautiful. JavaScript makes it interactive.",
-  "Machine learning is about teaching computers to learn from data. Neural networks are inspired by the human brain.",
-  "I can speak Chinese and English. 我可以说中文和英文。",
-  "ENRIQUE AI learns from every conversation. The more we talk the smarter I become.",
-  "Coding is fun. Practice makes perfect. Keep learning and building new things."  
-];
-
-// ===== Initialize =====
-VOCAB = defaultVocab();
-try {
-  var saved = localStorage.getItem('ea_nn_v3');
-  if (saved) {
-    var data = JSON.parse(saved);
-    NN = new ENRIQUE(data.vs, data.hs, data.es, data.nl);
-    NN.load(data);
-  }
-} catch(e) {}
-if (!NN) NN = new ENRIQUE(VOCAB.size, 256, 64, 2);
-
-function updateStat() {
-  document.getElementById('nnStat').textContent = NN.iter > 0 ? 'Trained (' + NN.iter + ' iters)' : 'Fresh network';
-  document.getElementById('nnParams').textContent = NN.vs * NN.es + NN.es * NN.hs + NN.hs * NN.hs * 4 * NN.nl + NN.hs * NN.vs + NN.vs;
-  document.getElementById('nnLoss').textContent = NN.smL < 10 ? NN.smL.toFixed(4) : '-';
-  document.getElementById('nnIter').textContent = NN.iter;
-  document.getElementById('nnVocab').textContent = NN.vs;
-}
-updateStat();
-
-// ===== Train =====
-function train() {
-  var btn = document.getElementById('trainBtn');
-  if (NN.iter > 0 && !confirm('Retrain network? This will reset current weights.')) return;
-  btn.disabled = true; btn.textContent = '⏳ Training...';
-  document.getElementById('progArea').style.display = 'block';
-  
-  setTimeout(function(){
-    var allText = PRETRAIN.join(' ');
-    var vocab = buildVocab([allText].concat(PRETRAIN));
-    NN = new ENRIQUE(vocab.size, 256, 64, 2);
-    VOCAB = vocab;
-    
-    var epochs = 30;
-    function step() {
-      for (var e = 0; e < epochs; e++) {
-        NN.train(allText, vocab.c2i, 0.005);
-        if (NN.iter % 10 === 0) {
-          // Gradient clipping safety
-          if (isNaN(NN.smL) || NN.smL > 100) break;
-        }
-      }
-      document.getElementById('progBar').style.width = '100%';
-      document.getElementById('progText').textContent = 'Training complete!';
-      btn.disabled = false; btn.textContent = '🧠 Retrain';
-      localStorage.setItem('ea_nn_v3', JSON.stringify(NN.save()));
-      updateStat();
-    }
-    step();
-  }, 50);
-}
-
-// ===== Generate Response =====
-function respond(msg) {
-  if (NN.iter < 5) {
-    // Fallback for untrained network
-    var m = msg.toLowerCase().trim();
-    if (/^(hi|hello|hey|你好|嗨)/.test(m)) return '你好！我是 ENRIQUE AI。请先点击"Train Network"训练我的神经网络！';
-    if (/python/.test(m)) return 'Python 是一种高级编程语言。训练后我能写 Python 代码！';
-    return '我正在学习！请点击侧边栏的 "Train Network" 按钮训练我。训练后我能更好地回答你的问题！';
-  }
-  
-  try {
-    var reply = NN.gen(VOCAB.chars, VOCAB.c2i, msg, 300, 0.7);
-    reply = reply.substring(msg.length).trim();
-    if (reply.length < 3) reply = NN.gen(VOCAB.chars, VOCAB.c2i, '', 200, 0.8);
-    var maxLen = 300;
-    if (reply.length > maxLen) reply = reply.substring(0, maxLen);
-    var idx = Math.max(reply.lastIndexOf('。'), reply.lastIndexOf('.'), reply.lastIndexOf('！'), reply.lastIndexOf('？'));
-    if (idx > 20) reply = reply.substring(0, idx + 1);
-    return reply || '...';
-  } catch(e) {
-    return 'Error generating response. Please retrain the network.';
-  }
-}
-
-function learn(msg, reply) {
-  if (!NN || NN.iter < 1) return;
-  CNV.push(msg); CNV.push(reply);
-  if (CNV.length > 20) CNV = CNV.slice(-20);
-  setTimeout(function(){
-    NN.train(msg + ' ' + reply, VOCAB.c2i, 0.002);
-    if (NN.iter % 5 === 0) {
-      localStorage.setItem('ea_nn_v3', JSON.stringify(NN.save()));
-      updateStat();
-    }
-  }, 200);
-}
-
-// ===== UI =====
-function sd(){
-  var inp=document.getElementById('inp'),msg=inp.value.trim();
-  if(!msg||B)return;B=1;document.getElementById('snd').disabled=true;
-  var w=document.getElementById('welc');if(w)w.remove();
-  var mi=document.getElementById('mi');
-  var u=document.createElement('div');u.className='msg u';
-  u.innerHTML='<div class="av">U</div><div class="mb">'+esc(msg)+'</div>';
-  mi.appendChild(u);D.push({r:'u',c:msg,t:Date.now()});sv();
-  var a=document.createElement('div');a.className='msg a';
-  a.innerHTML='<div class="av">E</div><div class="mb"><div class="ty"><span></span><span></span><span></span></div></div>';
-  mi.appendChild(a);var bubble=a.querySelector('.mb');
-  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
-  inp.value='';ah(inp);
-  setTimeout(function(){
-    try{
-      var reply=respond(msg),html='';
-      reply.split('\n').forEach(function(l){html+=esc(l)+'<br>'});
-      bubble.innerHTML=html;
-      D.push({r:'a',c:reply,t:Date.now()});T+=msg.length+reply.length;sv();us();
-      document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
-      learn(msg,reply);
-    }catch(e){bubble.innerHTML='<span style="color:var(--red)">Error: '+esc(e.message)+'</span>';}
-    B=0;document.getElementById('snd').disabled=false;inp.focus();
-  },300);
-}
-function qa(t){document.getElementById('inp').value=t;sd();}
-function nw(){D=[];T=0;sv();rd();if(window.innerWidth<769)tsb();ts('New chat');}
-function cl(){if(!D.length)return;D=[];T=0;sv();rd();ts('Cleared');}
-function esc(s){if(typeof s!='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function ah(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
-function rd(){
-  var mi=document.getElementById('mi');mi.innerHTML='';
-  if(!D.length){
-    mi.innerHTML='<div class="wc" id="welc"><div class="wi">E</div><div class="wt">ENRIQUE NN</div><div class="ws">Neural Network from Scratch<br>LSTM • 100% Original Code</div><div class="wg">'+
-      '<div class="gc" onclick="qa(\'Hello\')">👋 Hello</div>'+
-      '<div class="gc" onclick="qa(\'Write Python\')">🐍 Python</div>'+
-      '<div class="gc" onclick="qa(\'Create website\')">🌐 Website</div>'+
-      '<div class="gc" onclick="qa(\'Who are you\')">🧠 About</div>'+
-    '</div><div style="margin-top:14px;font-size:10px;color:var(--muted2)">Click "Train Network" in sidebar to start learning</div></div>';
-    return;
-  }
-  D.forEach(function(m){
-    var d=document.createElement('div');d.className='msg '+(m.r=='u'?'u':'a');
-    var av=m.r=='u'?'U':'E',txt=esc(m.c||'');
-    d.innerHTML='<div class="av">'+av+'</div><div class="mb">'+txt+'</div>';mi.appendChild(d);
-  });
-  document.getElementById('ms').scrollTop=document.getElementById('ms').scrollHeight;
-}
-function us(){document.getElementById('tc').innerHTML=T;document.getElementById('td').innerHTML=T;document.getElementById('mc').innerHTML=D.length}
-function tsb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on')}
-function ts(m){var t=document.createElement('div');t.className='ts';t.textContent=' '+m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
-function sv(){try{localStorage.setItem('ea_v3',JSON.stringify({d:D,t:T}))}catch(e){}}
-(function(){
-  try{var d=localStorage.getItem('ea_v3');if(d){var p=JSON.parse(d);D=p.d||[];T=p.t||0}}catch(e){}
-  us();rd();
-  var inp=document.getElementById('inp');
-  inp.addEventListener('input',function(){ah(this)});
-  inp.addEventListener('keydown',function(e){if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();sd()}});
-  console.log('ENRIQUE NN v3 loaded');
-})();
-</script>
-</body></html>
+const V=58,H=64,E=24;
+class M{constructor(r,c,w){this.r=r;this.c=c;this.w=w?new Float32Array(w):new Float32Array(r*c);if(!w){const s=Math.sqrt(2/(r+c));for(let i=0;i<r*c;i++)this.w[i]=(Math.random()*2-1)*s;}}}
+function sm(x){let m=x[0];for(let i=1;i<x.length;i++)if(x[i]>m)m=x[i];let s=0;for(let i=0;i<x.length;i++)s+=Math.exp(x[i]-m);const o=new Float32Array(x.length);for(let i=0;i<x.length;i++)o[i]=Math.exp(x[i]-m)/s;return o;}
+const we=new M(V,E),wx=new M(E,H),wh=new M(H,H),bh=new Float32Array(H),wy=new M(H,V),by=new Float32Array(V);
+const ch=" .,AEINPRabcdefghijklmnopqrstuvwxyz你我越聪神明编络网脑语程".split('');const c2={};ch.forEach((c,i)=>c2[c]=i);
+function fw(x,h){const p=new Float32Array(H);for(let j=0;j<H;j++){let s=bh[j];for(let i=0;i<E;i++)s+=x[i]*wx.w[i*H+j];for(let i=0;i<H;i++)s+=h[i]*wh.w[i*H+j];p[j]=s;}
+  const hn=[];for(let i=0;i<H;i++)hn[i]=Math.tanh(p[i]);const lg=[];for(let j=0;j<V;j++){let s=by[j];for(let i=0;i<H;i++)s+=hn[i]*wy.w[i*V+j];lg[j]=s;}return{h:hn,y:sm(lg)};}
+function ge(p,l,t){let h=[],o=p;for(let i=0;i<H;i++)h[i]=0;
+  for(const c of o){const x=[];for(let j=0;j<E;j++)x[j]=we.w[(c2[c]||0)*E+j];const r=fw(x,h);h=r.h;}
+  for(let i=0;i<l;i++){const x=[];for(let j=0;j<E;j++)x[j]=we.w[(c2[o[o.length-1]]||0)*E+j];const r=fw(x,h);h=r.h;
+    const s=r.y.map(p=>Math.pow(Math.max(p,1e-10),1/t));const su=s.reduce((a,b)=>a+b,0);const n=s.map(p=>p/su);
+    let ri=Math.random(),ci=0;for(;ci<n.length;ci++){ri-=n[ci];if(ri<=0)break;}o+=ch[Math.min(ci,ch.length-1)];}return o;}
+const cp="Hello I am ENRIQUE AI. Python is for coding. JavaScript for web. Neural networks learn. Machine learning is AI. 你好我是ENRIQUE AI。Python是编程语言。神经网络学习数据。AI越来越聪明。ENRIQUE speaks Chinese and English. I help you code websites.";
+const ai=[];for(const c of cp)ai.push(c2[c]||0);const sl=20;let it=0,sm=Math.log(V);
+function tr(se,lr){lr=lr||0.02;const st=[];let h=[];for(let i=0;i<H;i++)h[i]=0;
+  for(let t=0;t<se.length-1;t++){const x=[];for(let j=0;j<E;j++)x[j]=we.w[se[t]*E+j];const r=fw(x,h);h=r.h;st.push({h:[...r.h],y:[...r.y],t:se[t+1]});}
+  let l=0;for(const s of st)l+=-Math.log(Math.max(s.y[s.t],1e-15));l/=se.length;
+  for(let t=st.length-1;t>=0;t--){const s=st[t];const d=[];for(let j=0;j<V;j++)d[j]=Math.max(-3,Math.min(3,(s.y[j]-(j===s.t?1:0))*0.5));
+    for(let i=0;i<H;i++)for(let j=0;j<V;j++)wy.w[i*V+j]-=lr*0.5*d[j]*s.h[i];for(let j=0;j<V;j++)by[j]-=lr*0.5*d[j];}return l;}
+function at(cb){let d=0;const fn=()=>{for(let b=0;b<100;b++,d++){const si=Math.floor(Math.random()*(ai.length-sl-1));const l=tr(ai.slice(si,si+sl),0.03);if(!isNaN(l)&&l>0&&l<10)sm=sm*0.999+l*0.001;it++;}cb(d/8000,sm);if(d<8000)setTimeout(fn,10);};fn();}
+let rd=false;
+function ad(r,c){const d=document.getElementById('ms');const m=document.createElement('div');m.className='mi';const g=document.createElement('div');g.className='msg '+(r==='u'?'u':'a');
+  const a=document.createElement('div');a.className='av';a.textContent=r==='u'?'U':'E';const b=document.createElement('div');b.className='mb';b.textContent=c;
+  g.appendChild(a);g.appendChild(b);m.appendChild(g);d.appendChild(m);d.scrollTop=d.scrollHeight;}
+function sd(){if(!rd)return;const i=document.getElementById('inp');const t=i.value.trim();if(!t)return;i.value='';ad('u',t);document.getElementById('sbtn').disabled=true;
+  const d=document.getElementById('ms');const ti=document.createElement('div');ti.className='mi';ti.id='ty_';
+  const td=document.createElement('div');td.className='msg a';const ta=document.createElement('div');ta.className='av';ta.textContent='E';
+  const tb=document.createElement('div');tb.className='mb';tb.innerHTML='<div class="ty"><span></span><span></span><span></span></div>';
+  td.appendChild(ta);td.appendChild(tb);ti.appendChild(td);d.appendChild(ti);d.scrollTop=d.scrollHeight;
+  setTimeout(()=>{const e=document.getElementById('ty_');if(e)e.remove();
+    try{let p=t.substring(0,15);let r=ge(p,60,0.6);r=r.substring(p.length).trim();const x=['.','。','!','！'];let cut=-1;for(const s of x){const i=r.indexOf(s);if(i>3&&(cut===-1||i<cut))cut=i+1;}if(cut>0)r=r.substring(0,cut);if(r.length<2)r="Hello! I am ENRIQUE AI.";ad('ai',r);}catch(e){ad('ai','Error');}
+    document.getElementById('sbtn').disabled=false;i.focus();},200+Math.random()*500);}
+function nw(){document.getElementById('ms').innerHTML='';ad('ai','New chat!');}
+function cl(){document.getElementById('ms').innerHTML='';}
+function tb(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){const i=document.getElementById('inp');if(document.activeElement===i){e.preventDefault();sd();}}});
+document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sd();}});
+window.addEventListener('DOMContentLoaded',()=>{
+  const sv=localStorage.getItem('e_m');
+  if(sv){try{const d=JSON.parse(sv);if(d.we){we.w.set(d.we);wx.w.set(d.wx);wh.w.set(d.wh);bh.set(d.bh);wy.w.set(d.wy);by.set(d.by);it=d.it||0;sm=d.sm||sm;}
+    document.getElementById('ls').textContent=sm.toFixed(4);document.getElementById('it').textContent=it;
+    document.getElementById('ld').style.display='none';rd=true;ad('ai','你好！ENRIQUE AI ready! '+it+' iters, loss: '+sm.toFixed(4));return;}catch(e){}}
+  document.getElementById('lf').style.width='5%';document.getElementById('ll').textContent='Training...';
+  at((p,l)=>{document.getElementById('lf').style.width=(5+p*90)+'%';document.getElementById('ll').textContent='Training... loss='+l.toFixed(4);
+    document.getElementById('ls').textContent=l.toFixed(4);document.getElementById('it').textContent=it;});
+  setTimeout(()=>{document.getElementById('lf').style.width='100%';document.getElementById('ll').textContent='Ready!';
+    setTimeout(()=>{document.getElementById('ld').style.display='none';try{localStorage.setItem('e_m',JSON.stringify({we:Array.from(we.w),wx:Array.from(wx.w),wh:Array.from(wh.w),bh:Array.from(bh),wy:Array.from(wy.w),by:Array.from(by),it:it,sm:sm}));}catch(e){}rd=true;ad('ai','你好！我是 ENRIQUE AI。训练 '+it+' 次，损失 '+sm.toFixed(4)+'。');},400);},12000);});
+</script></body></html>
